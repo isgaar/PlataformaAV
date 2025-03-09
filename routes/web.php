@@ -14,7 +14,7 @@ Route::fallback(function () {
 });
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('landing');
 });
 
 Route::get('/dashboard', function () {

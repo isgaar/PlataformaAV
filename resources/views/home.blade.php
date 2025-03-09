@@ -15,6 +15,17 @@
                     @endif
 
                     {{ __('You are logged in!') }}
+
+                    <br><br>
+                    
+                    <!-- Mostrar el rol del usuario -->
+                    <strong>Tu rol es: </strong> 
+                    @if(auth()->user()->roles->isNotEmpty())
+                        {{ auth()->user()->getRoleNames()->first() }} 
+                    @else
+                        Sin rol asignado
+                    @endif
+
                 </div>
             </div>
         </div>
