@@ -68,6 +68,120 @@
 
 
 
+/* Barra de navegación con efecto de Blur */
+.navbar {
+    background-color: #4e7989cb; /* Azul oscuro con transparencia */
+    backdrop-filter: blur(10px);
+    padding: 0.5em 1vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px; /* Altura fija del navbar */
+}
+
+/* Logo y contenedor */
+.navbar-left {
+    display: flex;
+    align-items: center;
+}
+
+/* Logo */
+.navbar .logo-img {
+    width: 150px; /* Ajuste para dispositivos pequeños */
+    height: auto;
+}
+
+/* Menú de navegación */
+.navbar-right {
+    list-style: none;
+    display: flex;
+    justify-content: flex-end;
+    margin: 0;
+    padding: 0;
+    gap: 2vw;
+    margin-right: 5%;
+}
+
+/* Estilo de los enlaces */
+.navbar a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.1em;
+    font-weight: bold;
+    position: relative;
+    padding-bottom: 5px;
+}
+
+/* Efecto línea debajo del texto */
+.navbar a::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #FAD564;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease-out;
+}
+
+.navbar a:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+/* Botón hamburguesa para pantallas pequeñas */
+.navbar-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.navbar-toggle div {
+    width: 30px;
+    height: 3px;
+    background-color: white;
+    margin: 5px;
+    transition: 0.4s;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+    .navbar-right {
+        display: none; /* Oculta el menú por defecto */
+        flex-direction: column;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        background: rgba(78, 121, 137, 0.9);
+        width: 100%;
+        text-align: center;
+        padding: 10px 0;
+    }
+
+    .navbar-right.active {
+        display: flex; /* Muestra el menú cuando se activa */
+    }
+
+    .navbar-right li {
+        margin: 10px 0;
+    }
+
+    .navbar-toggle {
+        display: flex;
+    }
+
+    body {
+        padding-top: 100px;
+    }
+}
 
 
 
@@ -78,6 +192,7 @@
     justify-content: space-between;
     gap: 20px;
     align-items: stretch;
+    margin-top: 10px; /* Aumentar la separación desde el navbar */
     
     padding: 0 5vw;
 }
@@ -946,6 +1061,7 @@ body {
     padding: 0;
     background-color: #ffffff;
     color: #1B475D;
+    padding-top: 80px; /* Asegura espacio debajo del navbar */
 }
 
 /* Contenedor del login */

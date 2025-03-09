@@ -81,7 +81,7 @@
         </div>
         <div class="value-item">
             <div class="value-circle">
-                <img src="{{ asset('images/gafas-de-proteccion.svg') }}" alt="Seguridad" class="svg-color">
+                <img src="{{ asset('images/gafas-de-proteccion.png') }}" alt="Seguridad" class="svg-color">
             </div>
             <h3>Seguridad Sostenibilidad</h3>
         </div>

@@ -4,6 +4,8 @@ use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RenderOnlineController;
+
 
 Route::fallback(function () {
     Log::channel('graylog')->error('404 Not Found', [
@@ -28,6 +30,10 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// Rutas para Render Online
+Route::get('/renderonline', [RenderOnlineController::class, 'index'])->name('renderonline.index');
+Route::post('/pdb/upload', [RenderOnlineController::class, 'upload'])->name('pdb.upload');
 
 require __DIR__.'/auth.php';
 

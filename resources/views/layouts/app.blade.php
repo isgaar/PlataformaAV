@@ -10,80 +10,150 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 
-    <title>{{ config('app.name', 'Atomos Virtuales') }}</title>
+    <title>{{ str_replace('_', ' ', config('app.name')) }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
-    <!-- Scripts -->
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    <script src="{{ asset('js/3Dmol.js') }}"></script>
+
+    <style>
+        /* Estilo para la animación de la barra de navegación */
+        .navbar {
+            transition: transform 0.3s ease-in-out;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+        }
+    </style>
 </head>
 
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    {{ config('app.name', 'Laravel') }}
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="navbar-nav me-auto">
+        <!-- Barra de navegación -->
+        <nav class="navbar" id="navbar">
+            <ul class="navbar-left">
+                <li class="logo">
+                    <a href="/">
+                        <img src="{{ asset('av.png') }}" alt="Logo" class="logo-img">
+                    </a>
+                </li>
+            </ul>
 
-                    </ul>
+            <ul class="navbar-right flex items-center gap-6">
+                <!-- Si el usuario está autenticado -->
+                @auth
+                <li id="dashboard-link">
+                    <a href="{{ route('dashboard') }}" class="hover:text-yellow-400">Inicio</a>
+                </li>
+                <li class="active">
+                    <a href="#" class="hover:text-yellow-400">Biblioteca</a>
+                </li>
+                <li id="user-name">
+                    <a href="#" class="flex items-center gap-2 hover:text-yellow-400">
+                        <i class="fas fa-user"></i>
+                        <span>{{ Auth::user()->name }}</span>
+                    </a>
+                </li>
 
-                    <!-- Right Side Of Navbar -->
-                    <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
-                        @guest
-                        @if (Route::has('login'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
-                        </li>
-                        @endif
+                <li id="logout-link">
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="hover:text-red-500" title="Cerrar sesión">
+                        <i class="fas fa-sign-out-alt text-lg"></i>
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                        @csrf
+                    </form>
+                </li>
+                @endauth
 
-                        @if (Route::has('register'))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                        </li>
-                        @endif
-                        @else
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('dashboard') }}">{{ __('Dashboard') }}</a> <!-- Add this link -->
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                {{ Auth::user()->name }}
-                            </a>
-
-                            <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                    {{ __('Logout') }}
-                                </a>
-
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
-                            </div>
-                        </li>
-                        @endguest
-                    </ul>
-                </div>
-            </div>
+                <!-- Si el usuario no está autenticado -->
+                @guest
+                <li id="login-link">
+                    <a href="{{ route('login') }}" class="hover:text-green-400">Iniciar sesión</a>
+                </li>
+                @endguest
+            </ul>
         </nav>
 
         <main class="py-4">
             @yield('content')
         </main>
+
+        <!-- Footer -->
+        <footer>
+            <!-- Sección superior del footer -->
+            <div class="footer-top">
+                <div class="footer-left">
+                    <img src="{{ asset('av.png') }}" alt="Logo">
+                </div>
+                <div class="footer-right">
+                    <p>Laboratorio en química virtual,
+                        realizado sólo con fines educativos.</p>
+                </div>
+            </div>
+
+            <!-- Sección inferior del footer -->
+            <div class="footer-bottom">
+                <p>Copyright &copy; 2025 - Desarrollado por estudiantes UTCV</p>
+            </div>
+        </footer>
+
+        <button class="scroll-to-top" onclick="scrollToTop()">
+            <img src="{{ asset('images/up.png') }}" alt="Subir">
+        </button>
+
     </div>
+
+    <!-- Agregar Axios desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    @stack('scripts')
+
+    <script>
+        // Mostrar/Ocultar la navbar dependiendo del desplazamiento con animación
+        let lastScrollTop = 0;
+        const navbar = document.getElementById("navbar");
+
+        window.addEventListener("scroll", function () {
+            let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+
+            if (currentScroll > lastScrollTop) {
+                // Desplazamiento hacia abajo -> ocultar navbar con animación
+                navbar.style.transform = "translateY(-100%)";  // La barra se mueve hacia arriba fuera de la vista
+            } else {
+                // Desplazamiento hacia arriba -> mostrar navbar con animación
+                navbar.style.transform = "translateY(0)";  // La barra vuelve a su posición original
+            }
+
+            lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // Para no permitir valores negativos
+        });
+
+        // Botón de scroll hacia arriba
+        const scrollToTopButton = document.querySelector(".scroll-to-top");
+        scrollToTopButton.style.display = "none";
+
+        window.addEventListener("scroll", function() {
+            if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
+                scrollToTopButton.style.display = "flex";
+            } else {
+                scrollToTopButton.style.display = "none";
+            }
+        });
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+
 </body>
 
 </html>
