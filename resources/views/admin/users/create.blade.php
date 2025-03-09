@@ -58,6 +58,42 @@
                 </select>
             </div>
 
+            <div class="form-group">
+                <label for="school_id">Escuela</label>
+                <select name="school_id" class="form-control" required>
+                    @foreach ($schools as $school)
+                        <option value="{{ $school->id }}">{{ $school->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="grade_id">Grado</label>
+                <select name="grade_id" class="form-control" required>
+                    @foreach ($grades as $grade)
+                        <option value="{{ $grade->id }}">{{ $grade->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="group_id">Grupo</label>
+                <select name="group_id" class="form-control" required>
+                    @foreach ($groups as $group)
+                        <option value="{{ $group->id }}">{{ $group->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="turno_id">Turno</label>
+                <select name="turno_id" class="form-control" required>
+                    @foreach ($turnos as $turno)
+                        <option value="{{ $turno->id }}">{{ $turno->nombre }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             <div class="text-center">
                 <button type="submit" class="btn btn-success">Guardar</button>
             </div>

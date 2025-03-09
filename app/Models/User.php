@@ -8,7 +8,6 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens, HasRoles;
@@ -17,6 +16,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'school_id',
+        'grade_id',
+        'group_id',
+        'turno_id',
     ];
 
     protected $hidden = [
@@ -31,6 +34,32 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    // Relación con la escuela
+    public function school()
+    {
+        return $this->belongsTo(School::class);
+    }
+
+    // Relación con el grado
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class);
+    }
+
+    // Relación con el grupo
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
+    }
+
+    // Relación con el turno
+    // En el modelo User
+    public function turno()
+    {
+        return $this->belongsTo(Turno::class); // Relación con el modelo Turno
+    }
+
 
     // Método para obtener un solo rol (más limpio para la vista)
     public function getRole(): string
