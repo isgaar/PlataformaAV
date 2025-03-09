@@ -1,7 +1,9 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ProfileController;
 
 Route::fallback(function () {
     Log::channel('graylog')->error('404 Not Found', [
@@ -32,3 +34,15 @@ require __DIR__.'/auth.php';
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+
+Route::middleware(['auth', 'can:manage users'])->prefix('admin/users')->group(function () {
+    Route::get('/', [UserController::class, 'index'])->name('users.index'); // Listar Usuarios
+    Route::get('/create', [UserController::class, 'create'])->name('users.create'); // Crear Usuario
+    Route::post('/', [UserController::class, 'store'])->name('users.store'); // Almacenar Usuario
+    Route::get('/{user}/edit', [UserController::class, 'edit'])->name('users.edit'); // Editar Usuario
+    Route::put('/{user}', [UserController::class, 'update'])->name('users.update'); // Actualizar Usuario
+    Route::get('/{user}', [UserController::class, 'show'])->name('users.show'); // Ver Usuario
+    Route::delete('/{user}', [UserController::class, 'destroy'])->name('users.destroy'); // Eliminar Usuario
+});
+
