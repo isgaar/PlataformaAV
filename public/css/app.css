@@ -1,0 +1,1207 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilo global */
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Fira+Sans:wght@300;400;500;700&display=swap');
+
+
+
+ /* Añadir estos estilos CSS */
+ .render-controls {
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+#renderSettings {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#renderSettings td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+#renderSettings input[type="range"] {
+    width: 200px;
+}
+
+#renderSettings input[type="color"] {
+    width: 40px;
+    height: 30px;
+    vertical-align: middle;
+}
+
+
+
+#tooltip {
+    position: fixed; /* Mantiene el tooltip en pantalla en fullscreen */
+    top: 0;
+    left: 0;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    z-index: 2147483647; /* Valor máximo para asegurar que está arriba de todo */
+    pointer-events: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    max-width: 200px;
+}
+
+
+#tooltip table {
+    color: white;
+    font-size: 14px;
+}
+
+#tooltip img {
+    width: 50px;
+    height: 50px;
+}
+
+
+
+
+
+
+
+/* Contenedor para el visor 3D y la tabla */
+.content-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    align-items: stretch;
+    
+    padding: 0 5vw;
+}
+
+
+/* Contenedor del visor 3D */
+.viewer-container {
+    margin-top: 20px; /* Agrega un margen superior extra */
+    height: 90vh !important; /* Altura más grande */
+    margin-bottom: 20px;
+    font-family: 'Fira Sans', sans-serif !important;
+    font-weight: bold !important; /* Aplica negrita */
+    flex: 2;
+    position: relative;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    aspect-ratio: 19 / 10;
+    max-height: 70vh;
+    overflow: hidden;
+}
+
+.viewer-container * {
+    font-weight: bold !important;
+}
+
+
+
+.viewer {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 19 / 10;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+}
+
+
+.hero {
+    background-color: #C5B2DE; /* Color de fondo del hero */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px 20px;
+    text-align: center;
+}
+
+.hero-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px; /* Espacio entre la imagen y el contenido */
+    margin-bottom: 20px; /* Separación entre las dos secciones */
+}
+
+.hero img {
+    width: 400px;
+    height: auto;
+    transition: transform 0.3s ease;
+}
+
+.hero img:hover {
+    transform: scale(1.1);
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 500px;
+}
+
+.hero-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.hero-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    width: 150px;
+    justify-content: center;
+    font-size: 1.75rem; /* Tamaño un poco más grande */
+    font-weight: bold;  /* Estilo bold */
+}
+
+.hero-button.yellow {
+    background-color: white;
+    color: #014857;
+    border: 3px solid #00455e;  /* Contorno en el color deseado */
+}
+
+.hero-button.green {
+    background-color: #b2be5c;
+    color: white;
+    border: 3px solid #00455e;  /* Contorno en el color deseado */
+}
+
+.hero-button.cream {
+    background-color: #ffd55c;
+    color: #014857;
+    border: 3px solid #00455e;  /* Contorno en el color deseado */
+}
+
+.hero-divider {
+    border: none;
+    height: 10px;              /* Ajusta el grosor de la línea */
+    background-color: #b2be5c;
+    margin: 20px 0;           /* Espaciado superior e inferior */
+}
+
+
+.hero-bottom {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    
+}
+
+.cta-button {
+    background-color: #00435f;
+    color: white;
+    font-size: 1.2rem;
+    padding: 12px 24px;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.cta-button:hover {
+    background-color: #00455e;
+}
+
+.cta-button i {
+    width: 20px;
+    height: 20px;
+}
+
+.section {
+    padding: 60px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.section div {
+    padding: 20px;
+    margin: 0 10%;
+}
+
+.section.mission {
+    background-color: #00455e;
+    flex-direction: row;
+    text-align: left;
+    color: white;
+}
+
+.section.vision {
+    background-color: #b2be5b;
+    flex-direction: row-reverse;
+    text-align: right;
+    color: #00455e;
+}
+
+.section img {
+    width: 300px;
+    height: auto;
+    margin: 10px;
+    transition: transform 0.3s ease;
+}
+
+.section img:hover {
+    transform: scale(1.1);
+}
+
+.values-container {
+    background-color: #ffffff;
+    text-align: center;
+    padding: 60px;
+}
+
+.values-container h2 {
+    margin-bottom: 40px;
+}
+
+.values {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.value-item {
+    text-align: center;
+    max-width: 200px;
+}
+
+.value-circle {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 0 auto 10px;
+    transition: transform 0.3s ease;
+}
+
+.value-circle:hover {
+    transform: scale(1.1);
+}
+
+.value-circle img {
+    width: 80px;
+    height: 80px;
+}
+
+.value-item:nth-child(1) .value-circle {
+    background-color: #00455e;
+}
+
+.value-item:nth-child(2) .value-circle {
+    background-color: #c9c3f4;  /* Relleno */
+    border: 4px solid #00455e;  /* Contorno en el color deseado */
+}
+
+
+.value-item:nth-child(2) .svg-color {
+    filter: brightness(10%) saturate(100%) invert(16%) sepia(47%) saturate(1444%) hue-rotate(163deg) brightness(50%) contrast(99%);
+}
+
+
+.value-item:nth-child(3) .value-circle {
+    background-color: #00455e;
+}
+
+.footer {
+    background-color: #00455e;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    color: white;
+}
+
+.footer img {
+    width: 350px;
+    height: auto;
+    margin-left: 20px;
+}
+
+.footer-content {
+    flex: 1;
+    text-align: center;
+    padding-left: 10px;
+}
+
+.footer-content h2 {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.footer-content p {
+    font-size: 14px;
+    font-style: italic;
+}
+
+.footer-center {
+    position: relative;
+    width: 50%;
+    bottom: -20px;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.scroll-to-top {
+    background-color: #b2bd5c;
+    color: white;
+    border: none;
+    border-radius: 10%;
+    width: 80px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.scroll-to-top img {
+    width: 24px;
+    height: 24px;
+}
+
+/* Controles debajo del visor */
+.controls-overlay {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 10;
+    background-color: rgba(255, 245, 210, 0.8); /* Amarillo muy claro transparente */
+    padding: 5px 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.controls-overlay select {
+    padding: 5px;
+    border: 2px solid #00455e; /* Borde en color #00455e */
+    font-size: 14px;
+    background-color: white;
+    color: #1B475D;
+}
+
+.controls-overlay button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    border: 2px solid #00455e; /* Borde en color #00455e */
+    cursor: pointer;
+    font-size: 14px;
+    color: #1B475D;
+
+}
+
+/* Estilo para el contenedor de los botones y controles */
+.controls-overlay {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #f0f0f0; /* Color de fondo de los controles */
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.8); /* Fondo blanco semitransparente */
+    backdrop-filter: blur(5px); 
+}
+
+/* Botón de información */
+.btn-info {
+    background-color: #c9c0f5;
+    color: #1B475D;
+    font-size: 1.4rem;
+    font-weight: bold;
+    padding: 15px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    border: none;
+}
+
+/* Leyenda flotante */
+.floating-legend {
+    position: fixed;           /* Se posiciona de forma fija en la pantalla */
+    top: 20%;                  /* Ajusta la posición vertical */
+    right: 5%;                 /* Ajusta la posición horizontal */
+    background-color: #ffffff;
+    border: 2px solid #00455e;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    z-index: 10000;            /* Asegura que se muestre encima de otros elementos */
+    max-width: 300px;
+}
+
+.pdb-container {
+    padding: 20px;
+    width: 100%; /* Ocupa todo el ancho disponible */
+    max-width: 600px; /* Define un ancho máximo para que no crezca más */
+    min-width: 400px; /* Evita que sea más pequeño de lo deseado */
+    overflow: hidden; /* Oculta el contenido que sobrepase el ancho */
+    word-wrap: break-word; /* Asegura que las palabras largas no rompan el diseño */
+    white-space: normal; /* Evita que el contenido fuerce la expansión */
+}
+
+
+
+.btn-fullscreen {
+    background-color: #B4BD62; /* Verde Oliva */
+}
+
+.btn-fullscreen:hover {
+    background-color: #939F42; /* Verde Oliva más oscuro */
+}
+
+.btn-reset {
+    background-color: #FAD564; /* Amarillo */
+    color: #1B475D; /* Azul oscuro */
+}
+
+.btn-reset:hover {
+    background-color: #E9C352; /* Amarillo más oscuro */
+}
+
+.btn-practice {
+    background-color: #00455e; /* Color de fondo */
+    color: white; /* Color del texto */
+    font-family: 'Fira Sans', sans-serif; /* Fuente de letra */
+    font-size: 1.4rem; /* Tamaño de letra más grande */
+    font-weight: bold; /* Negrita */
+    padding: 15px 30px; /* Aumentar el padding para hacer el botón más grande */
+    border-radius: 10px; /* Bordes redondeados */
+    cursor: pointer; /* Cambiar el cursor al pasar el mouse */
+    text-align: center; /* Centrar el texto */
+    flex-shrink: 0; /* Evitar que se encoja */
+    transition: background-color 0.3s ease; /* Transición suave */
+}
+
+.btn-practice:hover {
+    background-color: #00364d; /* Cambiar color al pasar el mouse */
+}
+
+
+/* Panel de información */
+#pdbInfo {
+    flex: 1;
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    color: #1B475D;
+    font-weight: bold;
+    border: 3px solid #1B475D; /* Contorno azul */
+}
+
+#pdbInfo h3 {
+    font-size: 2rem; /* Aumenta el tamaño del título */
+    font-weight: bold;
+}
+
+/* Tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background-color: #FFFFFF;
+}
+
+table td {
+    padding: 12px;
+    border-bottom: 1px solid #C6C2F2;
+    font-size: 1em;
+    color: #1B475D;
+}
+
+table td:first-child {
+    font-size: 0.9rem; /* Reduce el tamaño de las etiquetas de la tabla */
+    font-weight: normal;
+}
+
+
+/* Tooltip del átomo */
+#tooltip {
+    position: absolute;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 10px;
+    border-radius: 8px;
+    z-index: 1000;
+    pointer-events: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+#tooltip table {
+    color: white;
+    font-size: 14px;
+}
+
+#tooltip img {
+    width: 50px;
+    height: 50px;
+}
+
+
+
+#renderSettings {
+    margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#renderSettings td {
+    padding: 10px;
+    border-bottom: 1px solid #D3D3D3;
+    font-size: 0.9rem;
+    color: #1B475D;
+}
+
+#renderSettings input[type="range"] {
+    width: 100%;
+}
+
+#renderSettings input[type="color"] {
+    width: 50px;
+    height: 30px;
+    padding: 0;
+}
+
+
+
+/* Ajustes de la tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table td, table th {
+    padding: 12px;
+    border-bottom: 1px solid #D3D3D3;
+    font-size: 1.1em;
+    color: #333;
+    
+}
+
+table td {
+    text-align:start;
+    font-size: 1rem;
+    
+}
+
+.legend-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding: 80px;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Leyenda */
+.legend {
+    margin-top: 20px;
+    margin-left: 5px;
+    margin-right: 80px; /* Aumenta la separación desde la izquierda */
+    padding: 10px;
+    flex: 1;
+    text-align: left;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    color: #1B475D; /* Color de texto azul oscuro */
+    font-family: 'Fira Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinea los elementos a la izquierda */
+}
+
+
+.legend h3 {
+    margin: 0 0 15px 0; /* Reducir el margen inferior del título */
+    font-size: 1.5em;
+    color: #1B475D;
+    font-weight: bold;
+    align-self: flex-start; /* Alinea el título hacia la derecha */
+}
+
+.legend ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    width: 100%; /* Ocupa todo el ancho disponible */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* Alinea los elementos de la lista hacia la derecha */
+}
+
+.legend li {
+    margin: 8px 0;
+    font-size: 1em;
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre el ícono y el texto */
+    justify-content: flex-start; /* Alinea el contenido hacia la derecha */
+}
+
+.legend li i {
+    font-size: 1.2em;
+    color: #1B475D; /* Color amarillo para los íconos */
+}
+
+.legend li b {
+    font-weight: 600;
+    color: #1B475D; /* Color azul oscuro para el texto en negrita */
+}
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap');
+
+
+
+/* Estilo para los botones generales */
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    color: white;
+    transition: background-color 0.3s ease;
+}
+
+/* Botón personalizado para cargar archivo */
+input[type="file"] {
+    display: none; /* Ocultar el input de archivo predeterminado */
+}
+
+label[for="file"] {
+    display: inline-block;
+    padding: 20px 60px;
+    background-color: #c9c0f5;
+    border-radius: 5px;
+    color: black;
+    cursor: pointer;
+    text-align: center;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+label[for="file"]:hover {
+    background-color: #b8a9f0;
+}
+
+.values-divider {
+    border: none;
+    height: 9px;              /* Ajusta el grosor de la línea */
+    background-color: #FAD564;
+    margin: 50px 0;           /* Espaciado superior e inferior */
+}
+
+
+#uploadForm {
+    display: flex;
+    flex-direction: column;
+    /* Centra los elementos */
+    gap: 10px; /* Espaciado entre elementos */
+}
+
+/* Estilo del botón de renderizado */
+#renderButton {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px 60px;
+    background-color: #00455e;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s ease-in-out;
+
+
+}
+
+#renderButton:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+}
+
+/* Animación del loader (spinner) */
+.loader {
+    width: 18px;
+    height: 18px;
+    border: 3px solid white;
+    border-top: 3px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+button[type="submit"] {
+    align-items: center; 
+    background-color: #00455e;
+    color: white;
+    padding: 20px 60px;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    border: none;
+}
+
+button[type="submit"]:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+
+button[type="submit"]:hover {
+    background-color: #00364d;
+}
+
+
+
+/* Estilo para el mensaje de error */
+.error-message {
+    color: red;
+    font-weight: bold;
+    margin-top: 10px;
+}
+/* Estilos generales del footer */
+footer {
+    display: flex;
+    flex-direction: column;
+    background-color: #00455e; /* Color de fondo uniforme */
+    color: white;
+    margin: 0; /* Eliminar márgenes */
+    padding: 0; /* Eliminar padding */
+}
+
+/* Sección superior del footer */
+.footer-top {
+    background-color: #00455e; /* Mismo color de fondo que el footer */
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: white;
+    margin-bottom: 0; /* Eliminar el espacio entre secciones */
+    padding-top: 36px;
+    border: none; /* Eliminar bordes */
+}
+
+.footer-left img {
+    width: 350px;
+    height: auto;
+    margin-left: 20px;
+}
+
+.footer-right {
+    flex: 1;
+    text-align: right;
+    padding-right: 100px;
+}
+
+.footer-right p {
+    font-size: 14px;
+    font-style: italic;
+    margin: 0;
+}
+
+/* Sección inferior del footer */
+.footer-bottom {
+    background-color: #397285; /* Color de fondo uniforme */
+    text-align: center;
+    color: white;
+    font-size: 12px;
+    line-height: 1.2;
+    padding: 6px 0;
+    padding-top: 0px;
+    border: none; /* Eliminar bordes */
+}
+
+/* Eliminar cualquier borde o línea en los elementos del footer */
+.footer-top, .footer-bottom, .footer-left, .footer-right {
+    border: none;
+    outline: none;
+}
+
+/* Párrafo con texto en cursiva (italic) */
+.italic-text {
+    font-style: italic;
+}
+
+/* Colores personalizados para Misión y Visión */
+.yellow-text {
+    color: #ffd25d; /* Amarillo */
+}
+
+.purple-text {
+    color: #c9c0f5; /* Púrpura */
+}
+
+/* Estilo para el footer inferior */
+.footer-bottom {
+    width: 100%;
+    text-align: center;
+    font-size: 1em;
+    font-weight: bold; /* Negrita */
+    font-style: italic; /* Cursiva */
+    margin-top: 20px;
+}
+
+
+/* Estilo de la imagen del logo en el footer */
+.footer-logo {
+    width: 400px;
+    height: auto;
+    margin: 10px 0;
+    display: block;
+}
+
+/* Responsividad para dispositivos pequeños */
+@media screen and (max-width: 768px) {
+    .footer-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .footer-section {
+        margin-bottom: 20px;
+    }
+
+    .footer-bottom {
+        font-size: 0.9em;
+    }
+}
+
+.scroll-to-top {
+    background-color: #b2bd5c;
+    color: white;
+    border: none;
+    border-radius: 10%;
+    width: 80px;
+    height: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+}
+
+.scroll-to-top img {
+    width: 24px;
+    height: 24px;
+}
+
+/* Importación de fuentes */
+@import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Fira+Sans:wght@300;400;500;700&display=swap');
+
+/* Estilos generales */
+body {
+    font-family: 'Fira Sans', sans-serif;
+    margin: 0;
+    font-size: 1.2rem;
+    padding: 0;
+    background-color: #ffffff;
+    color: #1B475D;
+}
+
+/* Contenedor del login */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh; /* Ocupa toda la altura de la pantalla */
+    background-color: #ffffff;
+    padding-bottom: 50px; /* Espacio extra para separarlo del footer */
+}
+
+/* Título */
+.login-title {
+    font-size: 2rem;
+    font-weight: bold;
+    font-family: 'Lilita One', sans-serif;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Tarjeta de login */
+.login-card {
+    background-color: #F8F8FF;
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 400px;
+    border: 2px solid #D3D3D3;
+}
+
+/* Icono de usuario */
+.login-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.login-icon svg {
+    width: 60px;
+    height: 60px;
+    color: #0A4D5F;
+}
+
+/* Inputs */
+.input-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.input-label {
+    font-size: 14px;
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    border: 2px solid #C6C2F2;
+    background-color: #E6E6FA;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: border 0.3s ease;
+}
+
+.input-field:focus {
+    border-color: #0A4D5F;
+    box-shadow: 0 0 5px rgba(10, 77, 95, 0.5);
+}
+
+/* Enlace de olvido de contraseña */
+.forgot-password {
+    display: block;
+    text-align: right;
+    font-size: 14px;
+    color: #0A4D5F;
+    text-decoration: none;
+    margin-bottom: 15px;
+}
+
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* Botón de inicio de sesión */
+.login-button {
+    width: 100%;
+    background-color: #0A4D5F;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.login-button:hover {
+    background-color: #083A45;
+}
+
+/* Mensaje de error */
+.error-message {
+    color: red;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Mensaje de registro */
+.register-message {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+
+
+/* Asegurar que los elementos estén más abajo del footer */
+.footer {
+    margin-top: 50px;
+}
+
+/* Responsividad */
+@media (max-width: 480px) {
+    .login-card {
+        width: 90%;
+    }
+}
+
+.dashboard-container {
+    text-align: center;
+}
+
+.header {
+    background-color: #4e7989cb;
+    color: white;
+    padding: 20px;
+    font-size: 1.2em;
+}
+
+.molecule-image {
+    width: 80px;
+    display: block;
+    margin: 0 auto 10px;
+}
+
+.student-info {
+    font-weight: bold;
+    font-size: 1.5em;
+    margin: 20px 0;
+}
+
+.menu {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+.menu span {
+    cursor: pointer;
+    padding: 5px 10px;
+    border-bottom: 3px solid transparent;
+}
+
+.menu .active {
+    font-weight: bold;
+    border-bottom: 3px solid #FFC107;
+}
+
+.practices {
+    display: flex;
+    
+    justify-content: center;
+    gap: 15px;
+}
+
+.practice-card {
+    background: white;
+    border-radius: 10px;
+    padding: 15px;
+    width: 200px;
+    box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.practice-card img {
+    width: 80px;
+    margin-bottom: 10px;
+}
+
+.practice-card h3 {
+    color: #0D3B66;
+}
+
+.practice-card button {
+    background-color: #0D3B66;
+    color: white;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.practice-card button:hover {
+    background-color: #05508C;
+}
+
+.sidebar {
+    padding-top: 100px;
+    width: 250px;
+    height: 100vh;
+    background-color: #f4f4f4;
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+    z-index: 1000;
+}
+
+.sidebar.compact {
+    
+    width: 50px; /* Ancho reducido para el modo compacto */
+}
+
+.sidebar.compact .sidebar-content a {
+    padding: 8px 5px;
+}
+
+.sidebar.compact .sidebar-content a span {
+    display: none; /* Oculta el texto en modo compacto */
+}
+
+.sidebar.compact .sidebar-header {
+    justify-content: center;
+}
+
+.sidebar.compact .menu-button,
+.sidebar.compact .close-button,
+.sidebar.compact .pin-button {
+    width: 250px;
+}
+
+.sidebar.collapsed {
+    transform: translateX(-250px);
+}
+
+.sidebar.locked {
+    transform: translateX(0) !important;
+}
