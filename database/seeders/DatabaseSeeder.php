@@ -13,11 +13,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        // Ejecutar primero los seeders de datos base
+        $this->call([
+            RoleSeeder::class,      // Roles deben ir primero
+            SchoolSeeder::class,    // Escuelas
+            GradeSeeder::class,     // Grados
+            TurnoSeeder::class,     // Turnos
+            GroupSeeder::class,     // Grupos
+            UserSeeder::class,      // Usuarios (después de grupos y escuelas)
+            AssignmentSeeder::class // Asignaciones (requiere users y grupos)
         ]);
     }
 }
