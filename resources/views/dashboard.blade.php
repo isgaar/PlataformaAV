@@ -1,17 +1,62 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
+@section('content')
+<div class="container">
+    <div class="row justify-content-center">
+        
+        <!-- Sidebar (Solo si el usuario es Admin) -->
+        @if(auth()->user()->role === 'admin')
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        {{ __('Admin Panel') }}
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item"><a href="{{ route('users.index') }}" class="text-decoration-none">Gestionar Usuarios</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        @endif
+
+        <!-- Contenido Principal -->
+        <div class="{{ auth()->user()->role === 'admin' ? 'col-md-9' : 'col-md-8' }}">
+            <div class="card">
+                <div class="card-header">{{ __('Dashboard') }}</div>
+
+                <div class="card-body">
+                    @if (session('status'))
+                        <div class="alert alert-success" role="alert">
+                            {{ session('status') }}
+                        </div>
+                    @endif
+
+                    {{ __('You are logged in!') }}
+
+                    <br><br>
+                    
+                    <!-- Mostrar el rol del usuario -->
+                    <strong>Tu rol es: </strong> 
+                    @if(auth()->user()->roles->isNotEmpty())
+                        {{ auth()->user()->getRoleNames()->first() }} 
+                    @else
+                        Sin rol asignado
+                    @endif
                 </div>
             </div>
         </div>
+
     </div>
-</x-app-layout>
+</div>
+
+<!-- JavaScript para console.log -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        @if(auth()->user()->role === 'admin')
+            console.log("El usuario autenticado es un ADMIN.");
+        @endif
+    });
+</script>
+
+@endsection
