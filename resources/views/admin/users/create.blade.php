@@ -24,9 +24,25 @@
         <form action="{{ route('users.store') }}" method="POST">
             @csrf
             <div class="form-group">
-                <label for="name">Nombre del usuario</label>
+                <label for="name">Nombre</label>
                 <input type="text" name="name" class="form-control" placeholder="Nombre del usuario" required>
                 @error('name')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="last_name">Apellido Paterno</label>
+                <input type="text" name="last_name" class="form-control" placeholder="Apellido Paterno" required>
+                @error('last_name')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
+            </div>
+
+            <div class="form-group">
+                <label for="second_last_name">Apellido Materno</label>
+                <input type="text" name="second_last_name" class="form-control" placeholder="Apellido Materno">
+                @error('second_last_name')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
             </div>
@@ -47,11 +63,15 @@
                         <i class="fas fa-eye"></i>
                     </button>
                 </div>
+                @error('password')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="form-group">
                 <label for="roles">Asigne un privilegio</label>
                 <select name="roles" class="form-control">
+                    <option value="">Seleccione un privilegio</option>
                     @foreach ($roles as $role)
                         <option value="{{ $role->id }}">{{ $role->name }}</option>
                     @endforeach
@@ -61,6 +81,7 @@
             <div class="form-group">
                 <label for="school_id">Escuela</label>
                 <select name="school_id" class="form-control" required>
+                    <option value="">Seleccione una escuela</option>
                     @foreach ($schools as $school)
                         <option value="{{ $school->id }}">{{ $school->name }}</option>
                     @endforeach
@@ -70,6 +91,7 @@
             <div class="form-group">
                 <label for="grade_id">Grado</label>
                 <select name="grade_id" class="form-control" required>
+                    <option value="">Seleccione un grado</option>
                     @foreach ($grades as $grade)
                         <option value="{{ $grade->id }}">{{ $grade->name }}</option>
                     @endforeach
@@ -79,6 +101,7 @@
             <div class="form-group">
                 <label for="group_id">Grupo</label>
                 <select name="group_id" class="form-control" required>
+                    <option value="">Seleccione un grupo</option>
                     @foreach ($groups as $group)
                         <option value="{{ $group->id }}">{{ $group->name }}</option>
                     @endforeach
@@ -88,6 +111,7 @@
             <div class="form-group">
                 <label for="turno_id">Turno</label>
                 <select name="turno_id" class="form-control" required>
+                    <option value="">Seleccione un turno</option>
                     @foreach ($turnos as $turno)
                         <option value="{{ $turno->id }}">{{ $turno->nombre }}</option>
                     @endforeach

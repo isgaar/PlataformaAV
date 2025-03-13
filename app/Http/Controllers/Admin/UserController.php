@@ -16,34 +16,37 @@ class UserController extends Controller
     // Método para listar usuarios con sus roles y relaciones
     public function index(Request $request)
     {
-        $search = $request->get('search', ''); // Obtener valor de búsqueda, por defecto vacío
+        $search = $request->get('search', ''); // Obtener valor de búsqueda
 
-        // Realizamos la búsqueda si se proporciona un término
-        $users = User::with(['roles', 'school', 'grade', 'group', 'turno']) // Eager loading de las relaciones
+        $users = User::with(['roles', 'school', 'grade', 'group', 'turno']) // Cargar relaciones
             ->where('name', 'like', "%$search%")
+            ->orWhere('last_name', 'like', "%$search%")
+            ->orWhere('second_last_name', 'like', "%$search%")
             ->orWhere('email', 'like', "%$search%")
-            ->paginate(10);  // Paginación de 10 usuarios por página
+            ->paginate(10);  
 
-        return view('admin.users.index', compact('users', 'search')); // Pasamos usuarios y la búsqueda
+        return view('admin.users.index', compact('users', 'search'));
     }
 
-    // Método para mostrar el formulario de crear usuario
+    // Método para mostrar el formulario de creación
     public function create()
     {
-        $roles = Role::all(); // Obtenemos todos los roles disponibles
-        $schools = School::all(); // Obtenemos todas las escuelas
-        $grades = Grade::all(); // Obtenemos todos los grados
-        $groups = Group::all(); // Obtenemos todos los grupos
-        $turnos = Turno::all(); // Obtenemos todos los turnos
+        $roles = Role::all();
+        $schools = School::all();
+        $grades = Grade::all();
+        $groups = Group::all();
+        $turnos = Turno::all();
         return view('admin.users.create', compact('roles', 'schools', 'grades', 'groups', 'turnos'));
     }
 
-    // Método para almacenar el nuevo usuario en la base de datos
+    // Método para almacenar un nuevo usuario
     public function store(Request $request)
     {
-        // Validar los datos del formulario
+        // Validar datos
         $request->validate([
             'name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'second_last_name' => 'nullable|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:8|confirmed',
             'school_id' => 'required|exists:schools,id',
@@ -52,9 +55,11 @@ class UserController extends Controller
             'turno_id' => 'required|exists:turnos,id',
         ]);
 
-        // Crear un nuevo usuario
+        // Crear usuario
         $user = User::create([
             'name' => $request->name,
+            'last_name' => $request->last_name,
+            'second_last_name' => $request->second_last_name,
             'email' => $request->email,
             'password' => bcrypt($request->password),
             'school_id' => $request->school_id,
@@ -63,7 +68,7 @@ class UserController extends Controller
             'turno_id' => $request->turno_id,
         ]);
 
-        // Asignar roles al usuario
+        // Asignar roles si se seleccionan
         if ($request->has('roles')) {
             $user->assignRole($request->roles);
         }
@@ -71,72 +76,69 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('status', 'Usuario creado correctamente');
     }
 
-    // Método para mostrar el formulario de edición de un usuario
+    // Método para mostrar formulario de edición
     public function edit($id)
     {
-        $user = User::findOrFail($id); // Obtener usuario por ID
-        $roles = Role::all(); // Obtener todos los roles disponibles
-        $schools = School::all(); // Obtener todas las escuelas
-        $grades = Grade::all(); // Obtener todos los grados
-        $groups = Group::all(); // Obtener todos los grupos
-        $turnos = Turno::all(); // Obtener todos los turnos
+        $user = User::findOrFail($id);
+        $roles = Role::all();
+        $schools = School::all();
+        $grades = Grade::all();
+        $groups = Group::all();
+        $turnos = Turno::all();
         return view('admin.users.edit', compact('user', 'roles', 'schools', 'grades', 'groups', 'turnos'));
     }
 
-    // Método para actualizar los datos de un usuario
+    // Método para actualizar usuario
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id); // Obtener el usuario por ID
+        $user = User::findOrFail($id);
 
-        // Validar los datos del formulario
+        // Validar datos
         $request->validate([
             'name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'second_last_name' => 'nullable|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
-            'password' => 'nullable|string|min:8|confirmed', // La contraseña es opcional al editar
+            'password' => 'nullable|string|min:8|confirmed',
             'school_id' => 'required|exists:schools,id',
             'grade_id' => 'required|exists:grades,id',
             'group_id' => 'required|exists:groups,id',
             'turno_id' => 'required|exists:turnos,id',
         ]);
 
-        // Actualizar los datos del usuario
+        // Actualizar usuario
         $user->update([
             'name' => $request->name,
+            'last_name' => $request->last_name,
+            'second_last_name' => $request->second_last_name,
             'email' => $request->email,
-            'password' => $request->password ? bcrypt($request->password) : $user->password, // Solo actualizar si hay nueva contraseña
+            'password' => $request->password ? bcrypt($request->password) : $user->password,
             'school_id' => $request->school_id,
             'grade_id' => $request->grade_id,
             'group_id' => $request->group_id,
             'turno_id' => $request->turno_id,
         ]);
 
-        // Actualizar los roles
+        // Actualizar roles
         if ($request->has('roles')) {
-            $user->syncRoles($request->roles); // Sincronizar roles
+            $user->syncRoles($request->roles);
         }
 
         return redirect()->route('users.index')->with('status', 'Usuario actualizado correctamente');
     }
 
-    // Método para mostrar los detalles de un usuario
+    // Método para mostrar detalles del usuario
     public function show($id)
-{
-    // Obtener el usuario por ID junto con las relaciones
-    $user = User::with(['school', 'grade', 'group', 'turno', 'roles'])->findOrFail($id);
+    {
+        $user = User::with(['school', 'grade', 'group', 'turno', 'roles'])->findOrFail($id);
+        return view('admin.users.show', compact('user'));
+    }
 
-    // Retornar la vista con los detalles del usuario
-    return view('admin.users.show', compact('user'));
-}
-
-
-
-
-    // Método para eliminar un usuario
+    // Método para eliminar usuario
     public function destroy($id)
     {
-        $user = User::findOrFail($id); // Obtener el usuario por ID
-        $user->delete(); // Eliminar el usuario
-
+        $user = User::findOrFail($id);
+        $user->delete();
         return redirect()->route('users.index')->with('status', 'Usuario eliminado correctamente');
     }
 }

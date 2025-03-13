@@ -18,9 +18,9 @@
                 <label for="email" class="input-label">Correo electrónico / Usuario</label>
                 <input id="email" type="email" class="input-field @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
                 @error('email')
-                    <div class="invalid-feedback">
-                        <strong>{{ $message }}</strong>
-                    </div>
+                <div class="invalid-feedback">
+                    <strong>{{ $message }}</strong>
+                </div>
                 @enderror
             </div>
 
@@ -33,30 +33,21 @@
                     </button>
                 </div>
                 @error('password')
-                    <div class="invalid-feedback">
-                        <strong>{{ $message }}</strong>
-                    </div>
+                <div class="invalid-feedback">
+                    <strong>{{ $message }}</strong>
+                </div>
                 @enderror
             </div>
 
-            <div class="input-group">
-                <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                    <label class="form-check-label" for="remember">
-                        {{ __('Remember Me') }}
-                    </label>
-                </div>
+            <div class="login-actions">
+                <a href="{{ route('password.request') }}" class="forgot-password">¿Has olvidado tu contraseña?</a>
+                <button type="submit" class="login-button">
+                    Iniciar Sesión
+                </button>
             </div>
 
-            <button type="submit" class="login-button">
-                {{ __('Login') }}
-            </button>
-
-            @if (Route::has('password.request'))
-                <a class="btn btn-link" href="{{ route('password.request') }}">
-                    {{ __('Forgot Your Password?') }}
-                </a>
-            @endif
+            <p class="register-text">¿No tienes cuenta? <br> <span>Pide al administrador te registre</span></p>
+            <div class="yellow-line"></div>
         </form>
     </div>
 </div>
@@ -78,6 +69,81 @@
 </script>
 
 <style>
+    body {
+        font-family: 'Fira Sans', sans-serif;
+        margin: 0;
+        font-size: 1.2rem;
+        padding: 0;
+        background-color: #ffffff;
+        color: #1B475D;
+    }
+
+    .login-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+
+    .login-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: #003366;
+        margin-bottom: 20px;
+        text-align: center;
+        position: relative;
+    }
+
+    .login-title::after,
+    .login-title::before {
+        content: "";
+        display: block;
+        width: 50px;
+        height: 6px;
+        background-color: #f4c542;
+        position: absolute;
+        top: 50%;
+    }
+
+    .login-title::before {
+        left: -60px;
+    }
+
+    .login-title::after {
+        right: -60px;
+    }
+
+    .login-icon {
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .input-group {
+        text-align: left;
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+    .input-label {
+        font-size: 14px;
+        font-weight: bold;
+        color: #333;
+        display: block;
+        margin-bottom: 5px;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 8px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        background-color: #d6c5f0;
+        font-size: 14px;
+    }
+
     .password-container {
         display: flex;
         align-items: center;
@@ -95,13 +161,73 @@
 
     .eye-button i.dark-icon {
         color: #1B475D;
-        /* Color oscuro para el icono */
     }
 
-    .captcha-container {
+    .login-actions {
         display: flex;
-        justify-content: center;
-        margin: 15px 0;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .login-button {
+        background-color: #003366;
+        color: white;
+        padding: 10px;
+        width: 48%;
+        border: none;
+        border-radius: 5px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    .login-button:hover {
+        background-color: #002244;
+    }
+
+    .forgot-password {
+        font-size: 12px;
+        color: #555;
+        text-decoration: none;
+        width: 48%;
+        text-align: left;
+    }
+
+    .register-text {
+        font-size: 12px;
+        color: #333;
+        margin-top: 15px;
+        text-align: center;
+    }
+
+    .register-text span {
+        font-weight: bold;
+        color: #003366;
+    }
+
+    .yellow-line {
+        width: 350px;
+        height: 3px;
+        background-color: #f4c542;
+        margin: 10px auto;
+    }
+
+    @media (max-width: 480px) {
+        .login-actions {
+            flex-direction: column;
+        }
+
+        .forgot-password {
+            text-align: center;
+        }
+
+        .login-button,
+        .forgot-password {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+
     }
 </style>
 @endsection
