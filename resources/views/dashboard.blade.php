@@ -2,7 +2,6 @@
 
 @section('content')
 
-
 <div class="dashboard-container">
     <!-- Cabecera -->
     <div class="header">
@@ -12,10 +11,9 @@
     
     <div class="row justify-content-center">
         <!-- Sidebar (Solo si el usuario es Admin) -->
-        @if(auth()->user()->role === 'admin')
+        @if(auth()->user()->hasRole('admin'))
             <div class="col-md-3">
                 <div class="card">
-                    
                     <div class="card-body">
                         <ul class="list-group">
                             <li class="list-group-item"><a href="{{ route('users.index') }}" class="text-decoration-none">Gestionar Usuarios</a></li>
@@ -26,7 +24,7 @@
         @endif
 
         <!-- Contenido Principal -->
-        <div class="{{ auth()->user()->role === 'admin' ? 'col-md-9' : 'col-md-8' }}">
+        <div class="{{ auth()->user()->hasRole('admin') ? 'col-md-9' : 'col-md-8' }}">
             <!-- Información del estudiante -->
             <div class="student-info">
                 <p><strong>¡Hola, {{ auth()->user()->name }}!</strong></p>  <!-- Nombre del usuario -->
@@ -65,8 +63,5 @@
         </div>
     </div>
 </div>
-
-
-
 
 @endsection

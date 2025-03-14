@@ -15,67 +15,82 @@ class UserSeeder extends Seeder
 {
     public function run()
     {
-        // Verificar que los roles existen
-        $adminRole = Role::where('name', 'admin')->first();
-        $teacherRole = Role::where('name', 'teacher')->first();
-        $studentRole = Role::where('name', 'student')->first();
+        // Verificar que los roles existen en la base de datos
+        $roles = [
+            'admin' => Role::where('name', 'admin')->first(),
+            'teacher' => Role::where('name', 'teacher')->first(),
+            'student' => Role::where('name', 'student')->first(),
+        ];
 
-        if (!$adminRole || !$teacherRole || !$studentRole) {
-            $this->command->error("Asegúrate de ejecutar el RoleSeeder antes de UserSeeder.");
+        if (in_array(null, $roles)) {
+            $this->command->error("❌ Error: Asegúrate de ejecutar el RoleSeeder antes de UserSeeder.");
             return;
         }
 
-        // Obtener datos relacionados
+        // Obtener datos relacionados (pueden ser `null` si no existen en la BD aún)
         $school = School::first();
         $grade = Grade::first();
         $group = Group::first();
         $turno = Turno::first();
 
-        // Crear usuario Admin
-        $admin = User::create([
-            'name' => 'Admin User',
-            'last_name' => 'Admin',
-            'second_last_name' => 'User',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password123'),
-            'role' => 'admin', // 👈 Asegurar que el campo role se incluya
-            'school_id' => $school->id ?? null,
-            'grade_id' => $grade->id ?? null,
-            'group_id' => $group->id ?? null,
-            'turno_id' => $turno->id ?? null
-        ]);
-        $admin->assignRole('admin');
+        // Lista de usuarios a crear
+        $users = [
+            [
+                'name' => 'Admin User',
+                'last_name' => 'Admin',
+                'second_last_name' => 'User',
+                'email' => 'admin@example.com',
+                'password' => Hash::make('password123'),
+                'role' => 'admin',
+                'school_id' => null,
+                'grade_id' => null,
+                'group_id' => null,
+                'turno_id' => null
+            ],
+            [
+                'name' => 'Teacher User',
+                'last_name' => 'Teacher',
+                'second_last_name' => 'User',
+                'email' => 'teacher@example.com',
+                'password' => Hash::make('password123'),
+                'role' => 'teacher',
+                'school_id' => $school->id ?? null,
+                'grade_id' => $grade->id ?? null,
+                'group_id' => $group->id ?? null,
+                'turno_id' => $turno->id ?? null
+            ],
+            [
+                'name' => 'Student User',
+                'last_name' => 'Student',
+                'second_last_name' => 'User',
+                'email' => 'student@example.com',
+                'password' => Hash::make('password123'),
+                'role' => 'student',
+                'school_id' => $school->id ?? null,
+                'grade_id' => $grade->id ?? null,
+                'group_id' => $group->id ?? null,
+                'turno_id' => $turno->id ?? null
+            ],
+        ];
 
-        // Crear usuario Teacher
-        $teacher = User::create([
-            'name' => 'Teacher User',
-            'last_name' => 'Teacher',
-            'second_last_name' => 'User',
-            'email' => 'teacher@example.com',
-            'password' => Hash::make('password123'),
-            'role' => 'teacher', // 👈 Asegurar que el campo role se incluya
-            'school_id' => $school->id ?? null,
-            'grade_id' => $grade->id ?? null,
-            'group_id' => $group->id ?? null,
-            'turno_id' => $turno->id ?? null
-        ]);
-        $teacher->assignRole('teacher');
+        // Crear los usuarios y asignar roles con Spatie
+        foreach ($users as $userData) {
+            $user = User::create([
+                'name' => $userData['name'],
+                'last_name' => $userData['last_name'],
+                'second_last_name' => $userData['second_last_name'],
+                'email' => $userData['email'],
+                'password' => $userData['password'],
+                'school_id' => $userData['school_id'],
+                'grade_id' => $userData['grade_id'],
+                'group_id' => $userData['group_id'],
+                'turno_id' => $userData['turno_id'],
+            ]);
 
-        // Crear usuario Student
-        $student = User::create([
-            'name' => 'Student User',
-            'last_name' => 'Student',
-            'second_last_name' => 'User',
-            'email' => 'student@example.com',
-            'password' => Hash::make('password123'),
-            'role' => 'student', // 👈 Asegurar que el campo role se incluya
-            'school_id' => $school->id ?? null,
-            'grade_id' => $grade->id ?? null,
-            'group_id' => $group->id ?? null,
-            'turno_id' => $turno->id ?? null
-        ]);
-        $student->assignRole('student');
+            // Asignar el rol con Spatie
+            $user->assignRole($roles[$userData['role']]->name);
+        }
 
-        $this->command->info('Usuarios con roles creados correctamente.');
+        $this->command->info(' ¡Usuarios con roles creados correctamente!.');
     }
 }
