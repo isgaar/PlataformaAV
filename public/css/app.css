@@ -494,7 +494,7 @@
 
 .scroll-to-top img {
     width: 24px;
-    height: 24px;
+    height: 44px;
 }
 
 /* Controles debajo del visor */
@@ -1252,17 +1252,33 @@ body {
     border-radius: 10px;
     padding: 15px;
     width: 200px;
+    min-height: 280px; /* Altura fija */
     box-shadow: 0px 4px 8px rgba(0,0,0,0.1);
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-.practice-card img {
-    width: 80px;
-    margin-bottom: 10px;
+.practice-card img, 
+.practice-card i {
+    width: auto;
+    height: 80px; /* Mantiene el tamaño uniforme */
+    margin: 0 auto 10px; /* Centrar horizontalmente */
+    justify-content: center;
+    align-items: center;
 }
 
 .practice-card h3 {
     color: #0D3B66;
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+}
+
+.practice-card p {
+    font-size: 0.9rem;
+    color: #555;
+    flex-grow: 1; /* Asegura que el contenido se distribuya bien */
 }
 
 .practice-card button {
@@ -1278,6 +1294,7 @@ body {
 .practice-card button:hover {
     background-color: #05508C;
 }
+
 
 .sidebar {
     padding-top: 100px;
@@ -1320,4 +1337,413 @@ body {
 
 .sidebar.locked {
     transform: translateX(0) !important;
+}
+/* FORMULARIOS DE USUARIOS */
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.form-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 580px;
+}
+.form-title {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+}
+.form-group {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+.form-group input, .form-group select, .form-group button {
+    flex: 1;
+    padding: 8px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.password-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.eye-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    right: 0px;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+.eye-button i {
+    color: #1B475D;
+}
+.eye-button:hover i {
+    color: #0a3d62;
+}
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+.back-btn {
+    background: #cbbdfd;
+}
+.submit-btn {
+    background: #4CAF50;
+    color: white;
+}
+.submit-btn.disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+.submit-btn.enabled {
+    background: #4CAF50;
+    cursor: pointer;
+}
+.submit-btn.enabled:hover {
+    background: #45a049;
+    transform: scale(1.05);
+}
+.form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+/* FIN DE DISEÑO DE FORMULARIOS */
+
+/* Estilos para los botones de acciones */
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    color: #212529;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+    border-color: #d39e00;
+}
+
+/* Estilos para el switch de Bootstrap */
+.form-check-input {
+    width: 2.5em;
+    height: 1.5em;
+}
+
+.form-check-input:checked {
+    background-color: #198754;
+    border-color: #198754;
+}
+
+/* Estilos generales para los formularios de Bootstrap */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-control {
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+}
+
+/* Estilo personalizado para el switch */
+.form-check.form-switch {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Personalización del interruptor */
+.form-check-input {
+    width: 3rem;
+    height: 1.5rem;
+    background-color: #e9ecef;
+    border: 2px solid #adb5bd;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    position: relative;
+}
+
+/* Color cuando está activado */
+.form-check-input:checked {
+    background-color: #0d6efd; /* Azul Bootstrap */
+    border-color: #0d6efd;
+}
+
+/* Sombra al estar enfocado */
+.form-check-input:focus {
+    box-shadow: 0 0 5px rgba(13, 110, 253, 0.5);
+}
+
+/* Animación de deslizamiento */
+.form-check-input::before {
+    content: "";
+    position: absolute;
+    width: 1.2rem;
+    height: 1.2rem;
+    background: white;
+    border-radius: 50%;
+    top: 50%;
+    left: 5px;
+    transform: translateY(-50%);
+    transition: all 0.3s ease-in-out;
+}
+
+/* Movimiento del switch al activarse */
+.form-check-input:checked::before {
+    left: calc(100% - 1.5rem);
+}
+
+/* Etiqueta personalizada */
+.form-check-label {
+    font-size: 1rem;
+    color: #343a40;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+}
+
+/* Cambia el color del texto cuando está activado */
+.form-check-input:checked + .form-check-label {
+    color: #0d6efd;
+}
+/* Contenedor del switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+/* Ocultar la caja de verificación original */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* Estilo del slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+/* El círculo del switch */
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+/* Color cuando está activado */
+input:checked + .slider {
+    background-color: #0d6efd; /* Azul Bootstrap */
+}
+
+/* Efecto de foco */
+input:focus + .slider {
+    box-shadow: 0 0 1px #0d6efd;
+}
+
+/* Mueve el círculo cuando está activado */
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Bordes redondeados */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Estilos para el panel de administración */
+.admin-panel {
+    
+    padding: 20px;
+    margin: 5px auto; /* Centrar el panel y agregar margen */
+    max-width: 90%; /* Ancho máximo para evitar que se extienda demasiado */
+    width: 100%; /* Ancho completo */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.admin-controls {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* Estilos para los botones y controles dentro del panel */
+.admin-panel .btn-practice {
+    background-color: #00455e;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    border: none;
+}
+
+.admin-panel .btn-practice:hover {
+    background-color: #00364d;
+}
+
+/* Estilos para los switches */
+.admin-panel .switch-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.admin-panel .switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.admin-panel .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.admin-panel .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 34px;
+}
+
+.admin-panel .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+}
+
+.admin-panel input:checked + .slider {
+    background-color: #0d6efd;
+}
+
+.admin-panel input:focus + .slider {
+    box-shadow: 0 0 1px #0d6efd;
+}
+
+.admin-panel input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Estilos para la tabla */
+.admin-panel .table-responsive {
+    width: 100%; /* La tabla ocupará todo el ancho disponible */
+}
+
+.admin-panel .custom-table {
+    width: 100%; /* Se asegura de que la tabla use todo el ancho del contenedor */
+    border-collapse: collapse;
+}
+
+.admin-panel .custom-table th, .admin-panel .custom-table td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.admin-panel .custom-table thead {
+    background-color: #00455e;
+    color: white;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+    .admin-panel {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .admin-controls {
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .admin-panel .btn-practice {
+        width: 100%;
+    }
 }

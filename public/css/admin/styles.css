@@ -1,0 +1,505 @@
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #ffffff;
+  text-align: center; /* Asegura que todo el contenido esté centrado */
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  font-family: 'Fira Sans', sans-serif;
+}
+
+.custom-table th {
+  background-color: #00455e;
+  color: white;
+  padding: 15px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center; /* Centra los encabezados */
+}
+
+.custom-table td {
+  padding: 12px;
+  font-size: 14px;
+  border-bottom: 1px solid #D3D3D3;
+  color: #1B475D;
+  text-align: center; /* Asegura que todo el texto de las celdas esté centrado */
+  vertical-align: middle; /* Asegura alineación vertical */
+}
+
+.custom-table tr:hover {
+  background-color: #eef3f7;
+}
+
+/* Botones personalizados dentro de la tabla */
+.btn-sm {
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  border-radius: 50%;
+  background-color: #00455e;
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-sm:hover {
+  background-color: #00364d;
+}
+
+/* ---------------------- */
+/* RESPONSIVE DESIGN */
+/* ---------------------- */
+
+/* Para tablets y pantallas medianas */
+@media (max-width: 1024px) {
+  .custom-table th,
+  .custom-table td {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .btn-sm {
+    width: 35px;
+    height: 35px;
+    font-size: 14px;
+  }
+}
+
+/* Para móviles */
+@media (max-width: 768px) {
+  .custom-table {
+    font-size: 12px; /* Reduce la fuente para mejor legibilidad */
+  }
+
+  .custom-table th,
+  .custom-table td {
+    font-size: 12px;
+    padding: 8px;
+    text-align: center; /* Centra todo en dispositivos móviles */
+    display: block;
+  }
+
+  .custom-table tr {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 1px solid #D3D3D3;
+    padding: 10px;
+  }
+
+  .btn-sm {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+}
+
+/* Para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .custom-table th,
+  .custom-table td {
+    font-size: 10px;
+    padding: 6px;
+  }
+
+  .btn-sm {
+    width: 28px;
+    height: 28px;
+    font-size: 10px;
+  }
+}
+
+
+/* Botones personalizados */
+.btn-sm {
+  width: 35px;
+  height: 35px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  border-radius: 50%;
+  background-color: #00455e;
+  /* Azul oscuro */
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-sm:hover {
+  background-color: #00364d;
+  /* Azul más oscuro al pasar el mouse */
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+
+  .custom-table th,
+  .custom-table td {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .btn-sm {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+
+  .d-flex.justify-content-between {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .d-flex.justify-content-between h2 {
+    margin-bottom: 15px;
+  }
+
+  .d-flex.justify-content-between a {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* ========================= */
+/*        FORMULARIO         */
+/* ========================= */
+
+.container {
+  width: 95%;
+  /* Ahora ocupa un 95% del ancho en pantallas grandes */
+  max-width: 1100px;
+  /* Aumenta el ancho máximo a 1100px */
+  margin: auto;
+  padding: 35px;
+  /* Aumenta un poco el padding para equilibrio */
+  font-family: 'Fira Sans', sans-serif;
+  transition: all 0.3s ease-in-out;
+}
+
+/* **Hacerlo más flexible en pantallas más pequeñas** */
+@media (max-width: 1024px) {
+  .container {
+    max-width: 95%;
+    /* Se expande un poco más en pantallas medianas */
+    padding: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    width: 97%;
+    /* Se ensancha más en tablets */
+    padding: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    width: 100%;
+    /* Se mantiene ancho completo en móviles */
+    padding: 18px;
+    border-radius: 5px;
+    box-shadow: none;
+  }
+}
+
+
+
+/* Título */
+.form-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #1B475D;
+  /* Azul oscuro */
+  text-align: left;
+  margin-bottom: 20px;
+  border-bottom: 3px solid #00455e;
+  /* Azul oscuro */
+  padding-bottom: 10px;
+}
+
+/* Caja del formulario */
+.form-container {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Campos del formulario */
+.form-control {
+  border: 2px solid #00455e;
+  /* Azul oscuro */
+  border-radius: 5px;
+  padding: 10px;
+  font-size: 14px;
+  font-family: 'Fira Sans', sans-serif;
+  /* Fuente principal */
+  color: #1B475D;
+  /* Azul oscuro */
+}
+
+/* Botones */
+.form-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.btn {
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  text-transform: uppercase;
+  font-family: 'Fira Sans', sans-serif;
+  /* Fuente principal */
+  font-weight: bold;
+  /* Negrita */
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #00455e;
+  /* Azul oscuro */
+  border: none;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #00364d;
+  /* Azul más oscuro al pasar el mouse */
+}
+
+.btn-secondary {
+  background-color: #c9c0f5;
+  /* Morado claro */
+  color: #1B475D;
+  /* Azul oscuro */
+}
+
+.btn-secondary:hover {
+  background-color: #b8a9f0;
+  /* Morado más oscuro al pasar el mouse */
+}
+
+/* ========================= */
+/*       RESPONSIVE          */
+/* ========================= */
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+
+  .col-md-6,
+  .col-md-3,
+  .col-md-12 {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+
+  .form-footer {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+}
+
+/* Modal */
+.modal-open {
+  overflow: hidden;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1050;
+  display: none;
+  overflow: hidden;
+  outline: 0;
+}
+
+.modal-open .modal {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.modal-dialog {
+  position: relative;
+  width: auto;
+  margin: 0.5rem;
+  pointer-events: none;
+}
+
+.modal.fade .modal-dialog {
+  transition: -webkit-transform 0.3s ease-out;
+  transition: transform 0.3s ease-out;
+  transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
+  -webkit-transform: translate(0, -25%);
+  transform: translate(0, -25%);
+}
+
+.modal.show .modal-dialog {
+  -webkit-transform: translate(0, 0);
+  transform: translate(0, 0);
+}
+
+.modal-dialog-centered {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  min-height: calc(100% - (0.5rem * 2));
+}
+
+.modal-content {
+  position: relative;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  width: 100%;
+  pointer-events: auto;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.3rem;
+  outline: 0;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1040;
+  background-color: #000;
+}
+
+.modal-backdrop.fade {
+  opacity: 0;
+}
+
+.modal-backdrop.show {
+  opacity: 0.5;
+}
+
+.modal-header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: start;
+  -ms-flex-align: start;
+  align-items: flex-start;
+  -webkit-box-pack: justify;
+  -ms-flex-pack: justify;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid #e9ecef;
+  border-top-left-radius: 0.3rem;
+  border-top-right-radius: 0.3rem;
+}
+
+.modal-header .close {
+  padding: 1rem;
+  margin: -1rem -1rem -1rem auto;
+}
+
+.modal-title {
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+.modal-body {
+  position: relative;
+  -webkit-box-flex: 1;
+  -ms-flex: 1 1 auto;
+  flex: 1 1 auto;
+  padding: 1rem;
+}
+
+.modal-footer {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  padding: 1rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.modal-footer> :not(:first-child) {
+  margin-left: .25rem;
+}
+
+.modal-footer> :not(:last-child) {
+  margin-right: .25rem;
+}
+
+.modal-scrollbar-measure {
+  position: absolute;
+  top: -9999px;
+  width: 50px;
+  height: 50px;
+  overflow: scroll;
+}
+
+@media (min-width: 576px) {
+  .modal-dialog {
+    max-width: 500px;
+    margin: 1.75rem auto;
+  }
+
+  .modal-dialog-centered {
+    min-height: calc(100% - (1.75rem * 2));
+  }
+
+  .modal-sm {
+    max-width: 300px;
+  }
+}
+
+@media (min-width: 992px) {
+  .modal-lg {
+    max-width: 800px;
+  }
+}
+
+/* Tooltip */
+.tooltip {
+  font-family: 'Fira Sans', sans-serif;
+  /* Fuente principal */
+  background-color: #00455e;
+  /* Azul oscuro */
+  color: white;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.tooltip .arrow::before {
+  border-top-color: #00455e;
+  /* Azul oscuro */
+}

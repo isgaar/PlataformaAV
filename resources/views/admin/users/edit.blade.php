@@ -1,196 +1,135 @@
 @extends('layouts.app')
 
 @section('content_header')
+@include('layouts.edit')
+
 @if (Session::has('status'))
-<div class="col-md-12 alert-section">
-    <div class="alert alert-{{ Session::get('status_type') }}" style="text-align: center; padding: 5px; margin-bottom: 5px;">
-        <span style="font-size: 20px; font-weight: bold;">
-            {{ Session::get('status') }}
-            @php
-            Session::forget('status');
-            @endphp
-        </span>
+<div class="alert-section">
+    <div class="alert alert-{{ Session::get('status_type') }}">
+        <span>{{ Session::get('status') }}</span>
+        @php
+        Session::forget('status');
+        @endphp
     </div>
 </div>
 @endif
-
-<div class="card">
-    <div class="card-header">
-        <h4 class="card-title"><b>Editando Usuario</b> <i class="fas fa-user-pen"></i></h4>
-    </div>
-</div>
 @stop
 
 @section('content')
-<div class="card-body">
-    <form action="{{ route('users.update', $user->id) }}" method="POST">
-        @csrf
-        @method('PUT')
-
-        <!-- Nombre -->
-        <div class="form-group">
-            <label for="name">Nombre del usuario</label>
-            <input type="text" name="name" id="name" class="form-control" value="{{ $user->name }}" oninput="capitalizeInput(this)" required>
-            @error('name')
-            <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
-
-        <!-- Apellidos -->
-        <div class="form-group">
-            <label for="last_name">Apellido Paterno</label>
-            <input type="text" name="last_name" id="last_name" class="form-control" value="{{ $user->last_name }}" required>
-            @error('last_name')
-            <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
-
-        <div class="form-group">
-            <label for="second_last_name">Apellido Materno</label>
-            <input type="text" name="second_last_name" id="second_last_name" class="form-control" value="{{ $user->second_last_name }}">
-            @error('second_last_name')
-            <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
-
-        <!-- Correo electrónico -->
-        <div class="form-group">
-            <label for="email">Correo electrónico</label>
-            <input type="email" name="email" id="email" class="form-control" value="{{ $user->email }}" required>
-            @error('email')
-            <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
-
-        <!-- Contraseña -->
-        <div class="form-group">
-            <label for="password">Contraseña</label>
-            <div class="input-group">
-                <input type="password" name="password" id="password" class="form-control" placeholder="Dejar en blanco para no cambiar">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('password')">
-                        <i class="fa fa-eye"></i>
-                    </button>
-                </div>
+<div class="form-container">
+    <div class="form-card">
+        <h3 class="form-title">{{ isset($user) ? 'Editando Usuario' : 'Perfil de nuevo usuario' }}</h3>
+        <form action="{{ isset($user) ? route('users.update', $user->id) : route('users.store') }}" method="POST" id="userForm">
+            @csrf
+            @if(isset($user)) @method('PUT') @endif
+            
+            <div class="form-group">
+                <input type="text" name="name" id="name" placeholder="Nombre del usuario*" value="{{ $user->name ?? '' }}" required oninput="validateText(this)">
+                @error('name')<span class="text-danger">{{ $message }}</span>@enderror
             </div>
-            @error('password')
-            <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
 
-        <!-- Confirmar Contraseña -->
-        <div class="form-group">
-            <label for="password_confirmation">Confirmar Contraseña</label>
-            <div class="input-group">
-                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" placeholder="Dejar en blanco para no cambiar">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('password_confirmation')">
-                        <i class="fa fa-eye"></i>
-                    </button>
-                </div>
+            <div class="form-group">
+                <input type="text" name="last_name" id="last_name" placeholder="Apellido Paterno*" value="{{ $user->last_name ?? '' }}" required oninput="validateText(this)">
+                <input type="text" name="second_last_name" id="second_last_name" placeholder="Apellido Materno*" value="{{ $user->second_last_name ?? '' }}" oninput="validateText(this)">
             </div>
-        </div>
 
-        <!-- Asignación de Rol -->
-        <div class="form-group">
-            <label for="roles">Asigne un privilegio</label>
-            <select name="roles" id="roles" class="form-control">
-                <option value="">Seleccione un privilegio</option>
-                @foreach ($roles as $role)
-                <option value="{{ $role->id }}" @if($user->roles->contains($role->id)) selected @endif>{{ $role->name }}</option>
-                @endforeach
-            </select>
-            @error('roles')
-            <span class="text-danger">{{ $message }}</span>
-            @enderror
-        </div>
+            <div class="form-group">
+                <input type="email" name="email" id="email" placeholder="Correo electrónico*" value="{{ $user->email ?? '' }}" required>
+                @error('email')<span class="text-danger">{{ $message }}</span>@enderror
+            </div>
 
-        <!-- Selección de Escuela -->
-        <div class="form-group">
-            <label for="school_id">Escuela</label>
-            <select name="school_id" id="school_id" class="form-control" required>
-                <option value="">Seleccione una escuela</option>
-                @foreach ($schools as $school)
-                <option value="{{ $school->id }}" @if($user->school_id == $school->id) selected @endif>{{ $school->name }}</option>
-                @endforeach
-            </select>
-        </div>
+            <div class="form-group password-container">
+                <input type="password" name="password" id="password" placeholder="{{ isset($user) ? 'Dejar en blanco para no cambiar' : 'Contraseña*' }}" {{ isset($user) ? '' : 'required' }}>
+                <button type="button" class="eye-button" onclick="togglePassword('password')"><i class="fas fa-eye-slash"></i></button>
+            </div>
 
-        <!-- Selección de Grado -->
-        <div class="form-group">
-            <label for="grade_id">Grado</label>
-            <select name="grade_id" id="grade_id" class="form-control" required>
-                <option value="">Seleccione un grado</option>
-                @foreach ($grades as $grade)
-                <option value="{{ $grade->id }}" @if($user->grade_id == $grade->id) selected @endif>{{ $grade->name }}</option>
-                @endforeach
-            </select>
-        </div>
+            <div class="form-group">
+                <select name="roles" id="roles" required onchange="checkAdmin()">
+                    <option value="">Asigne un privilegio*</option>
+                    @foreach ($roles as $role)
+                        <option value="{{ $role->id }}" {{ isset($user) && $user->roles->contains($role->id) ? 'selected' : '' }}>{{ $role->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <select name="school_id" id="school_id" required>
+                    <option value="">Escuela*</option>
+                    @foreach ($schools as $school)
+                        <option value="{{ $school->id }}" {{ isset($user) && $user->school_id == $school->id ? 'selected' : '' }}>{{ $school->name }}</option>
+                    @endforeach
+                </select>
+                <select name="grade_id" id="grade_id" required>
+                    <option value="">Grado*</option>
+                    @foreach ($grades as $grade)
+                        <option value="{{ $grade->id }}" {{ isset($user) && $user->grade_id == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
+                    @endforeach
+                </select>
+                <select name="group_id" id="group_id" required>
+                    <option value="">Grupo*</option>
+                    @foreach ($groups as $group)
+                        <option value="{{ $group->id }}" {{ isset($user) && $user->group_id == $group->id ? 'selected' : '' }}>{{ $group->name }}</option>
+                    @endforeach
+                </select>
+                <select name="turno_id" id="turno_id" required>
+                    <option value="">Turno*</option>
+                    @foreach ($turnos as $turno)
+                        <option value="{{ $turno->id }}" {{ isset($user) && $user->turno_id == $turno->id ? 'selected' : '' }}>{{ $turno->nombre }}</option>
+                    @endforeach
+                </select>
+            </div>
 
-        <!-- Selección de Grupo -->
-        <div class="form-group">
-            <label for="group_id">Grupo</label>
-            <select name="group_id" id="group_id" class="form-control" required>
-                <option value="">Seleccione un grupo</option>
-                @foreach ($groups as $group)
-                <option value="{{ $group->id }}" @if($user->group_id == $group->id) selected @endif>{{ $group->name }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <!-- Selección de Turno -->
-        <div class="form-group">
-            <label for="turno_id">Turno</label>
-            <select name="turno_id" id="turno_id" class="form-control" required>
-                <option value="">Seleccione un turno</option>
-                @foreach ($turnos as $turno)
-                <option value="{{ $turno->id }}" @if($user->turno_id == $turno->id) selected @endif>{{ $turno->nombre }}</option>
-                @endforeach
-            </select>
-        </div>
-
-        <div class="text-center">
-            <button type="submit" class="btn btn-warning">Actualizar</button>
-        </div>
-    </form>
+            <div class="form-buttons">
+                <a href="{{ route('users.index') }}" class="btn back-btn">Atrás</a>
+                <button type="submit" class="btn submit-btn">{{ isset($user) ? 'Actualizar' : 'Guardar' }}</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 <script>
-    function togglePasswordVisibility(fieldId) {
-        var field = document.getElementById(fieldId);
-        if (field.type === "password") {
-            field.type = "text";
+    function togglePassword() {
+        let passwordInput = document.getElementById("password");
+        let eyeIcon = document.querySelector(".eye-button i");
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            eyeIcon.classList.remove("fa-eye");
+            eyeIcon.classList.add("fa-eye-slash");
         } else {
-            field.type = "password";
+            passwordInput.type = "password";
+            eyeIcon.classList.remove("fa-eye-slash");
+            eyeIcon.classList.add("fa-eye");
         }
     }
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const roleSelect = document.getElementById("roles");
-        const schoolSelect = document.getElementById("school_id");
-        const gradeSelect = document.getElementById("grade_id");
-        const groupSelect = document.getElementById("group_id");
-        const turnoSelect = document.getElementById("turno_id");
+    function validateText(input) {
+        input.value = input.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ ]/g, '');
+        input.value = input.value.charAt(0).toUpperCase() + input.value.slice(1);
+        validateForm();
+    }
 
-        function toggleFields() {
-            const selectedRole = roleSelect.options[roleSelect.selectedIndex].text.toLowerCase();
-            const isAdmin = selectedRole === "admin";
+    function checkAdmin() {
+        var isAdmin = document.getElementById('roles').options[document.getElementById('roles').selectedIndex].text.toLowerCase() === 'admin';
+        document.getElementById('school_id').disabled = isAdmin;
+        document.getElementById('grade_id').disabled = isAdmin;
+        document.getElementById('group_id').disabled = isAdmin;
+        document.getElementById('turno_id').disabled = isAdmin;
+        validateForm();
+    }
 
-            schoolSelect.disabled = isAdmin;
-            gradeSelect.disabled = isAdmin;
-            groupSelect.disabled = isAdmin;
-            turnoSelect.disabled = isAdmin;
-
-            if (isAdmin) {
-                schoolSelect.value = "";
-                gradeSelect.value = "";
-                groupSelect.value = "";
-                turnoSelect.value = "";
+    function validateForm() {
+        var isAdmin = document.getElementById('roles').options[document.getElementById('roles').selectedIndex].text.toLowerCase() === 'admin';
+        var inputs = document.querySelectorAll('input[required], select[required]');
+        var allFilled = true;
+        
+        inputs.forEach(function(input) {
+            if (input.disabled === false && input.value.trim() === '') {
+                allFilled = false;
             }
-        }
-
-        roleSelect.addEventListener("change", toggleFields);
-        toggleFields();
-    });
+        });
+        
+        document.getElementById('submitButton').disabled = !(allFilled || isAdmin);
+    }
 </script>
+
 @stop

@@ -1,0 +1,109 @@
+/* Estilo general */
+.container {
+    max-width: 1200px;
+}
+
+/* Estilo de la tabla */
+.custom-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    text-align: center;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.custom-table th {
+    background-color: #007bff;
+    color: white;
+    padding: 14px;
+    font-size: 16px;
+    text-transform: uppercase;
+}
+
+.custom-table td {
+    padding: 12px;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+}
+
+.custom-table tr:hover {
+    background-color: #eef3f7;
+}
+
+/* Botones de acción */
+.actions .btn-sm {
+    width: 40px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    border-radius: 8px;
+    transition: 0.3s ease-in-out;
+}
+
+.actions .btn-sm:hover {
+    transform: scale(1.1);
+}
+
+/* Botón de creación */
+.create-btn {
+    background-color: #0056b3;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+.create-btn:hover {
+    background-color: #003d82;
+}
+
+/* Estilo del buscador */
+.search-box input {
+    border-radius: 5px 0 0 5px;
+}
+
+.search-box button {
+    border-radius: 0 5px 5px 0;
+    background-color: #0056b3;
+    color: white;
+}
+
+.search-box button:hover {
+    background-color: #003d82;
+}
+
+/* Modal */
+.modal-header {
+    font-size: 18px;
+}
+
+.modal-footer .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .custom-table th, .custom-table td {
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .btn-sm {
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
+    }
+
+    .title {
+        font-size: 22px;
+    }
+
+    .create-btn {
+        width: 100%;
+        text-align: center;
+    }
+}

@@ -1,6 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
+@include('layouts.edit')
+
 <div class="container">
     <!-- Mensaje de estado -->
     @if (Session::has('status'))
@@ -8,33 +10,33 @@
         <strong>{{ Session::get('status') }}</strong>
     </div>
     @php
-        Session::forget('status');
+    Session::forget('status');
     @endphp
     @endif
 
-    <!-- Título y botón para agregar nuevo usuario -->
+    <!-- Título y botón para agregar usuario -->
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Usuarios</h2>
-        <a href="{{ route('users.create') }}" class="btn btn-success">
-            <i class="fas fa-user-plus"></i> Nuevo Usuario
-        </a>
+        <h2 class="fw-bold text-primary"><i class="fas fa-users"></i> Usuarios</h2>
+        <button class="btn-practice" onclick="window.location.href='{{ route('users.create') }}'">
+            <i class="fas fa-user-plus"></i> Crear usuario
+        </button>
     </div>
 
-    <!-- Información de paginación -->
+    <!-- Información de paginación y búsqueda -->
     <div class="row mb-3">
         <div class="col-md-7">
             @if ($users->isEmpty())
-                <h5>No hay registros de usuarios</h5>
+            <h5>No hay registros de usuarios</h5>
             @else
-                <h5>{{ $users->total() }} Registro(s) encontrado(s). Página {{ $users->currentPage() }} de {{ $users->lastPage() }}. Registros por página: {{ $users->perPage() }}</h5>
+            <h5>{{ $users->total() }} Registro(s) encontrado(s). Página {{ $users->currentPage() }} de {{ $users->lastPage() }}. Registros por página: {{ $users->perPage() }}</h5>
             @endif
         </div>
         <div class="col-md-5 text-right">
             <form action="{{ route('users.index') }}" method="get">
                 <div class="input-group">
-                    <input type="text" class="form-control" name="search" value="{{ request('search') }}" placeholder="Buscar usuario">
+                    <input type="text" class="input-field" name="search" value="{{ request('search') }}" placeholder="Buscar usuario">
                     <div class="input-group-append">
-                        <button class="btn btn-outline-info" type="submit">Buscar</button>
+                        <button class="btn-practice" type="submit">Buscar</button>
                     </div>
                 </div>
             </form>
@@ -42,52 +44,62 @@
     </div>
 
     <!-- Tabla de usuarios -->
-    <table class="table table-bordered table-striped">
-        <thead class="thead-light">
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Correo electrónico</th>
-                <th>Rol</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($users as $user)
-            <tr>
-                <td>{{ $user->id }}</td>
-                <td>{{ $user->name }}</td>
-                <td>{{ $user->email }}</td>
-                <td>
-                    @if ($user->roles->isNotEmpty())
+    <div class="table-responsive">
+        <table class="table table-hover custom-table text-center">
+            <thead class="bg-primary text-white">
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Correo electrónico</th>
+                    <th>Rol</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach($users as $user)
+                <tr>
+                    <td>{{ $user->id }}</td>
+                    <td>{{ $user->name }} {{ $user->last_name }} {{ $user->second_last_name }}</td>
+                    <td>{{ $user->email }}</td>
+                    <td>
+                        @if ($user->roles->isNotEmpty())
                         {{ $user->roles->first()->name }}
-                    @else
+                        @else
                         Sin rol
-                    @endif
-                </td>
-                <td>
-                    <a href="{{ route('users.show', $user) }}" class="btn btn-info" title="Ver detalles del usuario">
-                        <i class="fas fa-eye"></i>
-                    </a>
-                    <a href="{{ route('users.edit', $user) }}" class="btn btn-warning" title="Editar usuario">
-                        <i class="fas fa-pen"></i>
-                    </a>
-                    <a href="{{ route('users.destroy', $user) }}" class="btn btn-danger" title="Eliminar usuario" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $user->id }}').submit();">
-                        <i class="fas fa-trash"></i>
-                    </a>
-                    <form id="delete-form-{{ $user->id }}" action="{{ route('users.destroy', $user) }}" method="POST" style="display: none;">
-                        @csrf
-                        @method('DELETE')
-                    </form>
-                </td>
-            </tr>
-            @endforeach
-        </tbody>
-    </table>
+                        @endif
+                    </td>
+                    <td>
+                        @if($user->id !== auth()->user()->id)
+                        <!-- Botón para eliminar usuario con modal -->
+                        <button class="btn-danger" title="Eliminar usuario" data-bs-toggle="modal" data-bs-target="#deleteModal" data-userid="{{ $user->id }}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+
+                        <!-- Botón para ver usuario -->
+                        <button class="btn-success" title="Ver usuario" onclick="window.location.href='{{ route('users.show', $user) }}'">
+                            <i class="bi bi-eye"></i>
+                        </button>
+
+                        <!-- Botón para editar usuario -->
+                        <button class="btn-warning" title="Editar usuario" onclick="window.location.href='{{ route('users.edit', $user) }}'">
+                            <i class="bi bi-pencil"></i>
+                        </button>
+                        @else
+                        <span class="text-muted">Tu cuenta</span>
+                        @endif
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
 
     <!-- Paginación -->
     <div class="d-flex justify-content-center">
         {{ $users->appends(request()->except('page'))->links('pagination::bootstrap-4') }}
     </div>
 </div>
+
+<!-- Incluir el modal de eliminación -->
+
 @endsection

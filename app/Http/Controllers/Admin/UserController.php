@@ -153,7 +153,7 @@ class UserController extends Controller
                 'last_name' => 'required|string|max:255',
                 'second_last_name' => 'nullable|string|max:255',
                 'email' => 'required|email|unique:users,email,' . $user->id,
-                'password' => 'nullable|string|min:8|confirmed',
+                'password' => 'nullable|string|min:8|',
                 'school_id' => 'nullable|exists:schools,id',
                 'grade_id' => 'nullable|exists:grades,id',
                 'group_id' => 'nullable|exists:groups,id',
