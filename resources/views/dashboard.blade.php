@@ -3,6 +3,15 @@
 
 @section('content')
 <div class="dashboard-container">
+    @if(auth()->user()->hasRole('student') || auth()->user()->hasRole('teacher'))
+
+    <!-- Cabecera -->
+    <div class="header text-center">
+        <img src="{{ asset('images/AGUA.png') }}" alt="Molécula" class="molecule-image">
+        <h1>Bienvenido(a) a tu laboratorio virtual de química.</h1>
+    </div>
+
+    @endif
 
 
     <div class="container mt-4">
@@ -65,11 +74,7 @@
 
                 @if(auth()->user()->hasRole('student') || auth()->user()->hasRole('teacher'))
 
-                <!-- Cabecera -->
-                <div class="header text-center">
-                    <img src="{{ asset('images/AGUA.png') }}" alt="Molécula" class="molecule-image">
-                    <h1>Bienvenido(a) a tu laboratorio virtual de química.</h1>
-                </div>
+
                 <div class="student-info text-center">
                     <p><strong>¡Hola, {{ auth()->user()->name }}!</strong></p>
                 </div>

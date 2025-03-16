@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RenderOnlineController;
 use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\Log;
+
 
 
 Route::fallback(function () {
