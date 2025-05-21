@@ -28,10 +28,11 @@
         font-weight: 700;
     }
 </style>
+
 <div class="hero">
     <!-- Primera sección: Imagen y contenido -->
     <div class="hero-top">
-        <img src="{{ asset('images/desk.png') }}" alt="Monitor">
+        <img src="{{ asset('images/desk.png') }}" alt="Monitor" class="pulse">
         <div class="hero-content">
             <div class="hero-buttons">
                 <button class="hero-button yellow" style="position: relative; left: -20px;">Explora</button>
@@ -41,7 +42,6 @@
             <hr class="hero-divider">
             <p>¡Únete a la nueva era educativa y lleva la ciencia al siguiente nivel!</p>
         </div>
-
     </div>
 
     <!-- Segunda sección: Botón centrado -->
@@ -51,6 +51,24 @@
             Descubre tu molécula
         </button>
     </div>
+</div>
+
+<!-- Nueva sección de tabla periódica -->
+<div class="section table">
+    
+    <div>
+        <h2>Explora la Tabla Periódica</h2>
+        <p>Descubre todos los elementos químicos, sus propiedades y características de manera interactiva. Una herramienta esencial para estudiantes y amantes de la química.</p>
+        
+        <div class="button-container">
+            <button class="cta-button" onclick="window.location.href='/tablaperiodica'">
+                <i class="fas fa-atom"></i>
+                Ver Tabla Periódica
+            </button>
+        </div>
+    </div>
+    <img src="{{ asset('images/tbpicon.png') }}" alt="Icono tabla periódica">
+
 </div>
 
 <div class="section mission">
@@ -93,7 +111,4 @@
         </div>
     </div>
 </div>
-</body>
-
-</html>
 @endsection

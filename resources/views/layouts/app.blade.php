@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
 
-    
+
 
     <title>{{ str_replace('_', ' ', config('app.name')) }}</title>
 
@@ -45,22 +45,19 @@
 
         <!-- Barra de navegación -->
         <nav class="navbar" id="navbar">
-            <ul class="navbar-left">
-                <li class="logo">
+            <div class="navbar-left">
+                <div class="logo">
                     <a href="/">
                         <img src="{{ asset('av.png') }}" alt="Logo" class="logo-img">
                     </a>
-                </li>
-            </ul>
-
+                </div>
+            </div>
+            
             <ul class="navbar-right flex items-center gap-6">
                 <!-- Si el usuario está autenticado -->
                 @auth
                 <li id="dashboard-link">
                     <a href="{{ route('dashboard') }}" class="hover:text-yellow-400">Inicio</a>
-                </li>
-                <li class="active">
-                    <a href="#" class="hover:text-yellow-400">Biblioteca</a>
                 </li>
                 <li id="user-name">
                     <a href="#" class="flex items-center gap-2 hover:text-yellow-400">
@@ -129,15 +126,15 @@
         let lastScrollTop = 0;
         const navbar = document.getElementById("navbar");
 
-        window.addEventListener("scroll", function () {
+        window.addEventListener("scroll", function() {
             let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
 
             if (currentScroll > lastScrollTop) {
                 // Desplazamiento hacia abajo -> ocultar navbar con animación
-                navbar.style.transform = "translateY(-100%)";  // La barra se mueve hacia arriba fuera de la vista
+                navbar.style.transform = "translateY(-100%)"; // La barra se mueve hacia arriba fuera de la vista
             } else {
                 // Desplazamiento hacia arriba -> mostrar navbar con animación
-                navbar.style.transform = "translateY(0)";  // La barra vuelve a su posición original
+                navbar.style.transform = "translateY(0)"; // La barra vuelve a su posición original
             }
 
             lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // Para no permitir valores negativos

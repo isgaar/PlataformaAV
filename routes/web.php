@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RenderOnlineController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\TablaperiodicaController;
 
 
 
@@ -43,6 +44,8 @@ require __DIR__.'/auth.php';
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+Route::get('/tablaperiodica', [TablaperiodicaController::class, 'index']);
 
 
 Route::middleware(['auth', 'can:manage users'])->prefix('admin/users')->group(function () {
