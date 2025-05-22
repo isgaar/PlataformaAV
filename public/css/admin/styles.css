@@ -503,3 +503,8 @@
   border-top-color: #00455e;
   /* Azul oscuro */
 }
+
+.bg-dashboard-header {
+  background-color: #1B475D !important;
+  color: #ffffff !important;
+}

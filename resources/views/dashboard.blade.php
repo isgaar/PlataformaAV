@@ -7,178 +7,300 @@
 
 @section('content')
 <div class="dashboard-container">
-    {{-- ----------------------------------------------------
-         ENCABEZADO (Común a docentes y estudiantes)
-    ----------------------------------------------------- */--}}
+    {{-- ENCABEZADO (Común a docentes y estudiantes) --}}
     @if(auth()->user()->hasRole('student') || auth()->user()->hasRole('teacher'))
-        <div class="header text-center">
-            <img src="{{ asset('images/AGUA.png') }}" alt="Molécula" class="molecule-image">
-            <h1>Bienvenido(a) a tu laboratorio virtual de química.</h1>
-        </div>
+    <div class="header text-center">
+        <img src="{{ asset('images/AGUA.png') }}" alt="Molécula" class="molecule-image">
+        <h1>Bienvenido(a) a tu laboratorio virtual de química.</h1>
+    </div>
     @endif
 
     <div class="container mt-4">
         <div class="row justify-content-center">
             <div class="col-md-{{ auth()->user()->hasRole('admin') ? '9' : '10' }}">
 
-                {{-- ----------------------------------------------------
-                     PANEL DE ADMINISTRACIÓN
-                ----------------------------------------------------- */--}}
+                {{-- PANEL DE ADMINISTRACIÓN --}}
                 @if(auth()->user()->hasRole('admin'))
-                    <div class="admin-panel">
-                        <button class="btn-practice mb-3" onclick="window.location.href='{{ route('users.index') }}'">
-                            <i class="bi bi-people"></i> Gestionar Usuarios
-                        </button>
+                <div class="admin-panel">
+                    <button class="btn-practice mb-3" onclick="window.location.href='{{ route('users.index') }}'">
+                        <i class="bi bi-people"></i> Gestionar Usuarios
+                    </button>
 
-                        <div class="d-flex align-items-center mb-3">
-                            <span class="fw-bold me-2">Mostrar:</span>
-                            @foreach(['student' => 'Estudiantes', 'teacher' => 'Maestros'] as $key => $label)
-                                <div class="d-flex align-items-center me-3">
-                                    <label class="fw-bold me-2">{{ $label }}</label>
-                                    <label class="switch">
-                                        <input type="checkbox" id="{{ $key }}Switch" onchange="toggleRole('{{ $key }}')" {{ $role == $key ? 'checked' : '' }}>
-                                        <span class="slider round"></span>
-                                    </label>
-                                </div>
-                            @endforeach
+                    <div class="d-flex align-items-center mb-3">
+                        <span class="fw-bold me-2">Mostrar:</span>
+                        @foreach(['student' => 'Estudiantes', 'teacher' => 'Maestros'] as $key => $label)
+                        <div class="d-flex align-items-center me-3">
+                            <label class="fw-bold me-2">{{ $label }}</label>
+                            <label class="switch">
+                                <input type="checkbox" id="{{ $key }}Switch" onchange="toggleRole('{{ $key }}')" {{ $role == $key ? 'checked' : '' }}>
+                                <span class="slider round"></span>
+                            </label>
                         </div>
-
-                        <div class="table-responsive" id="usersTableContainer">
-                            @include('dashboard.partials.users-table')
-                        </div>
-
-                        <div class="d-flex justify-content-center" id="paginationContainer">
-                            {{ $users->appends(request()->except('page'))->links('pagination::bootstrap-4') }}
-                        </div>
+                        @endforeach
                     </div>
+
+                    <div class="table-responsive" id="usersTableContainer">
+                        @include('dashboard.partials.users-table')
+                    </div>
+
+                    <div class="d-flex justify-content-center" id="paginationContainer">
+                        {{ $users->appends(request()->except('page'))->links('pagination::bootstrap-4') }}
+                    </div>
+                </div>
                 @endif
 
-                {{-- ----------------------------------------------------
-                     CONTENIDO  ESTUDIANTE / DOCENTE
-                ----------------------------------------------------- */--}}
+                {{-- CONTENIDO ESTUDIANTE / DOCENTE --}}
                 @if(auth()->user()->hasRole('student') || auth()->user()->hasRole('teacher'))
 
-                    {{-- Saludo --}}
-                    <div class="student-info text-center mb-3">
-                        <p class="h5">¡Hola, {{ auth()->user()->name }}!</p>
+                <div class="student-info text-center mb-3">
+                    <p class="h5">¡Hola, {{ auth()->user()->name }}!</p>
+                </div>
+
+                <div class="menu text-center mb-4">
+                    <span class="tab-link active" data-target="#coursesTab">Cursos</span>
+                    <span class="tab-link" data-target="#progressTab">Progreso</span>
+                </div>
+
+                {{-- TAB 1: CURSOS --}}
+                <div id="coursesTab" class="tab-pane show">
+                    <div class="practices d-flex flex-wrap justify-content-center">
+                        @foreach($practices as $practice)
+                        <div class="practice-card border border-primary m-2 text-center p-3">
+                            <img src="{{ asset('images/' . $practice['image']) }}" alt="{{ $practice['title'] }}" class="mb-2" style="max-height: 100px;">
+                            <h3 class="h5">{{ $practice['title'] }}</h3>
+                            <div class="colored-line my-2"></div>
+                            <p class="small">{!! $practice['description'] !!}</p>
+                            <button class="btn btn-primary">
+                                <i class="bi bi-play-fill"></i> Iniciar
+                            </button>
+                        </div>
+                        @endforeach
                     </div>
+                </div>
 
-                    {{-- Tabs --}}
-                    <div class="menu text-center mb-4">
-                        <span class="tab-link active" data-target="#coursesTab">Cursos</span>
-                        <span class="tab-link" data-target="#progressTab">Progreso</span>
-                    </div>
+                {{-- TAB 2: PROGRESO --}}
+                <div id="progressTab" class="tab-pane" style="display:none;">
+                    @role('teacher')
+                    <div class="container my-5">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-10">
+                                <div class="card shadow-sm border-primary">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="h5 mb-0 text-center">Progreso de Estudiantes</h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="table-responsive custom-table-responsive">
+                                            <table class="table table-hover align-middle mb-0">
+                                                <thead class="bg-dashboard-header">
+                                                    <tr>
+                                                        <th class="text-start ps-3">Estudiante</th>
+                                                        @foreach($practices as $p)
+                                                        <th class="text-center">{{ Str::limit($p['title'], 15) }}</th>
+                                                        @endforeach
+                                                    </tr>
+                                                </thead>
 
-                    {{-- *************************
-                          TAB 1:  CURSOS
-                       ************************* --}}
-                    <div id="coursesTab" class="tab-pane show">
-                        <div class="practices d-flex flex-wrap justify-content-center">
-                            @foreach($practices as $practice)
-                                <div class="practice-card border border-primary m-2 text-center p-3">
-                                    <img src="{{ asset('images/' . $practice['image']) }}" alt="{{ $practice['title'] }}" class="mb-2" style="max-height: 100px;">
-                                    <h3 class="h5">{{ $practice['title'] }}</h3>
-                                    <div class="colored-line my-2"></div>
-                                    <p class="small">{!! $practice['description'] !!}</p>
-                                    <button class="btn btn-primary">
-                                        <i class="bi bi-play-fill"></i> Iniciar
-                                    </button>
-
-                                    {{-- Extra buttons sólo para docentes 
-                                    @role('teacher')
-                                        <div class="mt-2">
-                                            <a href="" class="btn btn-outline-secondary btn-sm">
-                                                <i class="bi bi-pencil-square"></i> Editar
-                                            </a>
+                                                <tbody>
+                                                    @foreach($users as $student)
+                                                    <tr>
+                                                        <td class="text-start ps-3 fw-medium">
+                                                            {{ $student->name }} {{ $student->last_name }} {{ $student->second_last_name }}
+                                                        </td>
+                                                        @foreach($practices as $p)
+                                                        @php
+                                                        $done = in_array($p['id'], is_array($student->done_practices) ? $student->done_practices : (array) $student->done_practices);
+                                                        @endphp
+                                                        <td class="text-center">
+                                                            <span class="status-badge {{ $done ? 'bg-success' : 'bg-danger' }}">
+                                                                <i class="fas {{ $done ? 'fa-check' : 'fa-times' }}"></i>
+                                                                <span class="status-text">{{ $done ? 'Realizada' : 'Pendiente' }}</span>
+                                                            </span>
+                                                        </td>
+                                                        @endforeach
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
                                         </div>
-                                    @endrole
-                                    --}}
+                                    </div>
+                                    <div class="card-footer bg-light text-center">
+                                        <small class="text-muted">Actualizado el {{ now()->format('d/m/Y') }} - Total estudiantes: {{ count($users) }}</small>
+                                    </div>
                                 </div>
-                            @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    <style>
+                        .table thead th {
+                            color: #ffffff !important;
+                        }
+                    </style>
+                    @endrole
 
-                            {{-- 
-                            @role('teacher')
-                                <div class="practice-card border border-primary m-2 text-center p-3 d-flex flex-column justify-content-center align-items-center" style="min-width: 230px;">
-                                    <i class="bi bi-file-earmark-plus text-primary mb-3" style="font-size: 3rem;"></i>
-                                    <h3 class="h6 mb-2">Crear nueva práctica</h3>
-                                    <p class="small mb-3">Define una nueva práctica para tus estudiantes.</p>
-                                    <button class="btn btn-lg btn-outline-primary" onclick="window.location.href=''">
-                                        <i class="bi bi-plus-circle"></i> Crear práctica
-                                    </button>
+                    @role('student')
+                    <div class="container my-5">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="card shadow-sm border-primary">
+                                    <div class="card-header bg-primary text-white">
+                                        <h3 class="h5 mb-0 text-center">Mi Progreso Académico</h3>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover mb-0">
+                                                <thead class="bg-dashboard-header">
+                                                    <tr>
+                                                        <th class="w-40">Práctica</th>
+                                                        <th class="w-60">Estado</th>
+                                                    </tr>
+                                                </thead>
+
+                                                <tbody>
+                                                    @foreach($practices as $p)
+                                                    @php
+                                                    $done = in_array($p['id'], is_array(auth()->user()->done_practices) ? auth()->user()->done_practices : (array) auth()->user()->done_practices);
+                                                    @endphp
+                                                    <tr>
+                                                        <td class="align-middle">
+                                                            <strong>{{ $p['title'] }}</strong>
+                                                        </td>
+                                                        <td class="align-middle">
+                                                            <div class="d-flex align-items-center">
+                                                                <div class="progress flex-grow-1" style="height: 24px;">
+                                                                    <div class="progress-bar {{ $done ? 'bg-success' : 'bg-warning' }}"
+                                                                        role="progressbar"
+                                                                        style="width: {{ $done ? '100%' : '30%' }};"
+                                                                        aria-valuenow="{{ $done ? '100' : '30' }}"
+                                                                        aria-valuemin="0"
+                                                                        aria-valuemax="100">
+                                                                        {{ $done ? 'Completado' : 'En progreso' }}
+                                                                    </div>
+                                                                </div>
+                                                                <span class="ms-2 {{ $done ? 'text-success' : 'text-warning' }}">
+                                                                    <i class="fas {{ $done ? 'fa-check-circle' : 'fa-spinner' }}"></i>
+                                                                </span>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
-                            @endrole
-                            Botón de "crear práctica" para docentes --}}
+                            </div>
                         </div>
                     </div>
 
-                    {{-- *************************
-                          TAB 2:  PROGRESO
-                       ************************* --}}
-                    <div id="progressTab" class="tab-pane" style="display:none;">
-                        @role('teacher')
-                            {{-- Vista de alumnos --}}
-                            <div class="table-responsive">
-                                <table class="table table-bordered text-center align-middle">
-                                    <thead class="table-primary">
-                                        <tr>
-                                            <th>Estudiantes</th>
-                                            @foreach($practices as $p)
-                                                <th>{{ $p['title'] }}</th>
-                                            @endforeach
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach($users as $student)
-                                            <tr>
-                                                <td class="text-start ps-3">{{ $student->name }} {{ $student->last_name }} {{ $student->second_last_name }}</td>
-                                                @foreach($practices as $p)
-                                                    @php
-                                                        $done = in_array($p['id'], is_array($student->done_practices) ? $student->done_practices : (array) $student->done_practices);
-                                                    @endphp
-                                                    <td class="fw-bold {{ $done ? 'text-success' : 'text-danger' }}">
-                                                        {{ $done ? 'Realizada' : 'No realizada' }}
-                                                    </td>
-                                                @endforeach
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
-                        @endrole
+                    <style>
+                        .table thead th {
+                            color: #ffffff !important;
+                        }
 
-                        @role('student')
-                            {{-- Vista del propio progreso --}}
-                            <h3 class="h5 mb-4 text-center">Mi progreso</h3>
-                            <div class="progress-summary mx-auto" style="max-width:600px;">
-                                @foreach($practices as $p)
-                                    @php
-                                        $done = in_array($p['id'], is_array(auth()->user()->done_practices) ? auth()->user()->done_practices : (array) auth()->user()->done_practices);
-                                    @endphp
-                                    <div class="d-flex align-items-center mb-3">
-                                        <span class="me-3" style="width: 180px;">{{ $p['title'] }}</span>
-                                        <div class="progress flex-grow-1" role="progressbar" aria-label="{{ $p['title'] }}">
-                                            <div class="progress-bar {{ $done ? 'bg-success' : 'bg-secondary' }}" style="width: {{ $done ? '100%' : '0%' }};">
-                                                {{ $done ? 'Completado' : 'Pendiente' }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
-                            </div>
-                        @endrole
-                    </div>
-                @endif  {{-- Fin contenido estudiante/docente --}}
-            </div> {{-- col --}}
-        </div> {{-- row --}}
-    </div> {{-- container --}}
-</div> {{-- dashboard-container --}}
+                        .border-primary {
+                            border-color: #0d6efd !important;
+                        }
 
-{{-- ----------------------------------------------------
-     SCRIPTS
------------------------------------------------------ --}}
+                        .text-light-primary {
+                            color: rgba(13, 110, 253, 0.8);
+                        }
+
+                        .table-hover tbody tr:hover {
+                            background-color: rgba(13, 110, 253, 0.05);
+                        }
+
+                        .progress {
+                            border-radius: 12px;
+                            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+                        }
+
+                        .progress-bar {
+                            font-size: 0.8rem;
+                            font-weight: 500;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+
+                        .colored-line {
+                            height: 4px;
+                            width: 100%;
+                            border-radius: 2px;
+                            margin: 0 auto;
+                        }
+
+                        @media (max-width: 768px) {
+
+                            .w-40,
+                            .w-60 {
+                                width: auto !important;
+                            }
+
+                            .table-responsive {
+                                border: 0;
+                            }
+
+                            .table thead {
+                                display: none;
+                            }
+
+                            .table tr {
+                                display: block;
+                                margin-bottom: 1rem;
+                                border: 1px solid #dee2e6;
+                                border-radius: 0.25rem;
+                            }
+
+                            .table td {
+                                display: block;
+                                text-align: right;
+                                padding-left: 50%;
+                                position: relative;
+                                border-bottom: 1px solid #dee2e6;
+                            }
+
+                            .table td::before {
+                                content: attr(data-label);
+                                position: absolute;
+                                left: 1rem;
+                                width: calc(50% - 1rem);
+                                padding-right: 1rem;
+                                text-align: left;
+                                font-weight: bold;
+                                color: #0d6efd;
+                            }
+
+                            .table td:last-child {
+                                border-bottom: 0;
+                            }
+
+                            .table td[data-label] {
+                                text-align: right;
+                            }
+                        }
+                    </style>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const tableCells = document.querySelectorAll('.table td');
+                            const headers = ['Práctica', 'Estado'];
+
+                            tableCells.forEach((cell, index) => {
+                                const headerIndex = index % headers.length;
+                                cell.setAttribute('data-label', headers[headerIndex]);
+                            });
+                        });
+                    </script>
+                    @endrole
+                </div>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- SCRIPTS --}}
 <script>
-    /**
-     * Colorea las líneas de las cards de práctica.
-     */
     document.addEventListener("DOMContentLoaded", function() {
         const colors = ["#b2be5c", "#ffd55c", "#c9c3f4"];
         document.querySelectorAll('.colored-line').forEach(line => {
@@ -186,49 +308,41 @@
             line.style.backgroundColor = randomColor;
         });
 
-        // Manejo de tabs
         const tabs = document.querySelectorAll('.tab-link');
         tabs.forEach(tab => {
-            tab.addEventListener('click', function () {
-                // Quitar "active" de todos
+            tab.addEventListener('click', function() {
                 tabs.forEach(t => t.classList.remove('active'));
-                // Asignar "active" al clickeado
                 this.classList.add('active');
-
-                // Mostrar/Ocultar contenedores
                 document.querySelectorAll('.tab-pane').forEach(p => p.style.display = 'none');
                 const target = document.querySelector(this.getAttribute('data-target'));
-                if(target) target.style.display = 'block';
+                if (target) target.style.display = 'block';
             });
         });
     });
 
-    /**
-     * Cambia el role student/teacher en panel de admin sin recargar.
-     */
     function toggleRole(selectedRole) {
-        // Asegurar que sólo un switch esté activo
         ['student', 'teacher'].forEach(role => {
             document.getElementById(role + 'Switch').checked = (role === selectedRole);
         });
 
-        // Petición AJAX
         fetch(`/dashboard?role=${selectedRole}`, {
-            method: 'GET',
-            headers: { 'X-Requested-With': 'XMLHttpRequest' }
-        })
-        .then(r => r.text())
-        .then(html => {
-            const temp = document.createElement('div');
-            temp.innerHTML = html;
-            const newTable = temp.querySelector('#usersTableContainer');
-            const newPagination = temp.querySelector('#paginationContainer');
-            if(newTable && newPagination) {
-                document.getElementById('usersTableContainer').innerHTML = newTable.innerHTML;
-                document.getElementById('paginationContainer').innerHTML = newPagination.innerHTML;
-            }
-        })
-        .catch(err => console.error('Error en la carga de usuarios:', err));
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(r => r.text())
+            .then(html => {
+                const temp = document.createElement('div');
+                temp.innerHTML = html;
+                const newTable = temp.querySelector('#usersTableContainer');
+                const newPagination = temp.querySelector('#paginationContainer');
+                if (newTable && newPagination) {
+                    document.getElementById('usersTableContainer').innerHTML = newTable.innerHTML;
+                    document.getElementById('paginationContainer').innerHTML = newPagination.innerHTML;
+                }
+            })
+            .catch(err => console.error('Error en la carga de usuarios:', err));
     }
 </script>
 @endsection
