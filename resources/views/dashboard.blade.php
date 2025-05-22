@@ -84,7 +84,7 @@
                                         <i class="bi bi-play-fill"></i> Iniciar
                                     </button>
 
-                                    {{-- Extra buttons sólo para docentes --}}
+                                    {{-- Extra buttons sólo para docentes 
                                     @role('teacher')
                                         <div class="mt-2">
                                             <a href="" class="btn btn-outline-secondary btn-sm">
@@ -92,10 +92,11 @@
                                             </a>
                                         </div>
                                     @endrole
+                                    --}}
                                 </div>
                             @endforeach
 
-                            {{-- Botón de "crear práctica" para docentes --}}
+                            {{-- 
                             @role('teacher')
                                 <div class="practice-card border border-primary m-2 text-center p-3 d-flex flex-column justify-content-center align-items-center" style="min-width: 230px;">
                                     <i class="bi bi-file-earmark-plus text-primary mb-3" style="font-size: 3rem;"></i>
@@ -106,6 +107,7 @@
                                     </button>
                                 </div>
                             @endrole
+                            Botón de "crear práctica" para docentes --}}
                         </div>
                     </div>
 
