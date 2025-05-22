@@ -2,14 +2,17 @@
 @section('title', 'Tabla Periodica')
 @section('content')
 <style>
+    :root {
+        --primary: #1B475D; /* Puedes cambiar estos valores en tu tema */
+        --secondary: #6c757d;
+    }
+
     html, body, p, span, a, li, button, input, label, div {
         font-family: 'Fira Sans', sans-serif;
-        font-weight: 700;
     }
 
     h1, h2, h3, h4, h5, h6 {
-        font-family: 'Lilita One', sans-serif;
-        font-weight: 700;
+        font-family: 'Fira Sans', sans-serif;
     }
 
     .container {
@@ -45,7 +48,7 @@
         position: absolute;
         bottom: 15px;
         right: 15px;
-        background-color: rgba(0, 123, 255, 0.7);
+        background-color: var(--primary);
         color: white;
         width: 40px;
         height: 40px;
@@ -95,7 +98,7 @@
     }
 
     .dropdown-button {
-        background-color: #007bff;
+        background-color: var(--primary);
         color: white;
         padding: 15px 20px;
         border: none;
@@ -107,7 +110,6 @@
     }
 
     .dropdown-button:hover {
-        background-color: #0056b3;
     }
 
     .dropdown-content {
@@ -139,7 +141,7 @@
     }
 
     table th {
-        background-color: #007bff;
+        background-color: var(--primary);
         color: white;
     }
 
@@ -154,7 +156,7 @@
     .source {
         text-align: center;
         font-style: italic;
-        color: #666;
+        color: var(--secondary);
         margin-top: -15px;
         margin-bottom: 20px;
     }
@@ -162,9 +164,10 @@
     .section-title {
         margin-top: 40px;
         margin-bottom: 20px;
-        color: #007bff;
+        color: var(--primary);
     }
 </style>
+
 
 <div class="container">
     <h1 class="text-3xl mb-4">Tabla Periódica</h1>

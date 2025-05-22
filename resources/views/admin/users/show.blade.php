@@ -71,7 +71,7 @@
 
 
         <div class="form-buttons">
-            <a href="{{ route('users.index') }}" class="btn back-btn">Regresar</a>
+            <button onclick="window.location.href='{{ route('users.index') }}'" class="btn back-btn">Atrás</button>
         </div>
     </div>
 </div>

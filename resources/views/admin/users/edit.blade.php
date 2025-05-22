@@ -22,7 +22,7 @@
         <form action="{{ isset($user) ? route('users.update', $user->id) : route('users.store') }}" method="POST" id="userForm">
             @csrf
             @if(isset($user)) @method('PUT') @endif
-            
+
             <div class="form-group">
                 <input type="text" name="name" id="name" placeholder="Nombre del usuario*" value="{{ $user->name ?? '' }}" required oninput="validateText(this)">
                 @error('name')<span class="text-danger">{{ $message }}</span>@enderror
@@ -47,40 +47,40 @@
                 <select name="roles" id="roles" required onchange="checkAdmin()">
                     <option value="">Asigne un privilegio*</option>
                     @foreach ($roles as $role)
-                        <option value="{{ $role->id }}" {{ isset($user) && $user->roles->contains($role->id) ? 'selected' : '' }}>{{ $role->name }}</option>
+                    <option value="{{ $role->id }}" {{ isset($user) && $user->roles->contains($role->id) ? 'selected' : '' }}>{{ $role->name }}</option>
                     @endforeach
                 </select>
             </div>
-            
+
             <div class="form-group">
                 <select name="school_id" id="school_id" required>
                     <option value="">Escuela*</option>
                     @foreach ($schools as $school)
-                        <option value="{{ $school->id }}" {{ isset($user) && $user->school_id == $school->id ? 'selected' : '' }}>{{ $school->name }}</option>
+                    <option value="{{ $school->id }}" {{ isset($user) && $user->school_id == $school->id ? 'selected' : '' }}>{{ $school->name }}</option>
                     @endforeach
                 </select>
                 <select name="grade_id" id="grade_id" required>
                     <option value="">Grado*</option>
                     @foreach ($grades as $grade)
-                        <option value="{{ $grade->id }}" {{ isset($user) && $user->grade_id == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
+                    <option value="{{ $grade->id }}" {{ isset($user) && $user->grade_id == $grade->id ? 'selected' : '' }}>{{ $grade->name }}</option>
                     @endforeach
                 </select>
                 <select name="group_id" id="group_id" required>
                     <option value="">Grupo*</option>
                     @foreach ($groups as $group)
-                        <option value="{{ $group->id }}" {{ isset($user) && $user->group_id == $group->id ? 'selected' : '' }}>{{ $group->name }}</option>
+                    <option value="{{ $group->id }}" {{ isset($user) && $user->group_id == $group->id ? 'selected' : '' }}>{{ $group->name }}</option>
                     @endforeach
                 </select>
                 <select name="turno_id" id="turno_id" required>
                     <option value="">Turno*</option>
                     @foreach ($turnos as $turno)
-                        <option value="{{ $turno->id }}" {{ isset($user) && $user->turno_id == $turno->id ? 'selected' : '' }}>{{ $turno->nombre }}</option>
+                    <option value="{{ $turno->id }}" {{ isset($user) && $user->turno_id == $turno->id ? 'selected' : '' }}>{{ $turno->nombre }}</option>
                     @endforeach
                 </select>
             </div>
 
             <div class="form-buttons">
-                <a href="{{ route('users.index') }}" class="btn back-btn">Atrás</a>
+                <button onclick="window.location.href='{{ route('users.index') }}'" class="btn back-btn">Atrás</button>
                 <button type="submit" class="btn submit-btn">{{ isset($user) ? 'Actualizar' : 'Guardar' }}</button>
             </div>
         </form>
@@ -88,48 +88,50 @@
 </div>
 
 <script>
-    function togglePassword() {
-        let passwordInput = document.getElementById("password");
-        let eyeIcon = document.querySelector(".eye-button i");
-        if (passwordInput.type === "password") {
-            passwordInput.type = "text";
-            eyeIcon.classList.remove("fa-eye");
-            eyeIcon.classList.add("fa-eye-slash");
-        } else {
-            passwordInput.type = "password";
-            eyeIcon.classList.remove("fa-eye-slash");
-            eyeIcon.classList.add("fa-eye");
-        }
-    }
+    document.addEventListener("DOMContentLoaded", () => {
+        const passwordInput = document.getElementById("password");
+        const eyeButton = document.querySelector(".eye-button");
+        const eyeIcon = eyeButton.querySelector("i");
+        const roleSelect = document.getElementById("roles");
+        const submitButton = document.getElementById("submitButton");
+        const requiredInputs = document.querySelectorAll('input[required], select[required]');
+        const schoolFields = ['school_id', 'grade_id', 'group_id', 'turno_id'].map(id => document.getElementById(id));
 
-    function validateText(input) {
-        input.value = input.value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ ]/g, '');
-        input.value = input.value.charAt(0).toUpperCase() + input.value.slice(1);
-        validateForm();
-    }
-
-    function checkAdmin() {
-        var isAdmin = document.getElementById('roles').options[document.getElementById('roles').selectedIndex].text.toLowerCase() === 'admin';
-        document.getElementById('school_id').disabled = isAdmin;
-        document.getElementById('grade_id').disabled = isAdmin;
-        document.getElementById('group_id').disabled = isAdmin;
-        document.getElementById('turno_id').disabled = isAdmin;
-        validateForm();
-    }
-
-    function validateForm() {
-        var isAdmin = document.getElementById('roles').options[document.getElementById('roles').selectedIndex].text.toLowerCase() === 'admin';
-        var inputs = document.querySelectorAll('input[required], select[required]');
-        var allFilled = true;
-        
-        inputs.forEach(function(input) {
-            if (input.disabled === false && input.value.trim() === '') {
-                allFilled = false;
-            }
+        // Alternar visibilidad de la contraseña
+        eyeButton.addEventListener("click", () => {
+            const isPassword = passwordInput.type === "password";
+            passwordInput.type = isPassword ? "text" : "password";
+            eyeIcon.classList.toggle("fa-eye", !isPassword);
+            eyeIcon.classList.toggle("fa-eye-slash", isPassword);
         });
-        
-        document.getElementById('submitButton').disabled = !(allFilled || isAdmin);
-    }
+
+        // Validar campos de texto en tiempo real
+        document.querySelectorAll('input[type="text"]').forEach(input => {
+            input.addEventListener("input", () => {
+                input.value = input.value
+                    .replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑ ]/g, '')
+                    .replace(/\b\w/g, char => char.toUpperCase()); // capitalizar cada palabra
+                validateForm();
+            });
+        });
+
+        // Manejar cambio en privilegios
+        roleSelect.addEventListener("change", () => {
+            const isAdmin = roleSelect.options[roleSelect.selectedIndex].text.toLowerCase() === 'admin';
+            schoolFields.forEach(field => field.disabled = isAdmin);
+            validateForm();
+        });
+
+        // Validación del formulario para habilitar el botón de envío
+        function validateForm() {
+            const isAdmin = roleSelect.options[roleSelect.selectedIndex].text.toLowerCase() === 'admin';
+            const allFilled = Array.from(requiredInputs).every(input => {
+                return input.disabled || input.value.trim() !== '';
+            });
+            submitButton.disabled = !(allFilled || isAdmin);
+        }
+    });
 </script>
+
 
 @stop

@@ -15,13 +15,18 @@
     @endif
 
     <!-- Título y botón para agregar usuario -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-primary"><i class="fas fa-users"></i> Usuarios</h2>
-        <button class="btn-practice" onclick="window.location.href='{{ route('users.create') }}'">
+    <!-- Título y botón para agregar usuario -->
+    <div class="usuarios-header">
+        <h2 class="usuarios-title">
+            <i class="fas fa-users"></i> Usuarios
+        </h2>
+        <button class="btn-practice usuarios-btn" onclick="window.location.href='{{ route('users.create') }}'">
             <i class="fas fa-user-plus"></i> Crear usuario
         </button>
     </div>
 
+
+    <!-- Resto del código permanece igual -->
     <!-- Información de paginación y búsqueda -->
     <div class="row mb-3">
         <div class="col-md-7">
@@ -31,13 +36,15 @@
             <h5>{{ $users->total() }} Registro(s) encontrado(s). Página {{ $users->currentPage() }} de {{ $users->lastPage() }}. Registros por página: {{ $users->perPage() }}</h5>
             @endif
         </div>
-        <div class="col-md-5 text-right">
+        <div class="col-md-6 mx-auto">
             <form action="{{ route('users.index') }}" method="get">
                 <div class="input-group">
-                    <input type="text" class="input-field" name="search" value="{{ request('search') }}" placeholder="Buscar usuario">
-                    <div class="input-group-append">
-                        <button class="btn-practice" type="submit">Buscar</button>
-                    </div>
+                    <input type="text"
+                        class="form-control form-control-lg"
+                        name="search"
+                        value="{{ request('search') }}"
+                        placeholder="Buscar usuario">
+                    <button class="btn btn-lg btn-primary" type="submit">Buscar</button>
                 </div>
             </form>
         </div>

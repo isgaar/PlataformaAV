@@ -1300,6 +1300,13 @@ body {
     text-align: left;
 }
 
+.input-group input[type="text"] {
+    min-width: 900px;
+    height: calc(1em + 1rem + 2px);
+    /* altura estándar del btn-lg */
+}
+
+
 .input-label {
     font-size: 14px;
     font-weight: bold;
@@ -1575,14 +1582,12 @@ body {
     align-items: center;
 }
 
+.generate-button{
+    color: #1B475D;
+}
+
 .eye-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    position: absolute;
-    right: 0px;
-    font-size: 1.2rem;
-    transition: color 0.3s ease;
+    color: #1B475D;
 }
 
 .eye-button i {
@@ -1603,6 +1608,13 @@ body {
 
 .back-btn {
     background: #cbbdfd;
+    align-items: center;
+    color: #00455e;
+    padding: 20px 60px;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    border: none;
 }
 
 .submit-btn {
@@ -1965,4 +1977,51 @@ input:checked+.slider:before {
     .admin-panel .btn-practice {
         width: 100%;
     }
+}
+
+/*** USUARIOS EDIT
+**/
+.usuarios-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    /* Para que se adapte en móviles */
+    margin-bottom: 2 rem;
+}
+
+.usuarios-title {
+    margin: 0;
+    font-weight: bold;
+    color: #014857;
+    /* o usa la clase text-primary */
+}
+
+.usuarios-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    /* Más espacio interno */
+    font-size: 1.1rem;
+    /* Letra un poco más grande */
+    font-weight: 600;
+    /* Negrita moderada */
+    margin-top: 0.5rem;
+    border-radius: 0.5rem;
+    /* Opcional: bordes redondeados */
+}
+
+
+@media (min-width: 768px) {
+    .usuarios-btn {
+        margin-top: 0;
+        /* Quita el margen en pantallas medianas o mayores */
+    }
+}
+
+.colored-line {
+    height: 3px;
+    width: 100%;
+    border-radius: 4px;
 }

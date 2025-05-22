@@ -11,13 +11,18 @@ class SchoolSeeder extends Seeder
     {
         // Crear algunas escuelas de ejemplo
         School::create([
-            'name' => 'Escuela Primaria El Sol',
+            'name' => 'Telesecundaria Luis Córdoba Reyes',
             'address' => 'Calle Sol 123, Ciudad'
         ]);
 
         School::create([
-            'name' => 'Escuela Secundaria Los Pinos',
-            'address' => 'Calle Pinos 456, Ciudad'
+            'name' => 'Telesecundaria Felipe Carrillo Puerto',
+            'address' => 'Calle Patria 456, Ciudad'
+        ]);
+
+        School::create([
+            'name' => 'Telesecundaria Leona Vicario',
+            'address' => 'Calle B. Juarez 189, Ciudad'
         ]);
     }
 }
