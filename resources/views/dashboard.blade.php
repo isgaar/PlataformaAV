@@ -22,25 +22,68 @@
                 {{-- PANEL DE ADMINISTRACIÓN --}}
                 @if(auth()->user()->hasRole('admin'))
                 <div class="admin-panel">
-                    <button class="btn-practice mb-3" onclick="window.location.href='{{ route('users.index') }}'">
-                        <i class="bi bi-people"></i> Gestionar Usuarios
-                    </button>
+                    <div class="d-flex flex-column gap-3">
 
-                    <div class="d-flex align-items-center mb-3">
-                        <span class="fw-bold me-2">Mostrar:</span>
+                        <button class="btn-practice mb-3"
+                            onclick="window.location.href='{{ route('users.index') }}'"
+                            title="Acceder a la gestión de usuarios registrados">
+                            <i class="bi bi-people"></i> Gestionar Usuarios
+                        </button>
+
+                        <button class="btn-practice mb-3"
+                            onclick="window.location.href='{{ route('users.index') }}'"
+                            title="Administrar y registrar información de escuelas">
+                            <i class="bi bi-building me-2"></i> Gestionar Escuelas
+                        </button>
+
+                    </div>
+
+
+                    <div class="d-flex align-items-center flex-wrap gap-3 mb-4">
+                        <span class="fw-bold text-secondary">Mostrar:</span>
+
                         @foreach(['student' => 'Estudiantes', 'teacher' => 'Maestros'] as $key => $label)
-                        <div class="d-flex align-items-center me-3">
-                            <label class="fw-bold me-2">{{ $label }}</label>
-                            <label class="switch">
-                                <input type="checkbox" id="{{ $key }}Switch" onchange="toggleRole('{{ $key }}')" {{ $role == $key ? 'checked' : '' }}>
+                        <div class="d-flex align-items-center">
+                            <label for="{{ $key }}Switch" class="fw-medium me-2 mb-0">{{ $label }}</label>
+                            <label class="switch mb-0">
+                                <input type="checkbox"
+                                    id="{{ $key }}Switch"
+                                    onchange="toggleRole('{{ $key }}')"
+                                    {{ $role == $key ? 'checked' : '' }}>
                                 <span class="slider round"></span>
                             </label>
                         </div>
                         @endforeach
                     </div>
 
+
                     <div class="table-responsive" id="usersTableContainer">
-                        @include('dashboard.partials.users-table')
+                        <table class="table table-hover custom-table text-center">
+                            <thead class="bg-primary text-white">
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Escuela</th>
+                                    <th>Grado</th>
+                                    <th>Grupo</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="usersTableBody">
+                                @foreach($users as $user)
+                                <tr>
+                                    <td>{{ $user->name }} {{ $user->last_name }} {{ $user->second_last_name }}</td>
+                                    <td>{{ $user->school->name ?? '-' }}</td>
+                                    <td>{{ $user->grade->name ?? '-' }}</td>
+                                    <td>{{ $user->group->name ?? '-' }}</td>
+                                    <td>
+                                        <button class="btn-success btn-sm" title="Ver usuario">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
 
                     <div class="d-flex justify-content-center" id="paginationContainer">
@@ -70,9 +113,10 @@
                             <h3 class="h5">{{ $practice['title'] }}</h3>
                             <div class="colored-line my-2"></div>
                             <p class="small">{!! $practice['description'] !!}</p>
-                            <button class="btn btn-primary">
+                            <button class="btn btn-primary" onclick="openSimulationWindow()">
                                 <i class="bi bi-play-fill"></i> Iniciar
                             </button>
+
                         </div>
                         @endforeach
                     </div>
@@ -345,4 +389,49 @@
             .catch(err => console.error('Error en la carga de usuarios:', err));
     }
 </script>
+
+<script>
+    function openSimulationWindow() {
+        const win = window.open("", "_blank", "width=600,height=400");
+        if (win) {
+            win.document.write(`
+                <html>
+                    <head>
+                        <title>Simulación 3D</title>
+                        <style>
+                            body {
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                height: 100vh;
+                                margin: 0;
+                                font-family: Arial, sans-serif;
+                                background-color: #f8f9fa;
+                                color: #333;
+                                flex-direction: column;
+                            }
+                            h1 {
+                                font-size: 2rem;
+                                margin-bottom: 0.5rem;
+                            }
+                            p {
+                                font-size: 1rem;
+                                color: #888;
+                            }
+                        </style>
+                    </head>
+                    <body>
+                        <h1>Simulación 3D - Error 404</h1>
+                        <p>El archivo de simulación no se ha encontrado.</p>
+                    </body>
+                </html>
+            `);
+            win.document.close();
+        } else {
+            alert("Tu navegador ha bloqueado la ventana emergente.");
+        }
+    }
+</script>
+
+
 @endsection

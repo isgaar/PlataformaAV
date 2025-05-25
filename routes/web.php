@@ -8,6 +8,7 @@ use App\Http\Controllers\RenderOnlineController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\TablaperiodicaController;
+use App\Http\Controllers\CursoController;
 
 
 
@@ -56,5 +57,10 @@ Route::middleware(['auth', 'can:manage users'])->prefix('admin/users')->group(fu
     Route::put('/{user}', [UserController::class, 'update'])->name('users.update'); // Actualizar Usuario
     Route::get('/{user}', [UserController::class, 'show'])->name('users.show'); // Ver Usuario
     Route::delete('/{user}', [UserController::class, 'destroy'])->name('users.destroy'); // Eliminar Usuario
+});
+
+Route::middleware('auth')->group(function () {
+    Route::get('/cursos/realizacion', [CursoController::class, 'realizacion'])->name('cursos.realizacion');
+    Route::get('/cursos/resultado', [CursoController::class, 'resultado'])->name('cursos.resultado');
 });
 

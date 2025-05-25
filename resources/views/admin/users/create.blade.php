@@ -56,9 +56,14 @@
                     <button type="button" class="eye-button" onclick="togglePassword()">
                         <i class="fas fa-eye-slash"></i>
                     </button>
-                    <button type="button" class="generate-button" onclick="generatePassword()">
+                    <button
+                        type="button"
+                        class="generate-button"
+                        onclick="generatePassword()"
+                        title="Generar una contraseña aleatoria de forma segura">
                         <i class="fas fa-key"></i> Generar
                     </button>
+
                 </div>
                 @error('password')
                 <span class="text-danger">{{ $message }}</span>
