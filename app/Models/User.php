@@ -73,4 +73,11 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Period::class);
     }
+
+    public function activities()
+    {
+        return $this->belongsToMany(Activity::class)
+            ->withPivot('done', 'session')
+            ->withTimestamps();
+    }
 }

@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
             GradeSeeder::class,     // Grados
             TurnoSeeder::class,     // Turnos
             GroupSeeder::class,     // Grupos
-            PeriodSeeder::class,    //Periodos
+            PeriodSeeder::class,    // Periodos
             UserSeeder::class,      // Usuarios (después de grupos y escuelas)
             AssignmentSeeder::class // Asignaciones (requiere users y grupos)
         ]);
