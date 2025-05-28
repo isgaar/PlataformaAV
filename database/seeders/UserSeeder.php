@@ -8,6 +8,7 @@ use App\Models\School;
 use App\Models\Grade;
 use App\Models\Group;
 use App\Models\Turno;
+use App\Models\Period;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,7 +16,6 @@ class UserSeeder extends Seeder
 {
     public function run()
     {
-        // Verificar que los roles existen en la base de datos
         $roles = [
             'admin' => Role::where('name', 'admin')->first(),
             'teacher' => Role::where('name', 'teacher')->first(),
@@ -27,13 +27,16 @@ class UserSeeder extends Seeder
             return;
         }
 
-        // Obtener datos relacionados (pueden ser `null` si no existen en la BD aún)
         $school = School::first();
         $grade = Grade::first();
         $group = Group::first();
         $turno = Turno::first();
 
+        // Obtener los periodos existentes
+        $periods = Period::all();
+
         // Lista de usuarios a crear
+        // ...
         $users = [
             [
                 'name' => 'Admin User',
@@ -45,7 +48,8 @@ class UserSeeder extends Seeder
                 'school_id' => null,
                 'grade_id' => null,
                 'group_id' => null,
-                'turno_id' => null
+                'turno_id' => null,
+                'period_id' => null,
             ],
             [
                 'name' => 'Teacher User',
@@ -57,7 +61,8 @@ class UserSeeder extends Seeder
                 'school_id' => $school->id ?? null,
                 'grade_id' => $grade->id ?? null,
                 'group_id' => $group->id ?? null,
-                'turno_id' => $turno->id ?? null
+                'turno_id' => $turno->id ?? null,
+                'period_id' => null,
             ],
             [
                 'name' => 'Student User',
@@ -69,11 +74,30 @@ class UserSeeder extends Seeder
                 'school_id' => $school->id ?? null,
                 'grade_id' => $grade->id ?? null,
                 'group_id' => $group->id ?? null,
-                'turno_id' => $turno->id ?? null
+                'turno_id' => $turno->id ?? null,
+                'period_id' => $periods->first()?->id, // <-- usa el primer periodo disponible
             ],
         ];
 
-        // Crear los usuarios y asignar roles con Spatie
+
+        // Crear estudiantes con distintos periodos
+        foreach ($periods as $index => $period) {
+            $users[] = [
+                'name' => "Student $index",
+                'last_name' => 'Alumno',
+                'second_last_name' => 'Demo',
+                'email' => "student$index@example.com",
+                'password' => Hash::make('password123'),
+                'role' => 'student',
+                'school_id' => $school->id ?? null,
+                'grade_id' => $grade->id ?? null,
+                'group_id' => $group->id ?? null,
+                'turno_id' => $turno->id ?? null,
+                'period_id' => $period->id, // Asigna cada uno a un periodo distinto
+            ];
+        }
+
+        // Crear los usuarios y asignar roles
         foreach ($users as $userData) {
             $user = User::create([
                 'name' => $userData['name'],
@@ -85,12 +109,12 @@ class UserSeeder extends Seeder
                 'grade_id' => $userData['grade_id'],
                 'group_id' => $userData['group_id'],
                 'turno_id' => $userData['turno_id'],
+                'period_id' => $userData['period_id'],
             ]);
 
-            // Asignar el rol con Spatie
             $user->assignRole($roles[$userData['role']]->name);
         }
 
-        $this->command->info(' ¡Usuarios con roles creados correctamente!.');
+        $this->command->info('✅ Usuarios con roles y periodos creados correctamente.');
     }
 }

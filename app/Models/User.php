@@ -68,4 +68,9 @@ class User extends Authenticatable
     {
         return $this->getRoleNames()->first() ?? 'Sin rol';
     }
+
+    public function period()
+    {
+        return $this->belongsTo(Period::class);
+    }
 }
