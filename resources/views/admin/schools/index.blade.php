@@ -66,9 +66,14 @@
                     <td>{{ $school->address }}</td>
                     <td>
                         <!-- Botón para eliminar escuela -->
-                        <button class="btn-danger" title="Eliminar escuela" data-bs-toggle="modal" data-bs-target="#deleteModal" data-schoolid="{{ $school->id }}">
+                        <button class="btn-danger" title="Eliminar escuela"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteSchoolModal"
+                            data-schoolid="{{ $school->id }}"
+                            data-schoolname="{{ $school->name }}">
                             <i class="bi bi-trash"></i>
                         </button>
+
 
                         <!-- Botón para ver escuela -->
                         <button class="btn-success" title="Ver escuela" onclick="window.location.href='{{ route('schools.show', $school) }}'">

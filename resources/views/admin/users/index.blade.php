@@ -78,7 +78,11 @@
                     <td>
                         @if($user->id !== auth()->user()->id)
                         <!-- Botón para eliminar usuario con modal -->
-                        <button class="btn-danger" title="Eliminar usuario" data-bs-toggle="modal" data-bs-target="#deleteModal" data-userid="{{ $user->id }}">
+                        <button class="btn-danger" title="Eliminar usuario"
+                            data-bs-toggle="modal"
+                            data-bs-target="#deleteUserModal"
+                            data-userid="{{ $user->id }}"
+                            data-username="{{ $user->name }} {{ $user->second_last_name }} {{ $user->last_name }}">
                             <i class="bi bi-trash"></i>
                         </button>
 

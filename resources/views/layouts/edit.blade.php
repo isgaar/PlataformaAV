@@ -19,16 +19,42 @@
 </head>
 
 <body>
-    <!-- MODAL DE CONFIRMACIÓN PARA ELIMINAR USUARIO -->
-    <!-- MODAL DE CONFIRMACIÓN PARA ELIMINAR USUARIO -->
-    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <!-- MODAL DE CONFIRMACIÓN PARA ELIMINAR ESCUELA -->
+    <div class="modal fade" id="deleteSchoolModal" tabindex="-1" role="dialog" aria-labelledby="deleteSchoolLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="deleteModalLabel">
+                    <h5 class="modal-title" id="deleteSchoolLabel">
                         <i class="fas fa-exclamation-triangle"></i> Confirmar Eliminación
                     </h5>
-                    <button type="button" class="close text-white" data-bs-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close text-black" data-bs-dismiss="modal" aria-label="Cerrar">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas eliminar la escuela <strong id="deleteSchoolName"></strong>? Esta acción no se puede deshacer.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <form id="deleteSchoolForm" method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="button" class="btn btn-delete" onclick="document.getElementById('deleteSchoolForm').submit()">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CONFIRMACIÓN PARA ELIMINAR USUARIO -->
+    <div class="modal fade" id="deleteUserModal" tabindex="-1" role="dialog" aria-labelledby="deleteUserLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title" id="deleteUserLabel">
+                        <i class="fas fa-exclamation-triangle"></i> Confirmar Eliminación
+                    </h5>
+                    <button type="button" class="close text-black" data-bs-dismiss="modal" aria-label="Cerrar">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -37,10 +63,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <form id="deleteForm" method="POST">
+                    <form id="deleteUserForm" method="POST">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn btn-primary">Eliminar</button>
+                        <button type="button" class="btn btn-delete" onclick="document.getElementById('deleteUserForm').submit()">Eliminar</button>
                     </form>
                 </div>
             </div>
@@ -51,22 +77,29 @@
     <!-- Script para configurar el modal -->
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-            const deleteModal = document.getElementById('deleteModal');
-            deleteModal.addEventListener('show.bs.modal', function(event) {
+            const userModal = document.getElementById('deleteUserModal');
+            userModal.addEventListener('show.bs.modal', function(event) {
                 const button = event.relatedTarget;
                 const userId = button.getAttribute('data-userid');
                 const userName = button.getAttribute('data-username');
-                const action = "{{ url('admin/users') }}/" + userId; // ✅ Corregida la URL
+                const action = `{{ url('admin/users') }}/` + userId;
 
-                // Establecer la acción del formulario con la URL correcta
-                document.getElementById('deleteForm').setAttribute('action', action);
-
-                // Agregar el nombre del usuario en el mensaje de advertencia
+                document.getElementById('deleteUserForm').setAttribute('action', action);
                 document.getElementById('deleteUserName').textContent = userName;
+            });
+
+            const schoolModal = document.getElementById('deleteSchoolModal');
+            schoolModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+                const schoolId = button.getAttribute('data-schoolid');
+                const schoolName = button.getAttribute('data-schoolname');
+                const action = `{{ url('admin/schools') }}/` + schoolId;
+
+                document.getElementById('deleteSchoolForm').setAttribute('action', action);
+                document.getElementById('deleteSchoolName').textContent = schoolName;
             });
         });
     </script>
-
     <!-- Bootstrap JS y Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
