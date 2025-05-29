@@ -9,8 +9,12 @@ class GroupSeeder extends Seeder
 {
     public function run()
     {
-        // Crear algunos grupos de ejemplo
-        Group::create(['name' => 'Grupo A', 'grade_id' => 1]);
-        Group::create(['name' => 'Grupo B', 'grade_id' => 2]);
+        // Crear grupos A hasta F para grade_id = 1
+        foreach (['A', 'B', 'C', 'D', 'E', 'F'] as $letter) {
+            Group::create([
+                'name' => 'Grupo ' . $letter,
+                'grade_id' => 1
+            ]);
+        }
     }
 }

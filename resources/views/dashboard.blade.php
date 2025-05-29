@@ -75,9 +75,10 @@
                                     <td>{{ $user->grade->name ?? '-' }}</td>
                                     <td>{{ $user->group->name ?? '-' }}</td>
                                     <td>
-                                        <button class="btn-success btn-sm" title="Ver usuario">
+                                        <a href="{{ route('users.show', $user->id) }}" class="btn-success btn-sm" title="Ver detalles">
                                             <i class="bi bi-eye"></i>
-                                        </button>
+                                        </a>
+
                                     </td>
                                 </tr>
                                 @endforeach

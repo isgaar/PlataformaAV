@@ -35,17 +35,14 @@
         </div>
 
         <div class="form-group">
-            <label>Correo</label>
+            <label>Correo Electrónico</label>
             <input type="email" value="{{ $user->email }}" readonly>
+        </div>
 
-            <label for="password">Contraseña</label>
-            <input type="password" name="password" id="password" class="form-control" placeholder="Contraseña" required>
-            <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" id="showPasswordBtn" onclick="togglePasswordVisibility('password')">
-                    <i class="fa fa-eye"></i>
-                </button>
-            </div>
-
+        <div class="form-group">
+            <label>Contraseña</label>
+            <input type="password" value="********" readonly>
+            <small class="text-muted">La contraseña no se muestra por seguridad</small>
         </div>
 
 
@@ -71,7 +68,7 @@
 
 
         <div class="form-buttons">
-            <a href="{{ route('users.index') }}" class="back-btn">Atrás</a>
+            <a href="{{ url()->previous() }}" class="back-btn">Atrás</a>
         </div>
     </div>
 </div>

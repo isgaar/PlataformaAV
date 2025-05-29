@@ -116,7 +116,7 @@
 
             {{-- Botones --}}
             <div class="form-buttons">
-                <a href="{{ route('users.index') }}" class="back-btn">Regresar</a>
+                <a href="{{ route('users.index') }}" class="back-btn">Atrás</a>
                 <button type="submit" class="btn submit-btn" id="submitButton" disabled>Guardar</button>
             </div>
         </form>
