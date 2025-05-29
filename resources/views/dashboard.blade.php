@@ -392,46 +392,88 @@
 
 <script>
     function openSimulationWindow() {
-        const win = window.open("", "_blank", "width=600,height=400");
-        if (win) {
-            win.document.write(`
-                <html>
-                    <head>
-                        <title>Simulación 3D</title>
-                        <style>
-                            body {
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                height: 100vh;
-                                margin: 0;
-                                font-family: Arial, sans-serif;
-                                background-color: #f8f9fa;
-                                color: #333;
-                                flex-direction: column;
-                            }
-                            h1 {
-                                font-size: 2rem;
-                                margin-bottom: 0.5rem;
-                            }
-                            p {
-                                font-size: 1rem;
-                                color: #888;
-                            }
-                        </style>
-                    </head>
-                    <body>
-                        <h1>Simulación 3D - Error 404</h1>
-                        <p>El archivo de simulación no se ha encontrado.</p>
-                    </body>
-                </html>
-            `);
-            win.document.close();
-        } else {
+        const win = window.open("", "_blank", "width=700,height=500");
+        if (!win) {
             alert("Tu navegador ha bloqueado la ventana emergente.");
+            return;
         }
+
+        const loadingHTML = `
+            <html>
+                <head>
+                    <title>Cargando simulación...</title>
+                    <style>
+                        body {
+                            background-color: #111;
+                            color: #00ffcc;
+                            font-family: monospace;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 100vh;
+                            margin: 0;
+                            flex-direction: column;
+                        }
+                        #loadingText {
+                            font-size: 1.2rem;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div id="loadingText">Cargando prácticas<span id="dots">.</span></div>
+                </body>
+            </html>
+        `;
+
+        win.document.write(loadingHTML);
+        win.document.close();
+
+        let counter = 0;
+        const maxRepeats = 5;
+        const dots = ['.', '..', '...', '....', '.....'];
+        const interval = setInterval(() => {
+            if (counter < maxRepeats) {
+                win.document.getElementById('dots').textContent = dots[counter % dots.length];
+                counter++;
+            } else {
+                clearInterval(interval);
+                showErrorMessage(win);
+            }
+        }, 600); // Velocidad entre cada "paso" de animación
+    }
+
+    function showErrorMessage(win) {
+        win.document.body.innerHTML = `
+            <h1 style="color:#ff5555;">Error Crítico: Prácticas no Detectadas</h1>
+            <p>La plataforma no ha podido encontrar las prácticas instaladas en el sistema.</p>
+            <div style="background-color:#2d2d44;padding:15px;border-radius:6px;font-size:14px;white-space:pre-wrap;overflow-y:auto;max-height:300px;color:#f8f8f2;font-family:'Courier New', Courier, monospace;">
+ErrorCode: PRT404
+Timestamp: ${new Date().toISOString()}
+Module: PracticeDetectorService
+Path: /usr/local/platform/practices/
+Expected: practice-config.json
+Result: FileNotFoundException
+
+StackTrace:
+ - at scanPractices(PracticeService.js:204)
+ - at initPracticeLoad(core.js:88)
+ - at renderMainView(app.js:57)
+
+Posibles causas:
+ - Las prácticas no están instaladas correctamente.
+ - El archivo de configuración está corrupto o mal ubicado.
+ - Faltan permisos de lectura en el directorio de prácticas.
+
+Soluciones sugeridas:
+ - Verifica la existencia del archivo 'practice-config.json'.
+ - Reinstala las prácticas desde el panel de administrador.
+ - Asegúrate de que la ruta de instalación es accesible.
+            </div>
+        `;
     }
 </script>
+
+
 
 
 @endsection
