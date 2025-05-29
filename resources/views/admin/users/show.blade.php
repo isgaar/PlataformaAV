@@ -71,7 +71,7 @@
 
 
         <div class="form-buttons">
-            <button onclick="window.location.href='{{ route('users.index') }}'" class="btn back-btn">Atrás</button>
+            <a href="{{ route('users.index') }}" class="back-btn">Atrás</a>
         </div>
     </div>
 </div>

@@ -31,11 +31,10 @@
                         </button>
 
                         <button class="btn-practice mb-3"
-                            onclick="window.location.href='{{ route('users.index') }}'"
+                            onclick="window.location.href='{{ route('schools.index') }}'"
                             title="Administrar y registrar información de escuelas">
                             <i class="bi bi-building me-2"></i> Gestionar Escuelas
                         </button>
-
                     </div>
 
 

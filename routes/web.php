@@ -9,6 +9,7 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\TablaperiodicaController;
 use App\Http\Controllers\CursoController;
+use App\Http\Controllers\Admin\SchoolController;
 
 
 
@@ -58,6 +59,17 @@ Route::middleware(['auth', 'can:manage users'])->prefix('admin/users')->group(fu
     Route::get('/{user}', [UserController::class, 'show'])->name('users.show'); // Ver Usuario
     Route::delete('/{user}', [UserController::class, 'destroy'])->name('users.destroy'); // Eliminar Usuario
 });
+
+Route::middleware(['auth', 'can:manage users'])->prefix('admin/schools')->group(function () {
+    Route::get('/', [SchoolController::class, 'index'])->name('schools.index'); // Listar
+    Route::get('/create', [SchoolController::class, 'create'])->name('schools.create'); // Formulario
+    Route::post('/', [SchoolController::class, 'store'])->name('schools.store'); // Guardar
+    Route::get('/{school}', [SchoolController::class, 'show'])->name('schools.show'); // Ver
+    Route::get('/{school}/edit', [SchoolController::class, 'edit'])->name('schools.edit'); // Editar
+    Route::put('/{school}', [SchoolController::class, 'update'])->name('schools.update'); // Actualizar
+    Route::delete('/{school}', [SchoolController::class, 'destroy'])->name('schools.destroy'); // Eliminar
+});
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/cursos/realizacion', [CursoController::class, 'realizacion'])->name('cursos.realizacion');
