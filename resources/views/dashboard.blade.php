@@ -22,41 +22,43 @@
                 {{-- PANEL DE ADMINISTRACIÓN --}}
                 @if(auth()->user()->hasRole('admin'))
                 <div class="admin-panel">
-                    <div class="d-flex flex-column gap-3">
-
-                        <button class="btn-practice mb-3"
+                    {{-- Botones lado a lado --}}
+                    <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-4">
+                        <button class="btn-practice w-100 w-md-50"
                             onclick="window.location.href='{{ route('users.index') }}'"
                             title="Acceder a la gestión de usuarios registrados">
                             <i class="bi bi-people"></i> Gestionar Usuarios
                         </button>
 
-                        <button class="btn-practice mb-3"
+                        <button class="btn-practice w-100 w-md-50"
                             onclick="window.location.href='{{ route('schools.index') }}'"
                             title="Administrar y registrar información de escuelas">
                             <i class="bi bi-building me-2"></i> Gestionar Escuelas
                         </button>
                     </div>
 
+                    {{-- Filtros con switches --}}
+                    <div class="filters-container d-flex flex-column flex-md-row align-items-center flex-wrap gap-3 mb-4">
+                        <span class="fw-bold text-secondary filter-label">Mostrar:</span>
 
-                    <div class="d-flex align-items-center flex-wrap gap-3 mb-4">
-                        <span class="fw-bold text-secondary">Mostrar:</span>
-
-                        @foreach(['student' => 'Estudiantes', 'teacher' => 'Maestros'] as $key => $label)
-                        <div class="d-flex align-items-center">
-                            <label for="{{ $key }}Switch" class="fw-medium me-2 mb-0">{{ $label }}</label>
-                            <label class="switch mb-0">
-                                <input type="checkbox"
-                                    id="{{ $key }}Switch"
-                                    onchange="toggleRole('{{ $key }}')"
-                                    {{ $role == $key ? 'checked' : '' }}>
-                                <span class="slider round"></span>
-                            </label>
+                        <div class="switches-wrapper d-flex flex-row flex-wrap gap-3">
+                            @foreach(['student' => 'Estudiantes', 'teacher' => 'Maestros'] as $key => $label)
+                            <div class="switch-item d-flex align-items-center justify-content-between">
+                                <label for="{{ $key }}Switch" class="fw-medium me-2 mb-0">{{ $label }}</label>
+                                <label class="switch mb-0">
+                                    <input type="checkbox"
+                                        id="{{ $key }}Switch"
+                                        onchange="toggleRole('{{ $key }}')"
+                                        {{ $role == $key ? 'checked' : '' }}>
+                                    <span class="slider round"></span>
+                                </label>
+                            </div>
+                            @endforeach
                         </div>
-                        @endforeach
                     </div>
 
-
-                    <div class="table-responsive" id="usersTableContainer">
+                    {{-- Tabla visible solo en escritorio --}}
+                    <div class="table-responsive d-none d-md-block" id="usersTableContainer">
                         <table class="table table-hover custom-table text-center">
                             <thead class="bg-primary text-white">
                                 <tr>
@@ -78,7 +80,6 @@
                                         <a href="{{ route('users.show', $user->id) }}" class="btn-success btn-sm" title="Ver detalles">
                                             <i class="bi bi-eye"></i>
                                         </a>
-
                                     </td>
                                 </tr>
                                 @endforeach
@@ -86,11 +87,28 @@
                         </table>
                     </div>
 
+                    {{-- Cards visibles solo en móvil --}}
+                    <div class="user-cards-container d-md-none">
+                        @foreach($users as $user)
+                        <div class="user-card">
+                            <a href="{{ route('users.show', $user->id) }}" class="ver-btn" title="Ver detalles">
+                                Ver <i class="bi bi-eye"></i>
+                            </a>
+                            <h4>{{ $user->name }} {{ $user->last_name }} {{ $user->second_last_name }}</h4>
+                            <p><strong>Escuela:</strong> {{ $user->school->name ?? '-' }}</p>
+                            <p><strong>Grado:</strong> {{ $user->grade->name ?? '-' }}</p>
+                            <p><strong>Grupo:</strong> {{ $user->group->name ?? '-' }}</p>
+                        </div>
+                        @endforeach
+                    </div>
+
+                    {{-- Paginación --}}
                     <div class="d-flex justify-content-center" id="paginationContainer">
                         {{ $users->appends(request()->except('page'))->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
                 @endif
+
 
                 {{-- CONTENIDO ESTUDIANTE / DOCENTE --}}
                 @if(auth()->user()->hasRole('student') || auth()->user()->hasRole('teacher'))
@@ -365,6 +383,7 @@
     });
 
     function toggleRole(selectedRole) {
+        // Activar solo el switch seleccionado
         ['student', 'teacher'].forEach(role => {
             document.getElementById(role + 'Switch').checked = (role === selectedRole);
         });
@@ -375,20 +394,36 @@
                     'X-Requested-With': 'XMLHttpRequest'
                 }
             })
-            .then(r => r.text())
+            .then(response => response.text())
             .then(html => {
                 const temp = document.createElement('div');
                 temp.innerHTML = html;
+
+                // Actualiza tabla (escritorio)
                 const newTable = temp.querySelector('#usersTableContainer');
-                const newPagination = temp.querySelector('#paginationContainer');
-                if (newTable && newPagination) {
+                if (newTable) {
                     document.getElementById('usersTableContainer').innerHTML = newTable.innerHTML;
+                }
+
+                // Actualiza cards (móvil)
+                const newCards = temp.querySelector('.user-cards-container');
+                if (newCards) {
+                    const currentCards = document.querySelector('.user-cards-container');
+                    if (currentCards) {
+                        currentCards.innerHTML = newCards.innerHTML;
+                    }
+                }
+
+                // Actualiza paginación
+                const newPagination = temp.querySelector('#paginationContainer');
+                if (newPagination) {
                     document.getElementById('paginationContainer').innerHTML = newPagination.innerHTML;
                 }
             })
             .catch(err => console.error('Error en la carga de usuarios:', err));
     }
 </script>
+
 
 <script>
     function openSimulationWindow() {

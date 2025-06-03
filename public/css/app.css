@@ -2104,22 +2104,116 @@ input:checked+.slider:before {
     background-color: #00455e;
     color: white;
 }
-
-/* Estilos responsivos */
-@media (max-width: 768px) {
+/* 1. Estilos para vista móvil del panel de administración */
+@media screen and (max-width: 768px) {
     .admin-panel {
+        display: flex;
         flex-direction: column;
         align-items: center;
+        text-align: center;
+        gap: 20px;
+        padding: 15px 0;
     }
 
-    .admin-controls {
+    .admin-panel .d-flex.flex-column {
+        flex-direction: row !important;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .admin-panel .btn-practice {
+        flex: 1 1 48%;
+        margin: 5px 0 !important;
+        text-align: center;
+        max-width: 200px;
+    }
+
+    .admin-panel .d-flex.align-items-center.flex-wrap.gap-3.mb-4 {
         flex-direction: column;
+        align-items: center;
+        padding: 10px 0;
+        gap: 15px;
+        width: 100%;
+    }
+
+    .filters-container {
+        align-items: center;
+        text-align: center;
+    }
+
+    .filters-container .filter-label {
+        width: 100%;
+    }
+
+    .switches-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 20px;
+        width: 100%;
+    }
+
+    .switch-item {
+        display: flex;
         align-items: center;
         gap: 10px;
     }
 
-    .admin-panel .btn-practice {
+    /* Ocultar tabla en vista móvil */
+    #usersTableContainer {
+        display: none;
+    }
+
+    /* Cards para usuarios */
+    .user-cards-container {
+        display: flex;
+        flex-direction: column;
+        gap: 25px;
         width: 100%;
+        align-items: center;
+    }
+
+    .user-card {
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+        position: relative;
+        width: 90%;
+        max-width: 500px;
+        margin-bottom: 10px;
+    }
+
+    .user-card .ver-btn {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        font-size: 14px;
+        background-color: #198754;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    .user-card h4 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .user-card p {
+        font-size: 14px;
+        margin: 5px 0;
+        text-align: justify;
+    }
+}
+
+/* 2. Estilos opcionales para escritorio (se muestran ambas tablas y no las cards) */
+@media screen and (min-width: 769px) {
+    .user-cards-container {
+        display: none;
     }
 }
 
