@@ -68,41 +68,32 @@
     height: 50px;
 }
 
-
-
-/* Barra de navegación con efecto de Blur */
 .navbar {
     background-color: #4e7989cb;
-    /* Azul oscuro con transparencia */
     backdrop-filter: blur(10px);
     padding: 0.5em 1vw;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 100;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
     display: flex;
     justify-content: space-between;
     align-items: center;
     height: 70px;
-    /* Altura fija del navbar */
+    transition: transform 0.3s ease-in-out;
 }
 
-/* Logo y contenedor */
 .navbar-left {
     display: flex;
     align-items: center;
 }
 
-/* Logo */
 .navbar .logo-img {
     width: 150px;
-    /* Ajuste para dispositivos pequeños */
     height: auto;
 }
 
-/* Menú de navegación */
 .navbar-right {
     list-style: none;
     display: flex;
@@ -111,9 +102,9 @@
     padding: 0;
     gap: 2vw;
     margin-right: 5%;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
 }
 
-/* Estilo de los enlaces */
 .navbar a {
     color: #ffffff;
     text-decoration: none;
@@ -123,7 +114,6 @@
     padding-bottom: 5px;
 }
 
-/* Efecto línea debajo del texto */
 .navbar a::after {
     content: "";
     position: absolute;
@@ -142,39 +132,54 @@
     transform-origin: bottom left;
 }
 
-/* Botón hamburguesa para pantallas pequeñas */
 .navbar-toggle {
     display: none;
     flex-direction: column;
     cursor: pointer;
+    margin-right: 20px;
+    z-index: 101;
 }
 
 .navbar-toggle div {
     width: 30px;
     height: 3px;
     background-color: white;
-    margin: 5px;
+    margin: 5px 0;
     transition: 0.4s;
 }
 
-/* Responsive */
+.navbar-toggle.active .bar1 {
+    transform: rotate(-45deg) translate(-6px, 6px);
+}
+
+.navbar-toggle.active .bar2 {
+    opacity: 0;
+}
+
+.navbar-toggle.active .bar3 {
+    transform: rotate(45deg) translate(-6px, -6px);
+}
+
 @media screen and (max-width: 768px) {
     .navbar-right {
         display: none;
-        /* Oculta el menú por defecto */
         flex-direction: column;
         position: absolute;
         top: 100%;
         right: 0;
-        background: rgba(78, 121, 137, 0.9);
+        background: rgba(78, 121, 137, 0.95);
         width: 100%;
         text-align: center;
         padding: 10px 0;
+        max-height: 0;
+        overflow: hidden;
+        opacity: 0;
     }
 
     .navbar-right.active {
         display: flex;
-        /* Muestra el menú cuando se activa */
+        max-height: 500px;
+        opacity: 1;
     }
 
     .navbar-right li {
@@ -189,8 +194,6 @@
         padding-top: 100px;
     }
 }
-
-
 
 
 /* Contenedor para el visor 3D y la tabla */
@@ -332,6 +335,12 @@
     width: 100%;
 
 }
+
+
+
+
+
+
 
 .cta-button {
     background-color: #00435f;
@@ -546,18 +555,137 @@
     background-color: #00455e;
 }
 
+
+
+@media screen and (max-width: 768px) {
+    /* Sección Hero */
+    .hero {
+        padding: 30px 15px;
+    }
+
+    .hero-top {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .hero img {
+        width: 100%;
+        max-width: 350px;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .hero-content {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+        max-width: 100%;
+        padding: 0 10px;
+    }
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+
+    .hero-button {
+        position: static !important;
+    }
+
+    .hero-divider,
+    .hero-content p {
+        margin: 10px 0;
+    }
+
+    .hero-content p {
+        text-align: justify;
+        flex: 1;
+    }
+
+    .hero-bottom {
+        margin-top: 30px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .cta-button {
+        width: 90%;
+        max-width: 300px;
+    }
+
+    /* Secciones generales */
+    .section {
+        flex-direction: column !important;
+        align-items: center;
+        padding: 30px 15px;
+        text-align: center;
+        gap: 20px;
+    }
+
+    .section > div {
+        width: 100%;
+        max-width: 500px;
+        padding: 0 10px; /* Uniformidad con .hero-content */
+    }
+
+    .section h2 {
+        text-align: center;
+    }
+
+    .section p {
+        text-align: justify;
+        margin-top: 10px;
+    }
+
+    .section img {
+        width: 90%;
+        max-width: 300px;
+        height: auto;
+        margin: 0 auto;
+    }
+
+    /* Valores */
+    .values-container {
+        padding: 30px 15px;
+        text-align: center;
+    }
+
+    .values {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+    }
+
+    .value-item {
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+    }
+
+    .value-item h3 {
+        margin-top: 10px;
+    }
+}
+
 .footer {
     background-color: #00455e;
-    padding: 20px;
+    color: white;
+    padding: 1em;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     position: relative;
-    color: white;
 }
 
 .footer img {
-    width: 350px;
+    width: 250px; /* Más adaptable en móviles */
     height: auto;
     margin-left: 20px;
 }
@@ -565,50 +693,66 @@
 .footer-content {
     flex: 1;
     text-align: center;
-    padding-left: 10px;
+    padding: 10px;
 }
 
 .footer-content h2 {
     font-size: 20px;
     font-weight: bold;
+    margin: 0;
 }
 
 .footer-content p {
     font-size: 14px;
     font-style: italic;
+    margin: 5px 0 0;
 }
 
 .footer-center {
-    position: relative;
-    width: 50%;
-    bottom: -20px;
+    width: 100%;
     text-align: center;
-    padding: 10px 0;
+    margin-top: 20px;
     font-size: 14px;
     font-weight: bold;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 10px;
 }
+
+
+
 
 .scroll-to-top {
     background-color: #b2bd5c;
     color: white;
     border: none;
-    border-radius: 10%;
-    width: 80px;
+    border-radius: 12px;
+    width: 70px;
     height: 50px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     position: fixed;
-    bottom: 20px;
+    bottom: 30px;
     right: 20px;
     z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease-in-out;
+    padding: 0;
+    overflow: hidden;
+}
+
+.scroll-to-top:hover {
+    transform: scale(1.08);
 }
 
 .scroll-to-top img {
-    width: 24px;
-    height: 44px;
+    width: 32px;
+    height: auto;
+    object-fit: contain;
+    transition: transform 0.2s ease-in-out;
 }
+
 
 /* Controles debajo del visor */
 .controls-overlay {

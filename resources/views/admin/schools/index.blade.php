@@ -73,8 +73,6 @@
                             data-schoolname="{{ $school->name }}">
                             <i class="bi bi-trash"></i>
                         </button>
-
-
                         <!-- Botón para ver escuela -->
                         <button class="btn-success" title="Ver escuela" onclick="window.location.href='{{ route('schools.show', $school) }}'">
                             <i class="bi bi-eye"></i>
