@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\TablaperiodicaController;
 use App\Http\Controllers\CursoController;
 use App\Http\Controllers\Admin\SchoolController;
+use App\Http\Controllers\ActivityController;
 
 
 
@@ -76,3 +77,5 @@ Route::middleware('auth')->group(function () {
     Route::get('/cursos/resultado', [CursoController::class, 'resultado'])->name('cursos.resultado');
 });
 
+
+Route::middleware('auth')->post('/activity-result', [ActivityResultController::class, 'store']);
