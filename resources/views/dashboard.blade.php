@@ -87,13 +87,18 @@
                         </table>
                     </div>
 
-                    {{-- Cards visibles solo en móvil --}}
                     <div class="user-cards-container d-md-none">
                         @foreach($users as $user)
                         <div class="user-card">
-                            <a href="{{ route('users.show', $user->id) }}" class="ver-btn" title="Ver detalles">
-                                Ver <i class="bi bi-eye"></i>
-                            </a>
+                            <!-- Botones alineados verticalmente -->
+                            <div class="user-card-buttons">
+                                <!-- Ver -->
+                                <a href="{{ route('users.show', $user->id) }}" class="btn ver-btn" title="Ver detalles">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                            </div>
+
+                            <!-- Contenido de la card -->
                             <h4>{{ $user->name }} {{ $user->last_name }} {{ $user->second_last_name }}</h4>
                             <p><strong>Escuela:</strong> {{ $user->school->name ?? '-' }}</p>
                             <p><strong>Grado:</strong> {{ $user->grade->name ?? '-' }}</p>
@@ -101,6 +106,7 @@
                         </div>
                         @endforeach
                     </div>
+
 
                     {{-- Paginación --}}
                     <div class="d-flex justify-content-center" id="paginationContainer">

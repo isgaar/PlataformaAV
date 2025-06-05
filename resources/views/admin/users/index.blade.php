@@ -112,26 +112,29 @@
     <div class="user-cards-container d-md-none">
         @foreach($users as $user)
         <div class="user-card">
-            <!-- Botón VER -->
-            <a href="{{ route('users.show', $user->id) }}" class="ver-btn" title="Ver detalles">
-                <i class="bi bi-eye"></i>
-            </a>
+            <!-- Contenedor de botones alineados a la derecha -->
+            <div class="user-card-buttons">
+                <!-- Botón VER -->
+                <a href="{{ route('users.show', $user->id) }}" class="btn ver-btn" title="Ver detalles">
+                    <i class="bi bi-eye"></i>
+                </a>
 
-            <!-- Botón EDITAR -->
-            <a href="{{ route('users.edit', $user->id) }}" class="editar-btn" title="Editar">
-                <i class="bi bi-pencil"></i>
-            </a>
+                <!-- Botón EDITAR -->
+                <a href="{{ route('users.edit', $user->id) }}" class="btn editar-btn" title="Editar">
+                    <i class="bi bi-pencil"></i>
+                </a>
 
-            <!-- Botón ELIMINAR (solo si no es el mismo usuario autenticado) -->
-            @if($user->id !== auth()->user()->id)
-            <button class="eliminar-btn" title="Eliminar"
-                data-bs-toggle="modal"
-                data-bs-target="#deleteUserModal"
-                data-userid="{{ $user->id }}"
-                data-username="{{ $user->name }} {{ $user->last_name }}">
-                <i class="bi bi-trash"></i>
-            </button>
-            @endif
+                <!-- Botón ELIMINAR (si no es el usuario autenticado) -->
+                @if($user->id !== auth()->user()->id)
+                <button class="btn eliminar-btn" title="Eliminar"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteUserModal"
+                    data-userid="{{ $user->id }}"
+                    data-username="{{ $user->name }} {{ $user->last_name }}">
+                    <i class="bi bi-trash"></i>
+                </button>
+                @endif
+            </div>
 
             <!-- Contenido de la card -->
             <h4>{{ $user->name }} {{ $user->last_name }} {{ $user->second_last_name }}</h4>
@@ -142,6 +145,7 @@
         </div>
         @endforeach
     </div>
+
 
 
     <!-- Paginación -->

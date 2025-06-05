@@ -23,9 +23,6 @@
     font-display: swap;
 }
 
-
-
-
 /* Mostrar el icono por defecto, ocultar el texto */
 .logout-text {
     display: none;
@@ -1429,8 +1426,10 @@ footer {
 /* Estilos generales */
 body {
     font-family: 'Fira Sans', sans-serif;
-    -webkit-font-smoothing: antialiased;   /* Mejora en WebKit (Safari, Chrome) */
-    -moz-osx-font-smoothing: grayscale;    /* Mejora en Firefox */
+    -webkit-font-smoothing: antialiased;
+    /* Mejora en WebKit (Safari, Chrome) */
+    -moz-osx-font-smoothing: grayscale;
+    /* Mejora en Firefox */
     text-rendering: optimizeLegibility;
     margin: 0;
     font-size: 1.2rem;
@@ -2432,7 +2431,6 @@ input:checked+.slider:before {
         display: none;
     }
 
-    /* Cards para usuarios */
     .user-cards-container {
         display: flex;
         flex-direction: column;
@@ -2447,61 +2445,68 @@ input:checked+.slider:before {
         border-radius: 10px;
         padding: 20px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        position: relative;
         width: 90%;
         max-width: 500px;
-        margin-bottom: 10px;
+        position: relative;
+        font-family: inherit;
     }
 
-    .user-card .ver-btn {
+    /* Botones alineados verticalmente a la derecha */
+    .user-card-buttons {
         position: absolute;
         top: 15px;
         right: 15px;
-        font-size: 14px;
-        background-color: #198754;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 5px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
     }
 
-    .user-card .editar-btn {
-        position: absolute;
-        top: 15px;
-        left: 15px;
-        font-size: 14px;
+    /* Botones más pequeños */
+    .user-card .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        /* reducido de 36px */
+        height: 28px;
+        border-radius: 5px;
+        border: none;
+        font-size: 13px;
+        /* reducido de 16px */
+        cursor: pointer;
+        padding: 0;
+    }
+
+    /* Colores individuales */
+    .ver-btn {
+        background-color: #198754;
+        color: white;
+    }
+
+    .editar-btn {
         background-color: #ffc107;
         color: black;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 5px;
         text-decoration: none;
     }
 
-    .user-card .eliminar-btn {
-        position: absolute;
-        top: 15px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 14px;
+    .eliminar-btn {
         background-color: #dc3545;
         color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 5px;
     }
 
-
+    /* Texto */
     .user-card h4 {
-        font-size: 16px;
+        font-size: 18px;
+        font-weight: bold;
         margin-bottom: 10px;
     }
 
     .user-card p {
         font-size: 14px;
-        margin: 5px 0;
-        text-align: justify;
+        margin: 4px 0;
+        text-align: left;
     }
+
 }
 
 /* 2. Estilos opcionales para escritorio (se muestran ambas tablas y no las cards) */

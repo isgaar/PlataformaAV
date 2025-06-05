@@ -92,22 +92,27 @@
     <div class="user-cards-container d-md-none">
         @foreach($schools as $school)
         <div class="user-card">
-            <!-- Botones de acción -->
-            <a href="{{ route('schools.show', $school->id) }}" class="ver-btn" title="Ver escuela">
-                <i class="bi bi-eye"></i>
-            </a>
+            <!-- Botones alineados verticalmente -->
+            <div class="user-card-buttons">
+                <!-- Ver -->
+                <a href="{{ route('schools.show', $school->id) }}" class="btn ver-btn" title="Ver escuela">
+                    <i class="bi bi-eye"></i>
+                </a>
 
-            <a href="{{ route('schools.edit', $school->id) }}" class="editar-btn" title="Editar escuela">
-                <i class="bi bi-pencil"></i>
-            </a>
+                <!-- Editar -->
+                <a href="{{ route('schools.edit', $school->id) }}" class="btn editar-btn" title="Editar escuela">
+                    <i class="bi bi-pencil"></i>
+                </a>
 
-            <button class="eliminar-btn" title="Eliminar escuela"
-                data-bs-toggle="modal"
-                data-bs-target="#deleteSchoolModal"
-                data-schoolid="{{ $school->id }}"
-                data-schoolname="{{ $school->name }}">
-                <i class="bi bi-trash"></i>
-            </button>
+                <!-- Eliminar -->
+                <button class="btn eliminar-btn" title="Eliminar escuela"
+                    data-bs-toggle="modal"
+                    data-bs-target="#deleteSchoolModal"
+                    data-schoolid="{{ $school->id }}"
+                    data-schoolname="{{ $school->name }}">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
 
             <!-- Contenido de la card -->
             <h4>{{ $school->name }}</h4>
@@ -116,6 +121,7 @@
         </div>
         @endforeach
     </div>
+
 
     <!-- Paginación -->
     <div class="d-flex justify-content-center">
