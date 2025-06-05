@@ -34,14 +34,17 @@
             @endif
         </div>
         <div class="col-md-6 mx-auto">
-            <form action="{{ route('schools.index') }}" method="get">
-                <div class="input-group">
-                    <input type="text"
-                        class="form-control form-control-lg"
+            <form action="{{ route('schools.index') }}" method="get" class="search-form">
+                <div class="search-group">
+                    <label for="search-input" class="visually-hidden">Buscar escuela</label>
+                    <input
+                        type="text"
+                        id="search-input"
+                        class="search-input"
                         name="search"
                         value="{{ request('search') }}"
                         placeholder="Buscar escuela">
-                    <button class="btn btn-lg btn-primary" type="submit">Buscar</button>
+                    <button class="search-button" type="submit">Buscar</button>
                 </div>
             </form>
         </div>

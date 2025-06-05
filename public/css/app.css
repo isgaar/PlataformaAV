@@ -1,9 +1,30 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
 /* Estilo global */
-@import url('https://fonts.googleapis.com/css2?family=Lilita+One&family=Fira+Sans:wght@300;400;500;700&display=swap');
+@font-face {
+    font-family: 'Lilita One';
+    src: url('/fonts/lilita-one/LilitaOne-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Fira Sans';
+    src: url('/fonts/fira-sans/FiraSans-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Fira Sans';
+    src: url('/fonts/fira-sans/FiraSans-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+
 
 /* Mostrar el icono por defecto, ocultar el texto */
 .logout-text {
@@ -1408,12 +1429,16 @@ footer {
 /* Estilos generales */
 body {
     font-family: 'Fira Sans', sans-serif;
+    -webkit-font-smoothing: antialiased;   /* Mejora en WebKit (Safari, Chrome) */
+    -moz-osx-font-smoothing: grayscale;    /* Mejora en Firefox */
+    text-rendering: optimizeLegibility;
     margin: 0;
     font-size: 1.2rem;
     padding: 0;
     background-color: #ffffff;
     color: #1B475D;
     padding-top: 80px;
+    font-weight: 400;
     /* Asegura espacio debajo del navbar */
 }
 
@@ -2025,6 +2050,53 @@ body {
     background-color: #198754;
     border-color: #198754;
 }
+
+/* Boton de busqueda */
+.search-form {
+    width: 100%;
+    max-width: 600px;
+    margin: auto;
+}
+
+.search-group {
+    display: flex;
+    width: 100%;
+}
+
+.search-input {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 1.1rem;
+    border: 1px solid #ccc;
+    border-right: none;
+    border-radius: 8px 0 0 8px;
+    outline: none;
+}
+
+.search-button {
+    padding: 10px 20px;
+    font-size: 1.1rem;
+    border: 1px solid #007bff;
+    background-color: #007bff;
+    color: white;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+    background-color: #0056b3;
+}
+
+.visually-hidden {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
 
 /* Estilos generales para los formularios de Bootstrap */
 .form-group {

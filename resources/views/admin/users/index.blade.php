@@ -37,14 +37,17 @@
             @endif
         </div>
         <div class="col-md-6 mx-auto">
-            <form action="{{ route('users.index') }}" method="get">
-                <div class="input-group">
-                    <input type="text"
-                        class="form-control form-control-lg"
+            <form action="{{ route('users.index') }}" method="get" class="search-form">
+                <div class="search-group">
+                    <label for="search-user" class="visually-hidden">Buscar usuario</label>
+                    <input
+                        type="text"
+                        id="search-user"
+                        class="search-input"
                         name="search"
                         value="{{ request('search') }}"
                         placeholder="Buscar usuario">
-                    <button class="btn btn-lg btn-primary" type="submit">Buscar</button>
+                    <button class="search-button" type="submit">Buscar</button>
                 </div>
             </form>
         </div>
