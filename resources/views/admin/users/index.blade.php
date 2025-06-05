@@ -50,8 +50,8 @@
         </div>
     </div>
 
-    <!-- Tabla de usuarios -->
-    <div class="table-responsive">
+    <!-- Tabla visible solo en escritorio -->
+    <div class="table-responsive d-none d-md-block" id="usersTableContainer">
         <table class="table table-hover custom-table text-center">
             <thead class="bg-primary text-white">
                 <tr>
@@ -104,6 +104,42 @@
             </tbody>
         </table>
     </div>
+
+    {{-- Cards visibles solo en móvil --}}
+    <div class="user-cards-container d-md-none">
+        @foreach($users as $user)
+        <div class="user-card">
+            <!-- Botón VER -->
+            <a href="{{ route('users.show', $user->id) }}" class="ver-btn" title="Ver detalles">
+                <i class="bi bi-eye"></i>
+            </a>
+
+            <!-- Botón EDITAR -->
+            <a href="{{ route('users.edit', $user->id) }}" class="editar-btn" title="Editar">
+                <i class="bi bi-pencil"></i>
+            </a>
+
+            <!-- Botón ELIMINAR (solo si no es el mismo usuario autenticado) -->
+            @if($user->id !== auth()->user()->id)
+            <button class="eliminar-btn" title="Eliminar"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteUserModal"
+                data-userid="{{ $user->id }}"
+                data-username="{{ $user->name }} {{ $user->last_name }}">
+                <i class="bi bi-trash"></i>
+            </button>
+            @endif
+
+            <!-- Contenido de la card -->
+            <h4>{{ $user->name }} {{ $user->last_name }} {{ $user->second_last_name }}</h4>
+            <p><strong>Correo:</strong> {{ $user->email }}</p>
+            <p><strong>Escuela:</strong> {{ $user->school->name ?? '-' }}</p>
+            <p><strong>Grado:</strong> {{ $user->grade->name ?? '-' }}</p>
+            <p><strong>Grupo:</strong> {{ $user->group->name ?? '-' }}</p>
+        </div>
+        @endforeach
+    </div>
+
 
     <!-- Paginación -->
     <div class="d-flex justify-content-center">

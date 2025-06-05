@@ -47,8 +47,8 @@
         </div>
     </div>
 
-    <!-- Tabla de escuelas -->
-    <div class="table-responsive">
+    <!-- Tabla visible solo en escritorio -->
+    <div class="table-responsive d-none d-md-block" id="usersTableContainer">
         <table class="table table-hover custom-table text-center">
             <thead class="bg-primary text-white">
                 <tr>
@@ -65,7 +65,6 @@
                     <td>{{ $school->name }}</td>
                     <td>{{ $school->address }}</td>
                     <td>
-                        <!-- Botón para eliminar escuela -->
                         <button class="btn-danger" title="Eliminar escuela"
                             data-bs-toggle="modal"
                             data-bs-target="#deleteSchoolModal"
@@ -73,12 +72,9 @@
                             data-schoolname="{{ $school->name }}">
                             <i class="bi bi-trash"></i>
                         </button>
-                        <!-- Botón para ver escuela -->
                         <button class="btn-success" title="Ver escuela" onclick="window.location.href='{{ route('schools.show', $school) }}'">
                             <i class="bi bi-eye"></i>
                         </button>
-
-                        <!-- Botón para editar escuela -->
                         <button class="btn-warning" title="Editar escuela" onclick="window.location.href='{{ route('schools.edit', $school) }}'">
                             <i class="bi bi-pencil"></i>
                         </button>
@@ -87,6 +83,35 @@
                 @endforeach
             </tbody>
         </table>
+    </div>
+
+    <!-- Cards visibles solo en móvil -->
+    <div class="user-cards-container d-md-none">
+        @foreach($schools as $school)
+        <div class="user-card">
+            <!-- Botones de acción -->
+            <a href="{{ route('schools.show', $school->id) }}" class="ver-btn" title="Ver escuela">
+                <i class="bi bi-eye"></i>
+            </a>
+
+            <a href="{{ route('schools.edit', $school->id) }}" class="editar-btn" title="Editar escuela">
+                <i class="bi bi-pencil"></i>
+            </a>
+
+            <button class="eliminar-btn" title="Eliminar escuela"
+                data-bs-toggle="modal"
+                data-bs-target="#deleteSchoolModal"
+                data-schoolid="{{ $school->id }}"
+                data-schoolname="{{ $school->name }}">
+                <i class="bi bi-trash"></i>
+            </button>
+
+            <!-- Contenido de la card -->
+            <h4>{{ $school->name }}</h4>
+            <p><strong>Dirección:</strong> {{ $school->address }}</p>
+            <p><strong>ID:</strong> {{ $school->id }}</p>
+        </div>
+        @endforeach
     </div>
 
     <!-- Paginación -->

@@ -37,10 +37,12 @@
                 <li><a href="#"><i class="fas fa-user"></i> {{ Auth::user()->name }}</a></li>
                 <li>
                     <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        <i class="fas fa-sign-out-alt"></i>
+                        <i class="fas fa-sign-out-alt logout-icon"></i>
+                        <span class="logout-text">Cerrar sesión</span>
                     </a>
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
                 </li>
+
                 @endauth
                 @guest
                 <li><a href="{{ route('login') }}">Iniciar sesión</a></li>
@@ -79,7 +81,7 @@
         const navbar = document.getElementById("navbar");
         let lastScrollTop = 0;
 
-        window.addEventListener("scroll", function () {
+        window.addEventListener("scroll", function() {
             let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
             if (currentScroll > lastScrollTop) {
                 navbar.style.transform = "translateY(-100%)";
@@ -104,7 +106,7 @@
 
         // Scroll to top
         const scrollToTopButton = document.querySelector(".scroll-to-top");
-        window.addEventListener("scroll", function () {
+        window.addEventListener("scroll", function() {
             if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) {
                 scrollToTopButton.style.display = "flex";
             } else {
@@ -113,7 +115,10 @@
         });
 
         function scrollToTop() {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
     </script>
 </body>
