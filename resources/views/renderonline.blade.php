@@ -29,15 +29,10 @@
 
     <div class="pdb-container">
         <div class="pdb-action-buttons" style="display: flex; align-items: center; justify-content: center; gap: 40%; margin-bottom: 20px;">
-            <button class="btn-practice" title="Ejecuta el instalador para crear una molécula!">
-                <i class="fas fa-atom"></i> Practicar
-            </button>
             <button class="btn-info" id="toggleLegend" title="Mostrar instrucciones">
                 <i class="fas fa-question"></i>
             </button>
         </div>
-
-
 
         <!-- Información del archivo PDB -->
         <div id="pdbInfo" class="pdb-info-container">
@@ -288,8 +283,6 @@
                 renderButton.disabled = false;
             }
         });
-
-
 
         // Pantalla completa
         fullscreenButton.addEventListener("click", () => {

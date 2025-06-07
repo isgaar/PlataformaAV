@@ -168,8 +168,15 @@
                                                     </tr>
                                                 </thead>
 
+                                                <div class="pdb-action-buttons" style="display: flex; align-items: center; justify-content: center; gap: 40%; margin-bottom: 20px;">
+                                                        <button class="btn-practice" title="Ejecuta el instalador para crear una molécula!">
+                                                            <i class="fas fa-atom"></i> Practicar
+                                                        </button>
+                                                    </div>
+
                                                 <tbody>
                                                     @foreach($users as $student)
+                                                    
                                                     <tr>
                                                         <td class="text-start ps-3 fw-medium">
                                                             {{ $student->name }} {{ $student->last_name }} {{ $student->second_last_name }}
