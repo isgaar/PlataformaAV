@@ -40,7 +40,6 @@
             </div>
 
             <div class="login-actions">
-                <a href="{{ route('password.request') }}" class="forgot-password">¿Has olvidado tu contraseña?</a>
                 <button type="submit" class="login-button">
                     Iniciar Sesión
                 </button>

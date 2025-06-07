@@ -1833,6 +1833,54 @@ body {
 .dashboard-container {
     text-align: center;
 }
+/* Contenedor con posición relativa para permitir botón encima */
+.image-button-container {
+    position: relative;
+    display: inline-block;
+    max-width: 600px;
+    width: 100%;
+}
+
+/* Imagen con bordes redondeados */
+.image-button-container img {
+    width: 100%;
+    height: auto;
+}
+
+/* Botón flotante encima de la imagen */
+.practice-button-over-image {
+    position: absolute;
+    bottom: 15%;
+    right: 55%; /* <-- Aquí aumentamos el margen derecho */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    background-color: #00455e;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+
+/* Hover para el botón */
+.practice-button-over-image:hover {
+    background-color: #00364a;
+    transform: scale(1.05);
+}
+
+/* Ícono del átomo dentro del botón */
+.practice-button-over-image img {
+    width: 24px;
+    height: 24px;
+}
+
 
 .header {
     background-color: #4e7989cb;

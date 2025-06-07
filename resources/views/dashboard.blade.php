@@ -129,21 +129,16 @@
                 </div>
 
                 {{-- TAB 1: CURSOS --}}
-                <div id="coursesTab" class="tab-pane show">
-                    <div class="practices d-flex flex-wrap justify-content-center">
-                        @foreach($practices as $practice)
-                        <div class="practice-card border border-primary m-2 text-center p-3">
-                            <img src="{{ asset('images/' . $practice['image']) }}" alt="{{ $practice['title'] }}" class="mb-2" style="max-height: 100px;">
-                            <h3 class="h5">{{ $practice['title'] }}</h3>
-                            <div class="colored-line my-2"></div>
-                            <p class="small">{!! $practice['description'] !!}</p>
-                            <button class="btn btn-primary" onclick="openSimulationWindow()">
-                                <i class="bi bi-play-fill"></i> Iniciar
-                            </button>
+                <div id="coursesTab" class="tab-pane show d-flex justify-content-center">
+                    <div class="image-button-container">
+                        <img src="{{ asset('images/IMG_DAHSBOARD.png') }}" alt="Dashboard Cursos">
 
-                        </div>
-                        @endforeach
+                        <button class="practice-button-over-image" onclick="openSimulationWindow()">
+                            <img src="{{ asset('images/ATOMO.png') }}" alt="Átomo">
+                            <span>Practicar</span>
+                        </button>
                     </div>
+
                 </div>
 
                 {{-- TAB 2: PROGRESO --}}
@@ -169,14 +164,14 @@
                                                 </thead>
 
                                                 <div class="pdb-action-buttons" style="display: flex; align-items: center; justify-content: center; gap: 40%; margin-bottom: 20px;">
-                                                        <button class="btn-practice" title="Ejecuta el instalador para crear una molécula!">
-                                                            <i class="fas fa-atom"></i> Practicar
-                                                        </button>
-                                                    </div>
+                                                    <button class="btn-practice" title="Ejecuta el instalador para crear una molécula!">
+                                                        <i class="fas fa-atom"></i> Practicar
+                                                    </button>
+                                                </div>
 
                                                 <tbody>
                                                     @foreach($users as $student)
-                                                    
+
                                                     <tr>
                                                         <td class="text-start ps-3 fw-medium">
                                                             {{ $student->name }} {{ $student->last_name }} {{ $student->second_last_name }}
