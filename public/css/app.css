@@ -835,19 +835,26 @@
 
 }
 
-/* Estilo para el contenedor de los botones y controles */
+/* CONTROLES BAJO EL VISOR */
 .controls-overlay {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
     display: flex;
     justify-content: space-between;
-    padding: 10px;
-    margin-top: 20px;
-    background-color: #f0f0f0;
-    /* Color de fondo de los controles */
+    align-items: center;
+    flex-wrap: wrap; /* permite salto de línea si no cabe */
+    z-index: 10;
+    padding: 10px 15px;
     border-radius: 8px;
     background: rgba(255, 255, 255, 0.8);
-    /* Fondo blanco semitransparente */
     backdrop-filter: blur(5px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+    min-height: 50px;
 }
+
 
 /* Botón de información */
 .btn-info {
@@ -881,72 +888,106 @@
 
 .pdb-container {
     padding: 20px;
-    width: 100%;
-    /* Ocupa todo el ancho disponible */
+    width: 90%;
     max-width: 600px;
-    /* Define un ancho máximo para que no crezca más */
-    min-width: 400px;
-    /* Evita que sea más pequeño de lo deseado */
+    min-width: 320px;
+    margin: 0 auto;
     overflow: hidden;
-    /* Oculta el contenido que sobrepase el ancho */
     word-wrap: break-word;
-    /* Asegura que las palabras largas no rompan el diseño */
     white-space: normal;
-    /* Evita que el contenido fuerce la expansión */
+    box-sizing: border-box;
 }
 
 
+.pdb-action-buttons {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+.btn-fullscreen,
+.btn-reset {
+    font-size: 1.1rem;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
 
+/* Colores específicos */
 .btn-fullscreen {
     background-color: #B4BD62;
-    /* Verde Oliva */
+    color: #fff;
 }
 
 .btn-fullscreen:hover {
     background-color: #939F42;
-    /* Verde Oliva más oscuro */
 }
 
 .btn-reset {
     background-color: #FAD564;
-    /* Amarillo */
     color: #1B475D;
-    /* Azul oscuro */
 }
 
 .btn-reset:hover {
     background-color: #E9C352;
-    /* Amarillo más oscuro */
 }
 
+/* Botón práctica general */
 .btn-practice {
     background-color: #00455e;
-    /* Color de fondo */
     color: white;
-    /* Color del texto */
     font-family: 'Fira Sans', sans-serif;
-    /* Fuente de letra */
-    font-size: 1.4rem;
-    /* Tamaño de letra más grande */
-    font-weight: bold;
-    /* Negrita */
-    padding: 15px 30px;
-    /* Aumentar el padding para hacer el botón más grande */
+    font-size: 1.3rem;
+    padding: 12px 24px;
     border-radius: 10px;
-    /* Bordes redondeados */
+    font-weight: bold;
     cursor: pointer;
-    /* Cambiar el cursor al pasar el mouse */
     text-align: center;
-    /* Centrar el texto */
+    transition: background-color 0.3s ease, transform 0.2s ease;
     flex-shrink: 0;
-    /* Evitar que se encoja */
-    transition: background-color 0.3s ease;
-    /* Transición suave */
 }
 
 .btn-practice:hover {
     background-color: #00364d;
-    /* Cambiar color al pasar el mouse */
+}
+
+/* =================== */
+/* RESPONSIVE BUTTONS  */
+/* =================== */
+
+/* Pantallas medianas y pequeñas */
+@media (max-width: 1024px) {
+    .btn-fullscreen,
+    .btn-reset,
+    .btn-practice {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+}
+
+/* Pantallas pequeñas (teléfonos) */
+@media (max-width: 600px) {
+    .btn-fullscreen,
+    .btn-reset,
+    .btn-practice {
+        font-size: 0.9rem;
+        padding: 8px 16px;
+    }
+}
+
+/* Muy pequeños */
+@media (max-width: 400px) {
+    .btn-fullscreen,
+    .btn-reset,
+    .btn-practice {
+        font-size: 0.8rem;
+        padding: 6px 14px;
+    }
 }
 
 
@@ -1143,10 +1184,47 @@ table td {
     /* Color azul oscuro para el texto en negrita */
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;700&display=swap');
+/* ✅ Estilo general para pantallas grandes (wide screen) */
+.layout-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px;
+    min-height: 50vh;
+    width: 100%;
+}
 
+.viewer-container,
+.pdb-container {
+    flex: 1 1 48%;
+    max-width: 48%;
+}
 
+/* ✅ Vista para pantallas 4:3 o móviles: apilado vertical con RENDER ARRIBA */
+@media (max-aspect-ratio: 4/3), (max-width: 768px) {
+    .layout-container {
+        flex-direction: column;
+        align-items: center;
+    }
 
+    .viewer-container {
+        order: 1; /* 🔼 Render ahora va arriba */
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: none !important;
+        max-height: 50vh;
+        height: auto;
+    }
+
+    .pdb-container {
+        order: 2; /* 🔽 Tabla va abajo */
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: none !important;
+    }
+}
 /* Estilo para los botones generales */
 button {
     padding: 10px 15px;

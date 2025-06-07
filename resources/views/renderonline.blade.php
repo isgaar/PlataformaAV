@@ -3,76 +3,79 @@
 @section('content')
 <!-- Contenedor principal de la página -->
 <div class="content-container">
-    <!-- Contenedor del visor 3D -->
-    <div class="viewer-container">
-        <div class="controls-overlay">
-            <select id="renderMode">
-                <option value="sphere">CPK</option>
-                <option value="cartoon">Vista Cartoon</option>
-
-                <option value="surface">Vista Superficie</option>
-                <option value="stick">Vista Bastones</option>
-            </select>
-            <div>
-                <button class="btn-fullscreen" id="fullscreenButton">
-                    <i class="fas fa-expand"></i> Pantalla Completa
-                </button>
-                <button class="btn-reset" id="resetViewButton">
-                    <i class="fas fa-sync-alt"></i> Reiniciar Vista
+    <div class="layout-container">
+        <!-- Contenedor del visor 3D -->
+        <div class="viewer-container">
+            <div class="pdb-action-buttons" style="display: flex; align-items: center; justify-content: center; gap: 40%; margin-bottom: 20px;">
+                <button class="btn-info" id="toggleLegend" title="Mostrar instrucciones">
+                    <i class="fas fa-question"></i>
                 </button>
             </div>
+            <div class="controls-overlay">
+                <select id="renderMode">
+                    <option value="sphere">CPK</option>
+                    <option value="cartoon">Vista Cartoon</option>
+
+                    <option value="surface">Vista Superficie</option>
+                    <option value="stick">Vista Bastones</option>
+                </select>
+                <div>
+                    <button class="btn-fullscreen" id="fullscreenButton">
+                        <i class="fas fa-expand"></i> Pantalla Completa
+                    </button>
+                    <button class="btn-reset" id="resetViewButton">
+                        <i class="fas fa-sync-alt"></i> Reiniciar Vista
+                    </button>
+                </div>
+            </div>
+            <div id="viewer" class="viewer"></div>
         </div>
-        <div id="viewer" class="viewer"></div>
-    </div>
 
-    <!-- Botones de acción (Practicar + Ayuda) -->
+        <!-- Botones de acción (Practicar + Ayuda) -->
 
-    <div class="pdb-container">
-        <div class="pdb-action-buttons" style="display: flex; align-items: center; justify-content: center; gap: 40%; margin-bottom: 20px;">
-            <button class="btn-info" id="toggleLegend" title="Mostrar instrucciones">
-                <i class="fas fa-question"></i>
-            </button>
-        </div>
+        <div class="pdb-container">
 
-        <!-- Información del archivo PDB -->
-        <div id="pdbInfo" class="pdb-info-container">
-            <h3>Información del Archivo PDB</h3>
-            <!-- Formulario para cargar archivo -->
-            <form id="uploadForm" enctype="multipart/form-data">
-                @csrf <!-- Token CSRF -->
-                <label for="file" class="file-upload-label">Buscar</label>
-                <input type="file" id="file" name="file" accept=".pdb" required>
-                <button type="submit" id="renderButton">
-                    <span class="button-text"><i class="fas fa-play"></i> Renderizar</span>
-                    <span class="loader" style="display: none;"></span>
-                </button>
-            </form>
-            <!-- Mensaje de error -->
-            <div id="error-message" class="error-message" style="display: none;"></div>
-            <div id="toast" class="toast" style="display: none;">El archivo es demasiado grande. Intente comprimirlo antes de subirlo.</div>
-            <!-- Tabla de información -->
-            <table class="pdb-table">
-                <tr>
-                    <td>Nombre del archivo:</td>
-                    <td id="filename"></td>
-                </tr>
-                <tr>
-                    <td>Átomos:</td>
-                    <td id="atoms"></td>
-                </tr>
-                <tr>
-                    <td>Cadenas:</td>
-                    <td id="chains"></td>
-                </tr>
-                <tr>
-                    <td>Residuos:</td>
-                    <td id="residues"></td>
-                </tr>
-                <tr>
-                    <td>Tamaño:</td>
-                    <td id="size"></td>
-                </tr>
-            </table>
+
+            <!-- Información del archivo PDB -->
+            <div id="pdbInfo" class="pdb-info-container">
+                <h3>Información del Archivo PDB</h3>
+                <!-- Formulario para cargar archivo -->
+                <form id="uploadForm" enctype="multipart/form-data">
+                    @csrf <!-- Token CSRF -->
+                    <label for="file" class="file-upload-label">Buscar</label>
+                    <input type="file" id="file" name="file" accept=".pdb" required>
+                    <button type="submit" id="renderButton">
+                        <span class="button-text"><i class="fas fa-play"></i> Renderizar</span>
+                        <span class="loader" style="display: none;"></span>
+                    </button>
+                </form>
+                <!-- Mensaje de error -->
+                <div id="error-message" class="error-message" style="display: none;"></div>
+                <div id="toast" class="toast" style="display: none;">El archivo es demasiado grande. Intente comprimirlo antes de subirlo.</div>
+                <!-- Tabla de información -->
+                <table class="pdb-table">
+                    <tr>
+                        <td>Nombre del archivo:</td>
+                        <td id="filename"></td>
+                    </tr>
+                    <tr>
+                        <td>Átomos:</td>
+                        <td id="atoms"></td>
+                    </tr>
+                    <tr>
+                        <td>Cadenas:</td>
+                        <td id="chains"></td>
+                    </tr>
+                    <tr>
+                        <td>Residuos:</td>
+                        <td id="residues"></td>
+                    </tr>
+                    <tr>
+                        <td>Tamaño:</td>
+                        <td id="size"></td>
+                    </tr>
+                </table>
+            </div>
         </div>
     </div>
 
