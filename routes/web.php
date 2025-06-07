@@ -77,5 +77,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/cursos/resultado', [CursoController::class, 'resultado'])->name('cursos.resultado');
 });
 
-
-Route::middleware('auth')->post('/activity-result', [ActivityResultController::class, 'store']);
+Route::get('/session-json', function () {
+    return response()->json(Auth::user());
+})->middleware('auth');
