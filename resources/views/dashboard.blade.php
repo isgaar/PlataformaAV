@@ -133,10 +133,11 @@
                     <div class="image-button-container">
                         <img src="{{ asset('images/IMG_DAHSBOARD.png') }}" alt="Dashboard Cursos">
 
-                        <button class="practice-button-over-image" onclick="openSimulationWindow()">
+                        <button class="practice-button-over-image" onclick="lanzarUnity()">
                             <img src="{{ asset('images/ATOMO.png') }}" alt="Átomo">
                             <span>Practicar</span>
                         </button>
+
                     </div>
 
                 </div>
@@ -163,11 +164,6 @@
                                                     </tr>
                                                 </thead>
 
-                                                <div class="pdb-action-buttons" style="display: flex; align-items: center; justify-content: center; gap: 40%; margin-bottom: 20px;">
-                                                    <button class="btn-practice" title="Ejecuta el instalador para crear una molécula!">
-                                                        <i class="fas fa-atom"></i> Practicar
-                                                    </button>
-                                                </div>
 
                                                 <tbody>
                                                     @foreach($users as $student)
@@ -434,59 +430,18 @@
 
 
 <script>
-function openSimulationWindow() {
-    const win = window.open("", "_blank", "width=700,height=500");
-    if (!win) {
-        alert("Tu navegador ha bloqueado la ventana emergente.");
-        return;
-    }
-
-    // Mostrar pantalla de carga
-    win.document.write(`
-        <html>
-        <head>
-            <title>Cargando datos de sesión...</title>
-            <style>
-                body {
-                    font-family: monospace;
-                    background: #1e1e1e;
-                    color: #00ffcc;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    height: 100vh;
-                    margin: 0;
-                }
-                #status {
-                    font-size: 18px;
-                }
-            </style>
-        </head>
-        <body>
-            <div id="status">Cargando sesión del usuario...</div>
-        </body>
-        </html>
-    `);
-    win.document.close();
-
-    // Hacer la petición a Laravel para obtener la sesión
-    fetch('/session-json')
-        .then(res => res.json())
+function lanzarUnity() {
+    fetch('http://127.0.0.1:8000/lanzar-unity')
+        .then(response => response.json())
         .then(data => {
-            const formatted = JSON.stringify(data, null, 4);
-            win.document.body.innerHTML = `
-                <pre style="
-                    background: #2d2d2d;
-                    color: #f8f8f2;
-                    padding: 20px;
-                    border-radius: 10px;
-                    max-height: 90vh;
-                    overflow-y: auto;
-                ">${formatted}</pre>
-            `;
+            if (data.status === 'ok') {
+                console.log("Unity lanzado correctamente desde Laravel.");
+            } else {
+                alert("Error: no se pudo lanzar Unity.");
+            }
         })
         .catch(error => {
-            win.document.body.innerHTML = `<p style="color: red;">Error al obtener los datos de sesión: ${error}</p>`;
+            alert("Error de conexión con el servidor Laravel: " + error);
         });
 }
 </script>
