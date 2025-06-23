@@ -6,8 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Activity extends Model
 {
-    protected $fillable = ['name', 'description'];
+    // Solo llenables los campos existentes. Elimina "description" si no existe en la tabla.
+    protected $fillable = ['name'];
 
+    /**
+     * Relación muchos a muchos con usuarios.
+     */
     public function users()
     {
         return $this->belongsToMany(User::class)
@@ -15,5 +19,3 @@ class Activity extends Model
             ->withTimestamps();
     }
 }
-
-

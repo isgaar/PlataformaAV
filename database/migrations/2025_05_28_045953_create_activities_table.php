@@ -13,14 +13,8 @@ return new class extends Migration
     {
         Schema::create('activities', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('activity_id')->constrained()->cascadeOnDelete();
-            $table->string('session')->nullable(); // ID de sesión o intento
-            $table->boolean('done')->default(false); // Si la hizo o no
+            $table->string('name')->unique(); // solo lleva el nombre
             $table->timestamps();
-
-            // Si quieres evitar duplicados exactos:
-            $table->unique(['user_id', 'activity_id', 'session']);
         });
     }
 

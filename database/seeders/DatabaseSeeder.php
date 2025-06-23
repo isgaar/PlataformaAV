@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             GroupSeeder::class,     // Grupos
             PeriodSeeder::class,    // Periodos
             UserSeeder::class,      // Usuarios (después de grupos y escuelas)
-            AssignmentSeeder::class // Asignaciones (requiere users y grupos)
+            AssignmentSeeder::class, // Asignaciones (requiere users y grupos)
+            ActivityUserSeeder::class
         ]);
     }
 }

@@ -12,13 +12,19 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('activity_user', function (Blueprint $table) {
-        $table->id();
-        $table->foreignId('activity_id')->constrained()->onDelete('cascade');
-        $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        $table->boolean('done')->default(false);
-        $table->string('session');
-        $table->timestamps();
-    });
+            $table->id();
+
+            $table->foreignId('activity_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+
+            $table->boolean('done')->default(false);
+            $table->string('session')->nullable(); // ← hacer nullable es útil si no siempre se define
+
+            $table->timestamps();
+
+            // Evitar duplicados exactos de asignación por usuario, actividad y sesión
+            $table->unique(['user_id', 'activity_id', 'session']);
+        });
     }
 
     /**

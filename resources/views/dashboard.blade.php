@@ -220,15 +220,14 @@
                                                         <th class="w-60">Estado</th>
                                                     </tr>
                                                 </thead>
-
                                                 <tbody>
                                                     @foreach($practices as $p)
                                                     @php
-                                                    $done = in_array($p['id'], is_array(auth()->user()->done_practices) ? auth()->user()->done_practices : (array) auth()->user()->done_practices);
+                                                    $done = in_array($p->id, $donePractices);
                                                     @endphp
                                                     <tr>
                                                         <td class="align-middle">
-                                                            <strong>{{ $p['title'] }}</strong>
+                                                            <strong>{{ $p->name }}</strong>
                                                         </td>
                                                         <td class="align-middle">
                                                             <div class="d-flex align-items-center">
@@ -257,6 +256,7 @@
                             </div>
                         </div>
                     </div>
+
 
                     <style>
                         .table thead th {
@@ -293,56 +293,6 @@
                             width: 100%;
                             border-radius: 2px;
                             margin: 0 auto;
-                        }
-
-                        @media (max-width: 768px) {
-
-                            .w-40,
-                            .w-60 {
-                                width: auto !important;
-                            }
-
-                            .table-responsive {
-                                border: 0;
-                            }
-
-                            .table thead {
-                                display: none;
-                            }
-
-                            .table tr {
-                                display: block;
-                                margin-bottom: 1rem;
-                                border: 1px solid #dee2e6;
-                                border-radius: 0.25rem;
-                            }
-
-                            .table td {
-                                display: block;
-                                text-align: right;
-                                padding-left: 50%;
-                                position: relative;
-                                border-bottom: 1px solid #dee2e6;
-                            }
-
-                            .table td::before {
-                                content: attr(data-label);
-                                position: absolute;
-                                left: 1rem;
-                                width: calc(50% - 1rem);
-                                padding-right: 1rem;
-                                text-align: left;
-                                font-weight: bold;
-                                color: #0d6efd;
-                            }
-
-                            .table td:last-child {
-                                border-bottom: 0;
-                            }
-
-                            .table td[data-label] {
-                                text-align: right;
-                            }
                         }
                     </style>
 
@@ -430,20 +380,20 @@
 
 
 <script>
-function lanzarUnity() {
-    fetch('http://127.0.0.1:8000/lanzar-unity')
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'ok') {
-                console.log("Unity lanzado correctamente desde Laravel.");
-            } else {
-                alert("Error: no se pudo lanzar Unity.");
-            }
-        })
-        .catch(error => {
-            alert("Error de conexión con el servidor Laravel: " + error);
-        });
-}
+    function lanzarUnity() {
+        fetch('http://127.0.0.1:8000/lanzar-unity')
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    console.log("Unity lanzado correctamente desde Laravel.");
+                } else {
+                    alert("Error: no se pudo lanzar Unity.");
+                }
+            })
+            .catch(error => {
+                alert("Error de conexión con el servidor Laravel: " + error);
+            });
+    }
 </script>
 
 
