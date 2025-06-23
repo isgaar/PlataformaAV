@@ -102,3 +102,4 @@ Route::get('/lanzar-unity', function () {
 
     return response()->json(['status' => 'ok']);
 })->middleware('auth');
+
