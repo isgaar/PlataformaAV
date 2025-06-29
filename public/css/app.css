@@ -1653,8 +1653,6 @@ body {
 }
 
 .login-button {
-    max-width: 160px;
-    /* Tamaño estándar */
     width: 100%;
     background-color: #0A4D5F;
     color: white;
