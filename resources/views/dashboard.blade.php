@@ -133,7 +133,7 @@
                     <div class="image-button-container">
                         <img src="{{ asset('images/IMG_DAHSBOARD.png') }}" alt="Dashboard Cursos">
 
-                        <button class="practice-button-over-image" onclick="lanzarUnity()">
+                        <button id="btnLanzarUnity" class="practice-button-over-image" onclick="lanzarUnity()">
                             <img src="{{ asset('images/ATOMO.png') }}" alt="Átomo">
                             <span>Practicar</span>
                         </button>
@@ -380,12 +380,25 @@
 
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Detectar si el sistema operativo es Windows
+        const isWindows = navigator.platform.toLowerCase().includes('win');
+
+        const btn = document.getElementById('btnLanzarUnity');
+
+        if (!isWindows) {
+            // No es Windows: desactivar botón
+            btn.disabled = true;
+            btn.innerText = "Estamos trabajando arduamente para funcionar en Mac OS y Linux.";
+        }
+    });
+
     function lanzarUnity() {
         fetch('http://127.0.0.1:8000/lanzar-unity')
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'ok') {
-                    console.log("Unity lanzado correctamente desde Laravel.");
+                    console.log("✅ Unity lanzado correctamente desde Laravel.");
                 } else {
                     alert("Error: no se pudo lanzar Unity.");
                 }
@@ -395,8 +408,5 @@
             });
     }
 </script>
-
-
-
 
 @endsection

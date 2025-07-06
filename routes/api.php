@@ -1,16 +1,12 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ActivityController;
 
-Route::middleware(['auth:api', 'role:admin'])->get('/admin-dashboard', function () {
-    return response()->json(['message' => 'Bienvenido Admin']);
-});
+Route::get('/user', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
 
-Route::middleware(['auth:api', 'role:teacher'])->get('/teacher-dashboard', function () {
-    return response()->json(['message' => 'Bienvenido Teacher']);
-});
 
-Route::middleware(['auth:api', 'role:student'])->get('/student-dashboard', function () {
-    return response()->json(['message' => 'Bienvenido Student']);
-});
-
+Route::middleware('auth:api')->post('/guardar-actividad', [ActivityController::class, 'store']);

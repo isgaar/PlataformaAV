@@ -10,7 +10,9 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\SchoolController;
 use App\Http\Controllers\TablaperiodicaController;
 use App\Http\Controllers\CursoController;
-use App\Http\Controllers\ActivityController;
+use Laravel\Passport\HasApiTokens;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -50,10 +52,11 @@ Route::middleware('auth')->group(function () {
 Route::get('/renderonline', [RenderOnlineController::class, 'index'])->name('renderonline.index');
 Route::post('/pdb/upload', [RenderOnlineController::class, 'upload'])->name('pdb.upload');
 
-// Autenticación
+// Autenticación (solo esta línea para cargar rutas de auth)
+// Quitar la línea Auth::routes() para evitar duplicados
 require __DIR__.'/auth.php';
-Auth::routes();
 
+// Route para /home (puede estar en auth.php también, pero se puede dejar aquí)
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // Tabla periódica
@@ -94,12 +97,95 @@ Route::get('/session-json', function () {
 
 Route::get('/lanzar-unity', function () {
     $user = Auth::user();
-    $sessionPath = sys_get_temp_dir() . '/session.json';
-    file_put_contents($sessionPath, json_encode($user));
+    $sessionId = uniqid("sesion_");
 
+    $launchedFrom = url()->previous() ?? url()->current();
+
+    // ✅ Generar el token de acceso Passport
+    $tokenResult = $user->createToken('Unity');
+    $token = $tokenResult->accessToken;
+
+    // ✅ Preparar los datos que Unity va a recibir
+    $sessionData = [
+        'id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email,
+        'session' => $sessionId,
+        'launched_from' => $launchedFrom,
+        'token' => $token, // Esto es clave para las peticiones Unity
+    ];
+
+    // ✅ Guardar el JSON temporal
+    $sessionPath = sys_get_temp_dir() . '/session.json';
+    file_put_contents($sessionPath, json_encode($sessionData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+
+    // ✅ Ruta al ejecutable Unity
     $unityPath = 'C:\\Build\\Atomos Virtuales.exe';
+
+    // ✅ Lanzar el juego con el path al JSON como argumento
     pclose(popen('start "" "' . $unityPath . '" "' . $sessionPath . '"', 'r'));
 
-    return response()->json(['status' => 'ok']);
+    // ✅ También responder por si se llama desde navegador
+    return response()->json([
+        'status' => 'ok',
+        'session' => $sessionId,
+        'launched_from' => $launchedFrom,
+        'token' => $token,
+    ]);
 })->middleware('auth');
 
+/*
+Route::get('/lanzar-unity', function () {
+    $user = Auth::user();
+    $sessionId = uniqid("sesion_");
+
+    $launchedFrom = url()->previous() ?? url()->current();
+
+    // Token Passport
+    $tokenResult = $user->createToken('Unity');
+    $token = $tokenResult->accessToken;
+
+    // JSON para Unity
+    $sessionData = [
+        'id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email,
+        'session' => $sessionId,
+        'launched_from' => $launchedFrom,
+        'token' => $token,
+    ];
+
+    // Definir la ruta C:\Build\session.json
+    $sessionPath = 'C:\\Build\\session.json';
+
+    // Asegurarse de que la carpeta C:\Build exista
+    if (!is_dir('C:\\Build')) {
+        mkdir('C:\\Build', 0777, true); // Crear el directorio si no existe
+    }
+
+    // Guardar el archivo en C:\Build\session.json
+    file_put_contents($sessionPath, json_encode($sessionData, JSON_PRETTY_PRINT));
+
+    // Verificar si el archivo existe
+    if (!file_exists($sessionPath)) {
+        return response()->json(['status' => 'error', 'message' => 'El archivo de sesión no se pudo crear.'], 500);
+    }
+
+    // Actividades marcadas como hechas
+    $actividades = $user->activities()->wherePivot('done', 1)->pluck('name')->toArray();
+    $actividadesTexto = implode(' ', $actividades); // cambiar \n por espacio para cmd
+
+    // Corregir las comillas y la ruta
+    $comando = 'cmd /k "echo === DATOS DE SESIÓN === && type ""' . addslashes($sessionPath) . '"" && echo. && echo === ACTIVIDADES COMPLETADAS === && echo ' . escapeshellarg($actividadesTexto) . '"';
+
+    // Ejecutar el comando
+    pclose(popen("start " . $comando, 'r'));
+
+    return response()->json([
+        'status' => 'debug',
+        'session_path' => $sessionPath,
+        'token' => $token,
+        'activities' => $actividades,
+    ]);
+})->middleware('auth');
+*/
