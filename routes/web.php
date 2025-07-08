@@ -51,7 +51,7 @@ Route::get('/renderonline', [RenderOnlineController::class, 'index'])->name('ren
 Route::post('/pdb/upload', [RenderOnlineController::class, 'upload'])->name('pdb.upload');
 
 // Autenticación (solo esta línea para cargar rutas de auth)
-require __DIR__.'/auth.php';
+require _DIR_.'/auth.php';
 
 // Página de inicio autenticado
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
@@ -190,7 +190,7 @@ Route::get('/session-json', function () {
 |--------------------------------------------------------------------------
 | ACTIVA: esta es la versión recomendada.
 |--------------------------------------------------------------------------
-*//*
+//
 Route::get('/lanzar-unity', function () {
     $user = Auth::user();
     $sessionId = uniqid("sesion_");
@@ -222,23 +222,32 @@ Route::get('/lanzar-unity', function () {
 */
 
 Route::get('/lanzar-unity', function () {
-    $user = Auth::user();
-    if (!$user) {
+    // Verificar si el usuario está autenticado (opcional, solo por claridad)
+    if (!Auth::check()) {
         return response()->json(['error' => 'No autenticado'], 401);
     }
 
+    $user = Auth::user();
+
+    // Generar un identificador único para la sesión
     $sessionId = uniqid("sesion_");
+
+    // La URL desde donde se lanzó Unity
     $launchedFrom = url()->previous() ?? url()->current();
 
+    // Generar token con Passport
     $tokenResult = $user->createToken('Unity');
     $token = $tokenResult->accessToken;
 
-    $scheme = request()->getScheme();
-    $host = request()->getHost();
-    $port = request()->getPort();
+    // Construir la URL base dinámica del servidor
+    $scheme = request()->getScheme(); // http o https
+    $host = request()->getHost();     // IP o dominio
+    $port = request()->getPort();     // puerto (8000 en php artisan serve)
     $apiBaseUrl = $scheme . '://' . $host . ($port == 80 || $port == 443 ? '' : ':' . $port);
 
+    // Preparar los datos de sesión que se enviarán al launcher
     $sessionData = [
+        'status' => 'ok',
         'id' => $user->id,
         'name' => $user->name,
         'email' => $user->email,
@@ -252,10 +261,11 @@ Route::get('/lanzar-unity', function () {
 })->middleware('auth');
 
 
+
 Route::get('/ip-discovery', function () {
     return response()->json([
         'scheme' => request()->getScheme(),
         'server_ip' => request()->getHost(),
         'server_port' => request()->getPort(),
     ]);
-});
+}); 

@@ -21,3 +21,9 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+
+/database/migrations/*_create_oauth_auth_codes_table.php
+/database/migrations/*_create_oauth_access_tokens_table.php
+/database/migrations/*_create_oauth_refresh_tokens_table.php
+/database/migrations/*_create_oauth_clients_table.php
+/database/migrations/*_create_oauth_personal_access_clients_table.php
