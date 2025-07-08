@@ -190,7 +190,7 @@ Route::get('/session-json', function () {
 |--------------------------------------------------------------------------
 | ACTIVA: esta es la versión recomendada.
 |--------------------------------------------------------------------------
-*/
+*//*
 Route::get('/lanzar-unity', function () {
     $user = Auth::user();
     $sessionId = uniqid("sesion_");
@@ -219,6 +219,37 @@ Route::get('/lanzar-unity', function () {
     return response()->json($sessionData);
 })->middleware('auth');
 
+*/
+
+Route::get('/lanzar-unity', function () {
+    $user = Auth::user();
+    if (!$user) {
+        return response()->json(['error' => 'No autenticado'], 401);
+    }
+
+    $sessionId = uniqid("sesion_");
+    $launchedFrom = url()->previous() ?? url()->current();
+
+    $tokenResult = $user->createToken('Unity');
+    $token = $tokenResult->accessToken;
+
+    $scheme = request()->getScheme();
+    $host = request()->getHost();
+    $port = request()->getPort();
+    $apiBaseUrl = $scheme . '://' . $host . ($port == 80 || $port == 443 ? '' : ':' . $port);
+
+    $sessionData = [
+        'id' => $user->id,
+        'name' => $user->name,
+        'email' => $user->email,
+        'session' => $sessionId,
+        'api_base_url' => $apiBaseUrl,
+        'launched_from' => $launchedFrom,
+        'token' => $token,
+    ];
+
+    return response()->json($sessionData);
+})->middleware('auth');
 
 
 Route::get('/ip-discovery', function () {
