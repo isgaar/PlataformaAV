@@ -138,6 +138,7 @@
                             <span>Practicar</span>
                         </button>
 
+
                     </div>
 
                 </div>
@@ -378,7 +379,7 @@
     }
 </script>
 
-
+<!--
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Detectar si el sistema operativo es Windows
@@ -408,5 +409,31 @@
             });
     }
 </script>
+-->
+
+<script>
+    async function lanzarUnity() {
+        try {
+            const response = await fetch('/lanzar-unity');
+            if (!response.ok) {
+                alert("Error al obtener la sesión: " + response.status);
+                return;
+            }
+
+            const data = await response.json();
+            console.log("JSON recibido:", data);
+
+            const jsonString = JSON.stringify(data);
+            const jsonBase64 = btoa(jsonString);
+
+            window.location.href = `atomos://launch?data=${encodeURIComponent(jsonBase64)}`;
+        } catch (error) {
+            alert("Error al lanzar Unity: " + error);
+        }
+    }
+</script>
+
+
+
 
 @endsection

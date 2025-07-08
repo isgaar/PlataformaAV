@@ -12,8 +12,6 @@ use App\Http\Controllers\TablaperiodicaController;
 use App\Http\Controllers\CursoController;
 use Laravel\Passport\HasApiTokens;
 
-
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -53,10 +51,9 @@ Route::get('/renderonline', [RenderOnlineController::class, 'index'])->name('ren
 Route::post('/pdb/upload', [RenderOnlineController::class, 'upload'])->name('pdb.upload');
 
 // Autenticación (solo esta línea para cargar rutas de auth)
-// Quitar la línea Auth::routes() para evitar duplicados
 require __DIR__.'/auth.php';
 
-// Route para /home (puede estar en auth.php también, pero se puede dejar aquí)
+// Página de inicio autenticado
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // Tabla periódica
@@ -95,97 +92,139 @@ Route::get('/session-json', function () {
     return response()->json(Auth::user());
 })->middleware('auth');
 
-Route::get('/lanzar-unity', function () {
-    $user = Auth::user();
-    $sessionId = uniqid("sesion_");
-
-    $launchedFrom = url()->previous() ?? url()->current();
-
-    // ✅ Generar el token de acceso Passport
-    $tokenResult = $user->createToken('Unity');
-    $token = $tokenResult->accessToken;
-
-    // ✅ Preparar los datos que Unity va a recibir
-    $sessionData = [
-        'id' => $user->id,
-        'name' => $user->name,
-        'email' => $user->email,
-        'session' => $sessionId,
-        'launched_from' => $launchedFrom,
-        'token' => $token, // Esto es clave para las peticiones Unity
-    ];
-
-    // ✅ Guardar el JSON temporal
-    $sessionPath = sys_get_temp_dir() . '/session.json';
-    file_put_contents($sessionPath, json_encode($sessionData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
-
-    // ✅ Ruta al ejecutable Unity
-    $unityPath = 'C:\\Build\\Atomos Virtuales.exe';
-
-    // ✅ Lanzar el juego con el path al JSON como argumento
-    pclose(popen('start "" "' . $unityPath . '" "' . $sessionPath . '"', 'r'));
-
-    // ✅ También responder por si se llama desde navegador
-    return response()->json([
-        'status' => 'ok',
-        'session' => $sessionId,
-        'launched_from' => $launchedFrom,
-        'token' => $token,
-    ]);
-})->middleware('auth');
+/*
+|--------------------------------------------------------------------------
+| VERSION 1: Lanza Unity ejecutable local desde PHP
+|--------------------------------------------------------------------------
+| Comentada: esta versión guarda el JSON local y lanza el EXE desde PHP.
+| No recomendable si usas servidor remoto.
+|
+| Route::get('/lanzar-unity', function () {
+|     $user = Auth::user();
+|     $sessionId = uniqid("sesion_");
+|
+|     $launchedFrom = url()->previous() ?? url()->current();
+|
+|     $tokenResult = $user->createToken('Unity');
+|     $token = $tokenResult->accessToken;
+|
+|     $sessionData = [
+|         'id' => $user->id,
+|         'name' => $user->name,
+|         'email' => $user->email,
+|         'session' => $sessionId,
+|         'launched_from' => $launchedFrom,
+|         'token' => $token,
+|     ];
+|
+|     $sessionPath = sys_get_temp_dir() . '/session.json';
+|     file_put_contents($sessionPath, json_encode($sessionData, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+|
+|     $unityPath = 'C:\\Build\\Atomos Virtuales.exe';
+|     pclose(popen('start "" "' . $unityPath . '" "' . $sessionPath . '"', 'r'));
+|
+|     return response()->json([
+|         'status' => 'ok',
+|         'session' => $sessionId,
+|         'launched_from' => $launchedFrom,
+|         'token' => $token,
+|     ]);
+| })->middleware('auth');
+*/
 
 /*
+|--------------------------------------------------------------------------
+| VERSION 2: Lanza Unity y muestra datos en consola
+|--------------------------------------------------------------------------
+| Comentada: esta versión creaba el JSON y mostraba info en consola.
+|
+| Route::get('/lanzar-unity', function () {
+|     $user = Auth::user();
+|     $sessionId = uniqid("sesion_");
+|
+|     $launchedFrom = url()->previous() ?? url()->current();
+|
+|     $tokenResult = $user->createToken('Unity');
+|     $token = $tokenResult->accessToken;
+|
+|     $sessionData = [
+|         'id' => $user->id,
+|         'name' => $user->name,
+|         'email' => $user->email,
+|         'session' => $sessionId,
+|         'launched_from' => $launchedFrom,
+|         'token' => $token,
+|     ];
+|
+|     $sessionPath = 'C:\\Build\\session.json';
+|
+|     if (!is_dir('C:\\Build')) {
+|         mkdir('C:\\Build', 0777, true);
+|     }
+|
+|     file_put_contents($sessionPath, json_encode($sessionData, JSON_PRETTY_PRINT));
+|
+|     if (!file_exists($sessionPath)) {
+|         return response()->json(['status' => 'error', 'message' => 'El archivo de sesión no se pudo crear.'], 500);
+|     }
+|
+|     $actividades = $user->activities()->wherePivot('done', 1)->pluck('name')->toArray();
+|     $actividadesTexto = implode(' ', $actividades);
+|
+|     $comando = 'cmd /k "echo === DATOS DE SESIÓN === && type ""' . addslashes($sessionPath) . '"" && echo. && echo === ACTIVIDADES COMPLETADAS === && echo ' . escapeshellarg($actividadesTexto) . '"';
+|
+|     pclose(popen("start " . $comando, 'r'));
+|
+|     return response()->json([
+|         'status' => 'debug',
+|         'session_path' => $sessionPath,
+|         'token' => $token,
+|         'activities' => $actividades,
+|     ]);
+| })->middleware('auth');
+*/
+
+/*
+|--------------------------------------------------------------------------
+| VERSION 3: Responder JSON con api_base_url
+|--------------------------------------------------------------------------
+| ACTIVA: esta es la versión recomendada.
+|--------------------------------------------------------------------------
+*/
 Route::get('/lanzar-unity', function () {
     $user = Auth::user();
     $sessionId = uniqid("sesion_");
 
     $launchedFrom = url()->previous() ?? url()->current();
 
-    // Token Passport
     $tokenResult = $user->createToken('Unity');
     $token = $tokenResult->accessToken;
 
-    // JSON para Unity
+    $scheme = request()->getScheme();
+    $host = request()->getHost();
+    $port = request()->getPort();
+    $apiBaseUrl = $scheme . '://' . $host . ($port == 80 || $port == 443 ? '' : ':' . $port);
+
     $sessionData = [
         'id' => $user->id,
         'name' => $user->name,
         'email' => $user->email,
         'session' => $sessionId,
+        'api_base_url' => $apiBaseUrl,
         'launched_from' => $launchedFrom,
         'token' => $token,
     ];
 
-    // Definir la ruta C:\Build\session.json
-    $sessionPath = 'C:\\Build\\session.json';
-
-    // Asegurarse de que la carpeta C:\Build exista
-    if (!is_dir('C:\\Build')) {
-        mkdir('C:\\Build', 0777, true); // Crear el directorio si no existe
-    }
-
-    // Guardar el archivo en C:\Build\session.json
-    file_put_contents($sessionPath, json_encode($sessionData, JSON_PRETTY_PRINT));
-
-    // Verificar si el archivo existe
-    if (!file_exists($sessionPath)) {
-        return response()->json(['status' => 'error', 'message' => 'El archivo de sesión no se pudo crear.'], 500);
-    }
-
-    // Actividades marcadas como hechas
-    $actividades = $user->activities()->wherePivot('done', 1)->pluck('name')->toArray();
-    $actividadesTexto = implode(' ', $actividades); // cambiar \n por espacio para cmd
-
-    // Corregir las comillas y la ruta
-    $comando = 'cmd /k "echo === DATOS DE SESIÓN === && type ""' . addslashes($sessionPath) . '"" && echo. && echo === ACTIVIDADES COMPLETADAS === && echo ' . escapeshellarg($actividadesTexto) . '"';
-
-    // Ejecutar el comando
-    pclose(popen("start " . $comando, 'r'));
-
-    return response()->json([
-        'status' => 'debug',
-        'session_path' => $sessionPath,
-        'token' => $token,
-        'activities' => $actividades,
-    ]);
+    // OJO: devolvemos JSON directamente
+    return response()->json($sessionData);
 })->middleware('auth');
-*/
+
+
+
+Route::get('/ip-discovery', function () {
+    return response()->json([
+        'scheme' => request()->getScheme(),
+        'server_ip' => request()->getHost(),
+        'server_port' => request()->getPort(),
+    ]);
+});
