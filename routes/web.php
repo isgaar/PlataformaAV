@@ -51,7 +51,7 @@ Route::get('/renderonline', [RenderOnlineController::class, 'index'])->name('ren
 Route::post('/pdb/upload', [RenderOnlineController::class, 'upload'])->name('pdb.upload');
 
 // Autenticación (solo esta línea para cargar rutas de auth)
-require _DIR_.'/auth.php';
+require __DIR__.'/auth.php';
 
 // Página de inicio autenticado
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
