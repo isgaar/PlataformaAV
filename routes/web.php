@@ -221,6 +221,12 @@ Route::get('/lanzar-unity', function () {
 
 */
 
+// Ruta AJAX para obtener progreso sin recargar
+Route::get('/dashboard/practices-status', [DashboardController::class, 'practicesStatus'])
+    ->middleware(['auth'])
+    ->name('dashboard.practices-status');
+
+
 Route::get('/lanzar-unity', function () {
     // Verificar si el usuario está autenticado (opcional, solo por claridad)
     if (!Auth::check()) {

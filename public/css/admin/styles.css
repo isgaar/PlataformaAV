@@ -1,35 +1,19 @@
 .custom-table {
   width: 100%;
   border-collapse: collapse;
-  background-color: #ffffff;
   text-align: center; /* Asegura que todo el contenido esté centrado */
-  border-radius: 10px;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  font-family: 'Fira Sans', sans-serif;
 }
 
 .custom-table th {
-  background-color: #00455e;
-  color: white;
-  padding: 15px;
-  font-size: 16px;
   font-weight: bold;
   text-align: center; /* Centra los encabezados */
 }
 
 .custom-table td {
-  padding: 12px;
-  font-size: 14px;
-  border-bottom: 1px solid #D3D3D3;
-  color: #1B475D;
-  text-align: center; /* Asegura que todo el texto de las celdas esté centrado */
-  vertical-align: middle; /* Asegura alineación vertical */
+  text-align: center; /* Centra las celdas */
+  vertical-align: middle; /* Alineación vertical */
 }
 
-.custom-table tr:hover {
-  background-color: #eef3f7;
-}
 
 /* Botones personalizados dentro de la tabla */
 .btn-sm {

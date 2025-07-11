@@ -1,19 +1,8 @@
-<?php /*
- *  dashboard.blade.php – Vista unificada con datos de prácticas simulados
- */ ?>
-
 @extends('layouts.app')
 @include('layouts.edit')
 
 @section('content')
 <div class="dashboard-container">
-    {{-- ENCABEZADO (Común a docentes y estudiantes) --}}
-    @if(auth()->user()->hasRole('student') || auth()->user()->hasRole('teacher'))
-    <div class="header text-center">
-        <img src="{{ asset('images/AGUA.png') }}" alt="Molécula" class="molecule-image">
-        <h1>Bienvenido(a) a tu laboratorio virtual de química.</h1>
-    </div>
-    @endif
 
     <div class="container mt-4">
         <div class="row justify-content-center">
@@ -22,25 +11,18 @@
                 {{-- PANEL DE ADMINISTRACIÓN --}}
                 @if(auth()->user()->hasRole('admin'))
                 <div class="admin-panel">
-                    {{-- Botones lado a lado --}}
                     <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-4">
                         <button class="btn-practice w-100 w-md-50"
-                            onclick="window.location.href='{{ route('users.index') }}'"
-                            title="Acceder a la gestión de usuarios registrados">
+                            onclick="window.location.href='{{ route('users.index') }}'">
                             <i class="bi bi-people"></i> Gestionar Usuarios
                         </button>
-
                         <button class="btn-practice w-100 w-md-50"
-                            onclick="window.location.href='{{ route('schools.index') }}'"
-                            title="Administrar y registrar información de escuelas">
+                            onclick="window.location.href='{{ route('schools.index') }}'">
                             <i class="bi bi-building me-2"></i> Gestionar Escuelas
                         </button>
                     </div>
-
-                    {{-- Filtros con switches --}}
                     <div class="filters-container d-flex flex-column flex-md-row align-items-center flex-wrap gap-3 mb-4">
                         <span class="fw-bold text-secondary filter-label">Mostrar:</span>
-
                         <div class="switches-wrapper d-flex flex-row flex-wrap gap-3">
                             @foreach(['student' => 'Estudiantes', 'teacher' => 'Maestros'] as $key => $label)
                             <div class="switch-item d-flex align-items-center justify-content-between">
@@ -57,9 +39,8 @@
                         </div>
                     </div>
 
-                    {{-- Tabla visible solo en escritorio --}}
                     <div class="table-responsive d-none d-md-block" id="usersTableContainer">
-                        <table class="table table-hover custom-table text-center">
+                        <table class="table text-center">
                             <thead class="bg-primary text-white">
                                 <tr>
                                     <th>Nombre</th>
@@ -69,7 +50,7 @@
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
-                            <tbody id="usersTableBody">
+                            <tbody>
                                 @foreach($users as $user)
                                 <tr>
                                     <td>{{ $user->name }} {{ $user->last_name }} {{ $user->second_last_name }}</td>
@@ -77,7 +58,7 @@
                                     <td>{{ $user->grade->name ?? '-' }}</td>
                                     <td>{{ $user->group->name ?? '-' }}</td>
                                     <td>
-                                        <a href="{{ route('users.show', $user->id) }}" class="btn-success btn-sm" title="Ver detalles">
+                                        <a href="{{ route('users.show', $user->id) }}" class="btn-success btn-sm">
                                             <i class="bi bi-eye"></i>
                                         </a>
                                     </td>
@@ -90,15 +71,11 @@
                     <div class="user-cards-container d-md-none">
                         @foreach($users as $user)
                         <div class="user-card">
-                            <!-- Botones alineados verticalmente -->
                             <div class="user-card-buttons">
-                                <!-- Ver -->
-                                <a href="{{ route('users.show', $user->id) }}" class="btn ver-btn" title="Ver detalles">
+                                <a href="{{ route('users.show', $user->id) }}" class="btn ver-btn">
                                     <i class="bi bi-eye"></i>
                                 </a>
                             </div>
-
-                            <!-- Contenido de la card -->
                             <h4>{{ $user->name }} {{ $user->last_name }} {{ $user->second_last_name }}</h4>
                             <p><strong>Escuela:</strong> {{ $user->school->name ?? '-' }}</p>
                             <p><strong>Grado:</strong> {{ $user->grade->name ?? '-' }}</p>
@@ -107,216 +84,367 @@
                         @endforeach
                     </div>
 
-
-                    {{-- Paginación --}}
                     <div class="d-flex justify-content-center" id="paginationContainer">
                         {{ $users->appends(request()->except('page'))->links('pagination::bootstrap-4') }}
                     </div>
                 </div>
                 @endif
 
+                {{-- VISTA ESTUDIANTE --}}
+                @role('student')
 
-                {{-- CONTENIDO ESTUDIANTE / DOCENTE --}}
-                @if(auth()->user()->hasRole('student') || auth()->user()->hasRole('teacher'))
+                @php
+                $allDone = count($donePractices) === count($practices);
+                @endphp
 
-                <div class="student-info text-center mb-3">
-                    <p class="h5">¡Hola, {{ auth()->user()->name }}!</p>
-                </div>
+                <div class="container-custom">
+                    <div class="card-container">
+                        <div class="card-custom shadow-custom border-custom">
+                            <div class="card-header-custom">
+                                <h3 class="card-title-custom">Mi Progreso</h3>
+                                <div class="button-group-custom">
+                                    @if($allDone)
+                                    <button
+                                        class="download-button-custom"
+                                        onclick="generarCertificado(this)"
+                                        data-nombre="{{ Auth::user()->name }} {{ Auth::user()->last_name }} {{ Auth::user()->second_last_name }}">
+                                        <img src="{{ asset('images/download.svg') }}" alt="Descarga">
+                                        <span>Obtener Certificado</span>
+                                    </button>
+                                    @endif
 
-                <div class="menu text-center mb-4">
-                    <span class="tab-link active" data-target="#coursesTab">Cursos</span>
-                    <span class="tab-link" data-target="#progressTab">Progreso</span>
-                </div>
-
-                {{-- TAB 1: CURSOS --}}
-                <div id="coursesTab" class="tab-pane show d-flex justify-content-center">
-                    <div class="image-button-container">
-                        <img src="{{ asset('images/IMG_DAHSBOARD.png') }}" alt="Dashboard Cursos">
-
-                        <button id="btnLanzarUnity" class="practice-button-over-image" onclick="lanzarUnity()">
-                            <img src="{{ asset('images/ATOMO.png') }}" alt="Átomo">
-                            <span>Practicar</span>
-                        </button>
-
-
-                    </div>
-
-                </div>
-
-                {{-- TAB 2: PROGRESO --}}
-                <div id="progressTab" class="tab-pane" style="display:none;">
-                    @role('teacher')
-                    <div class="container my-5">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-10">
-                                <div class="card shadow-sm border-primary">
-                                    <div class="card-header bg-primary text-white">
-                                        <h3 class="h5 mb-0 text-center">Progreso de Estudiantes</h3>
-                                    </div>
-                                    <div class="card-body p-0">
-                                        <div class="table-responsive custom-table-responsive">
-                                            <table class="table table-hover align-middle mb-0">
-                                                <thead class="bg-dashboard-header">
-                                                    <tr>
-                                                        <th class="text-start ps-3">Estudiante</th>
-                                                        @foreach($practices as $p)
-                                                        <th class="text-center">{{ Str::limit($p['title'], 15) }}</th>
-                                                        @endforeach
-                                                    </tr>
-                                                </thead>
-
-
-                                                <tbody>
-                                                    @foreach($users as $student)
-
-                                                    <tr>
-                                                        <td class="text-start ps-3 fw-medium">
-                                                            {{ $student->name }} {{ $student->last_name }} {{ $student->second_last_name }}
-                                                        </td>
-                                                        @foreach($practices as $p)
-                                                        @php
-                                                        $done = in_array($p['id'], is_array($student->done_practices) ? $student->done_practices : (array) $student->done_practices);
-                                                        @endphp
-                                                        <td class="text-center">
-                                                            <span class="status-badge {{ $done ? 'bg-success' : 'bg-danger' }}">
-                                                                <i class="fas {{ $done ? 'fa-check' : 'fa-times' }}"></i>
-                                                                <span class="status-text">{{ $done ? 'Realizada' : 'Pendiente' }}</span>
-                                                            </span>
-                                                        </td>
-                                                        @endforeach
-                                                    </tr>
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer bg-light text-center">
-                                        <small class="text-muted">Actualizado el {{ now()->format('d/m/Y') }} - Total estudiantes: {{ count($users) }}</small>
-                                    </div>
+                                    <button id="btnLanzarUnity" class="practice-button-custom" onclick="lanzarUnity()">
+                                        <img src="{{ asset('images/ATOMO.png') }}" alt="Átomo">
+                                        <span>Prácticas</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body-custom">
+                                <div class="table-responsive-custom">
+                                    <table class="table-custom" id="studentProgressTable">
+                                        <thead class="table-header-custom">
+                                            <tr>
+                                                <th>Prácticas</th>
+                                                <th>Estado</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($practices as $p)
+                                            @php
+                                            $done = in_array($p->id, $donePractices);
+                                            @endphp
+                                            <tr>
+                                                <td><strong>{{ $p->name }}</strong></td>
+                                                <td><strong class="{{ $done ? 'text-success' : 'text-warning' }}">
+                                                    {{ $done ? 'Finalizada' : 'Pendiente' }}</strong></td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <style>
-                        .table thead th {
-                            color: #ffffff !important;
-                        }
-                    </style>
-                    @endrole
+                </div>
 
-                    @role('student')
-                    <div class="container my-5">
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8">
-                                <div class="card shadow-sm border-primary">
-                                    <div class="card-header bg-primary text-white">
-                                        <h3 class="h5 mb-0 text-center">Mi Progreso Académico</h3>
-                                    </div>
-                                    <div class="card-body p-0">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover mb-0">
-                                                <thead class="bg-dashboard-header">
-                                                    <tr>
-                                                        <th class="w-40">Práctica</th>
-                                                        <th class="w-60">Estado</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+                @endrole
+
+                {{-- VISTA DOCENTE --}}
+                @role('teacher')
+                <div class="container my-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-10">
+                            <div class="card shadow-sm border-primary">
+                                <div class="card-header bg-primary text-white">
+                                    <h3 class="h5 mb-0 text-center">Progreso de Estudiantes</h3>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead class="bg-dashboard-header">
+                                                <tr>
+                                                    <th>Estudiante</th>
+                                                    @foreach($practices as $p)
+                                                    <th>{{ Str::limit($p['name'], 15) }}</th>
+                                                    @endforeach
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($users as $student)
+                                                <tr>
+                                                    <td>{{ $student->name }} {{ $student->last_name }} {{ $student->second_last_name }}</td>
                                                     @foreach($practices as $p)
                                                     @php
-                                                    $done = in_array($p->id, $donePractices);
+                                                    $done = in_array(
+                                                        $p['id'],
+                                                        is_array($student->done_practices)
+                                                        ? $student->done_practices
+                                                        : (array)$student->done_practices
+                                                    );
                                                     @endphp
-                                                    <tr>
-                                                        <td class="align-middle">
-                                                            <strong>{{ $p->name }}</strong>
-                                                        </td>
-                                                        <td class="align-middle">
-                                                            <div class="d-flex align-items-center">
-                                                                <div class="progress flex-grow-1" style="height: 24px;">
-                                                                    <div class="progress-bar {{ $done ? 'bg-success' : 'bg-warning' }}"
-                                                                        role="progressbar"
-                                                                        style="width: {{ $done ? '100%' : '30%' }};"
-                                                                        aria-valuenow="{{ $done ? '100' : '30' }}"
-                                                                        aria-valuemin="0"
-                                                                        aria-valuemax="100">
-                                                                        {{ $done ? 'Completado' : 'En progreso' }}
-                                                                    </div>
-                                                                </div>
-                                                                <span class="ms-2 {{ $done ? 'text-success' : 'text-warning' }}">
-                                                                    <i class="fas {{ $done ? 'fa-check-circle' : 'fa-spinner' }}"></i>
-                                                                </span>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
+                                                    <td>{{ $done ? 'Finalizada' : 'Pendiente' }}</td>
                                                     @endforeach
-                                                </tbody>
-                                            </table>
-                                        </div>
+                                                </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
                                     </div>
+                                </div>
+                                <div class="card-footer text-center">
+                                    <small class="text-muted">Actualizado el {{ now()->format('d/m/Y') }}</small>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
-                    <style>
-                        .table thead th {
-                            color: #ffffff !important;
-                        }
-
-                        .border-primary {
-                            border-color: #0d6efd !important;
-                        }
-
-                        .text-light-primary {
-                            color: rgba(13, 110, 253, 0.8);
-                        }
-
-                        .table-hover tbody tr:hover {
-                            background-color: rgba(13, 110, 253, 0.05);
-                        }
-
-                        .progress {
-                            border-radius: 12px;
-                            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
-                        }
-
-                        .progress-bar {
-                            font-size: 0.8rem;
-                            font-weight: 500;
-                            display: flex;
-                            align-items: center;
-                            justify-content: center;
-                        }
-
-                        .colored-line {
-                            height: 4px;
-                            width: 100%;
-                            border-radius: 2px;
-                            margin: 0 auto;
-                        }
-                    </style>
-
-                    <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            const tableCells = document.querySelectorAll('.table td');
-                            const headers = ['Práctica', 'Estado'];
-
-                            tableCells.forEach((cell, index) => {
-                                const headerIndex = index % headers.length;
-                                cell.setAttribute('data-label', headers[headerIndex]);
-                            });
-                        });
-                    </script>
-                    @endrole
                 </div>
-                @endif
+                @endrole
+
             </div>
         </div>
     </div>
 </div>
 
-{{-- SCRIPTS --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<script>
+function generarCertificado(btn) {
+    const nombre = btn.dataset.nombre || "Estudiante";
+
+    // Crear dinámicamente el HTML
+    const html = `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Certificado de Reconocimiento</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&display=swap');
+    body {
+      margin:0;
+      padding:0;
+      background-color:#f4f4f4;
+      font-family:'Playfair Display', serif;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100vh;
+    }
+    .certificado {
+      width:100%;
+      max-width:1200px;
+      aspect-ratio:4/3;
+      background-color:white;
+      border:10px solid #003f5c;
+      padding:30px;
+      box-sizing:border-box;
+      box-shadow:0 0 20px rgba(0,0,0,0.1);
+      display:flex;
+      justify-content:center;
+      align-items:center;
+    }
+    .marco {
+      border:2px solid #003f5c;
+      width:100%;
+      height:100%;
+      padding:40px;
+      box-sizing:border-box;
+      text-align:center;
+      display:flex;
+      position:relative;
+      flex-direction:column;
+      justify-content:flex-start;
+      overflow:hidden;
+      background-color:white;
+    }
+    .logos {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+    }
+    .logos img {
+      width:110px;
+      height:auto;
+    }
+    .titulo {
+      font-size:1.3em;
+      text-transform:uppercase;
+      letter-spacing:1px;
+      margin:0;
+    }
+    h1 {
+      font-size:3.5em;
+      margin:5px 0;
+    }
+    .a {
+      font-size:1.2em;
+      margin:10px 0;
+    }
+    .nombre {
+      font-family:'Great Vibes', cursive;
+      font-size:3em;
+      margin-bottom:10px;
+    }
+    .linea-verde {
+      border:none;
+      height:2px;
+      background-color:#a0b86d;
+      width:60%;
+      margin:0 auto 20px;
+    }
+    .descripcion {
+      font-size:1.2em;
+      line-height:1.5;
+      color:#333;
+      max-width:800px;
+      margin:0 auto;
+    }
+    .firmas {
+      display:flex;
+      justify-content:space-around;
+      align-items:flex-end;
+      margin-top:15px;
+      margin-bottom:40px;
+      background:white;
+      position:relative;
+      z-index:1;
+    }
+    .firma {
+      text-align:center;
+      max-width:220px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:8px;
+    }
+    .firma img {
+      width:220px;
+      height:auto;
+      margin-bottom:0;
+      border:none;
+      filter:drop-shadow(0 2px 2px rgba(0,0,0,0.15));
+    }
+    .linea-firma {
+      height:3px;
+      width:200px;
+      background-color:#a0b86d;
+      margin:0 auto;
+      display:block;
+      border-radius:2px;
+    }
+    .firma-aestra-img {
+      width:140px !important;
+      height:auto !important;
+      filter:drop-shadow(0 2px 2px rgba(0,0,0,0.15));
+      margin-bottom:0;
+      border:none;
+    }
+    .firma strong {
+      font-weight:700;
+      font-size:1.1em;
+      letter-spacing:0.03em;
+    }
+    .firma span {
+      font-style:italic;
+      font-size:0.9em;
+      color:#555;
+    }
+    .ondas-inferiores {
+      position:absolute;
+      bottom:-30px;
+      left:0;
+      right:0;
+      width:100%;
+      height:200px;
+      overflow:hidden;
+      z-index:0;
+    }
+    .onda {
+      position:absolute;
+      width:100%;
+      height:200px;
+      bottom:0;
+      left:0;
+    }
+    .onda.amarillo {
+      z-index:1;
+      opacity:1;
+      fill:#fcbf49;
+    }
+    .onda.azul {
+      z-index:2;
+      opacity:1;
+      fill:#003f5c;
+    }
+  </style>
+</head>
+<body>
+  <div class="certificado">
+    <div class="marco">
+      <div class="logos">
+        <img src="${window.location.origin}/images/logoAV.png" alt="Logo AV">
+        <p class="titulo">ÁTOMOS VIRTUALES<br>OTORGA EL PRESENTE</p>
+        <img src="${window.location.origin}/images/logoAestra.png" alt="Logo Aestra">
+      </div>
+      <div>
+        <h1>RECONOCIMIENTO</h1>
+        <p class="a">A</p>
+        <p class="nombre">${nombre}</p>
+        <hr class="linea-verde">
+        <p class="descripcion">
+          Por su destacada participación en las prácticas realizadas en el laboratorio virtual,<br>
+          demostrando habilidades en el manejo y análisis de simulaciones científicas.
+        </p>
+      </div>
+      <div class="firmas">
+        <div class="firma">
+          <p><img src="${window.location.origin}/images/firmaatomin.png" alt="Firma DR. Atomín" width="220" height="100"></p>
+          <div class="linea-firma"></div>
+          <p><strong>DR. Atomín</strong><br><span>Profesor Asignado</span></p>
+        </div>
+        <div class="firma firma-aestra">
+          <p><img src="${window.location.origin}/images/image.png" alt="Firma Aestra" class="firma-aestra-img"></p>
+          <div class="linea-firma"></div>
+          <p><strong>AESTRA</strong><br><span>Empresa de Software</span></p>
+        </div>
+      </div>
+      <div class="ondas-inferiores">
+        <svg class="onda amarillo" viewBox="0 0 1200 150" preserveAspectRatio="none">
+          <path d="M0,60 C300,130 900,0 1200,100 L1200,150 L0,150 Z"></path>
+        </svg>
+        <svg class="onda azul" viewBox="0 0 1200 150" preserveAspectRatio="none">
+          <path d="M0,80 C300,150 900,20 1200,120 L1200,150 L0,150 Z"></path>
+        </svg>
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
+
+
+    // Crear un div temporal visible
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = html;
+    document.body.appendChild(tempDiv);
+
+    // Log para depurar
+    console.log("HTML a exportar:", tempDiv.innerHTML);
+
+    html2pdf().from(tempDiv).set({
+        margin: 0,
+        filename: `Certificado_${nombre.replace(/\s+/g, '_')}.pdf`,
+        image: { type: 'png', quality: 1 },
+        html2canvas: { scale: 3, useCORS: true },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
+    }).save().then(() => {
+        // Eliminar después de generar el PDF
+        document.body.removeChild(tempDiv);
+    });
+}
+
+</script>
+
+
+
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         const colors = ["#b2be5c", "#ffd55c", "#c9c3f4"];
@@ -377,41 +505,7 @@
             })
             .catch(err => console.error('Error en la carga de usuarios:', err));
     }
-</script>
 
-<!--
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Detectar si el sistema operativo es Windows
-        const isWindows = navigator.platform.toLowerCase().includes('win');
-
-        const btn = document.getElementById('btnLanzarUnity');
-
-        if (!isWindows) {
-            // No es Windows: desactivar botón
-            btn.disabled = true;
-            btn.innerText = "Estamos trabajando arduamente para funcionar en Mac OS y Linux.";
-        }
-    });
-
-    function lanzarUnity() {
-        fetch('http://127.0.0.1:8000/lanzar-unity')
-            .then(response => response.json())
-            .then(data => {
-                if (data.status === 'ok') {
-                    console.log("✅ Unity lanzado correctamente desde Laravel.");
-                } else {
-                    alert("Error: no se pudo lanzar Unity.");
-                }
-            })
-            .catch(error => {
-                alert("Error de conexión con el servidor Laravel: " + error);
-            });
-    }
-</script>
--->
-
-<script>
     async function lanzarUnity() {
         try {
             const response = await fetch('/lanzar-unity');
@@ -419,13 +513,9 @@
                 alert("Error al obtener la sesión: " + response.status);
                 return;
             }
-
             const data = await response.json();
-            console.log("JSON recibido:", data);
-
             const jsonString = JSON.stringify(data);
             const jsonBase64 = btoa(jsonString);
-
             window.location.href = `atomos://launch?data=${encodeURIComponent(jsonBase64)}`;
         } catch (error) {
             alert("Error al lanzar Unity: " + error);
@@ -433,6 +523,19 @@
     }
 </script>
 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const btnUnity = document.getElementById('btnLanzarUnity');
+        const platform = navigator.platform.toLowerCase();
+
+        if (!platform.includes('win')) {
+            btnUnity.disabled = true;
+            btnUnity.title = `Estamos trabajando arduamente para ofrecer una amplia experiencia en tu sistema operativo (${navigator.platform})`;
+            btnUnity.style.cursor = 'not-allowed';
+        }
+    });
+    
+</script>
 
 
 

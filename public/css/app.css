@@ -1013,28 +1013,7 @@
     font-weight: bold;
 }
 
-/* Tabla */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    background-color: #FFFFFF;
-}
 
-table td {
-    padding: 12px;
-    border-bottom: 1px solid #C6C2F2;
-    font-size: 1em;
-    color: #1B475D;
-}
-
-table td:first-child {
-    font-size: 0.9rem;
-    /* Reduce el tamaño de las etiquetas de la tabla */
-    font-weight: normal;
-}
 
 
 /* Tooltip del átomo */
@@ -1086,27 +1065,47 @@ table td:first-child {
 
 
 
-/* Ajustes de la tabla */
+/* Tabla */
 table {
     width: 100%;
     border-collapse: collapse;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background-color: #FFFFFF;
     margin-top: 20px;
 }
 
-table td,
-table th {
+/* Estilos comunes a th y td */
+table th,
+table td {
     padding: 12px;
-    border-bottom: 1px solid #D3D3D3;
+    border-bottom: 5px solid white; /* Puedes cambiar por #D3D3D3 si prefieres */
     font-size: 1.1em;
-    color: #333;
-
+    color: #333; /* Color base de texto */
 }
 
+/* Encabezados */
+table th {
+    color: white; /* Texto blanco */
+    background-color: #0d3b50; /* Fondo azul oscuro */
+    text-align: center;
+}
+
+/* Celdas */
 table td {
     text-align: start;
     font-size: 1rem;
-
+    color: #1B475D; /* Sobrescribe el color base */
+    background-color: rgb(211, 211, 211);
 }
+
+/* Primera columna con tamaño de letra menor */
+table td:first-child {
+    font-size: 0.9rem;
+    font-weight: normal;
+}
+
 
 .legend-container {
     display: flex;
@@ -1831,29 +1830,58 @@ body {
 .dashboard-container {
     text-align: center;
 }
-/* Contenedor con posición relativa para permitir botón encima */
-.image-button-container {
-    position: relative;
-    display: inline-block;
-    max-width: 600px;
-    width: 100%;
+
+/* Header con tu azul oscuro */
+.card-header-custom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap; /* Permite que pasen a otra línea */
+    gap: 0.75rem; /* Espacio entre elementos cuando se apilan */
 }
 
-/* Imagen con bordes redondeados */
-.image-button-container img {
-    width: 100%;
-    height: auto;
+/* Grupo de botones alineado horizontalmente en escritorio */
+.button-group-custom {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap; /* En móviles, que bajen uno debajo de otro */
 }
 
-/* Botón flotante encima de la imagen */
-.practice-button-over-image {
-    position: absolute;
-    bottom: 15%;
-    right: 55%; /* <-- Aquí aumentamos el margen derecho */
+/* Botón de descarga */
+.download-button-custom {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 10px;
-    padding: 10px 20px;
+    background-color: #d4c2f2;
+    color: #0d3b50;
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    padding: 0.5rem 1rem;
+    flex: 1 1 auto; /* Para que crezca si es necesario */
+}
+.download-button-custom:hover {
+    background-color: #c1afe3;
+    transform: translateY(-2px);
+}
+.download-button-custom img {
+    height: 1.25rem;
+    width: auto;
+    filter: invert(17%) sepia(32%) saturate(1190%) hue-rotate(178deg) brightness(95%) contrast(90%);
+}
+
+/* Botón de prácticas */
+.practice-button-custom {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
     background-color: #00455e;
     color: white;
     border: none;
@@ -1864,7 +1892,48 @@ body {
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
     transition: background-color 0.3s ease, transform 0.2s ease;
+    padding: 0.5rem 1rem;
+    flex: 1 1 auto;
 }
+.practice-button-custom:hover {
+    background-color: #00364a;
+    transform: translateY(-2px);
+}
+.practice-button-custom img {
+    height: 1.25rem;
+    width: auto;
+}
+
+/* Responsivo en pantallas chicas */
+@media (max-width: 576px) {
+    .card-header-custom {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .button-group-custom {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .download-button-custom,
+    .practice-button-custom {
+        width: 100%;
+    }
+
+    .card-title-custom {
+        text-align: center;
+    }
+}
+
+
+
+
+/* Botón flotante encima de la imagen */
+.practice-button-over-image {
+   
+}
+
 
 
 /* Hover para el botón */

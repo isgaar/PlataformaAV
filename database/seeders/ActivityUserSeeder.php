@@ -12,14 +12,15 @@ class ActivityUserSeeder extends Seeder
     {
         // Lista de nombres de actividades
         $activityNames = [
-            "Práctica PA17",
-            "Práctica PA18",
-            "Práctica PA20",
-            "Práctica PA21",
-            "Práctica PA22",
-            "Práctica PA24",
-            "Práctica PA30",
+            "Práctica 17: Partículas, átomos, moléculas",
+            "Práctica 18: Mezclas homogéneas y heterogéneas",
+            "Práctica 20: Elementos en seres vivos, tierra, universo",
+            "Práctica 21: Modelo de Bohr",
+            "Práctica 22: Molécula iónica y molecular",
+            "Práctica 24: Compuesto iónico y molecular",
+            "Práctica 30: Reacciones exotérmicas y endotérmicas",
         ];
+
 
         // Crear o encontrar cada actividad por su nombre
         $activities = collect($activityNames)->map(function ($name) {
