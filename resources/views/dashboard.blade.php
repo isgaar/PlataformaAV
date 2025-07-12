@@ -258,7 +258,7 @@ function generarCertificado(btn) {
         <div class="logos">
           <img src="${window.location.origin}/images/logoAV.png" alt="Logo AV">
           <p class="titulo">ÁTOMOS VIRTUALES<br>OTORGA EL PRESENTE</p>
-          <img src="${window.location.origin}/images/logoAestra.png" alt="Logo Aestra">
+          <img src="${window.location.origin}/images/logoAestra.PNG" alt="Logo Aestra">
         </div>
         <h1>RECONOCIMIENTO</h1>
         <p class="a">A</p>
@@ -270,7 +270,7 @@ function generarCertificado(btn) {
         </p>
         <div class="firmas">
           <div class="firma">
-            <img src="/images/firmaatomin.png">
+            <img src="/images/firmaatomin.PNG">
             <div class="linea-firma"></div>
             <strong>DR. Atomín</strong><br><span>Profesor Asignado</span>
           </div>
