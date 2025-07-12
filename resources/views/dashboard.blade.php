@@ -208,241 +208,116 @@
 
 <script>
 function generarCertificado(btn) {
-    const nombre = btn.dataset.nombre || "Estudiante";
+  const nombre = btn.dataset.nombre || "Estudiante";
 
-    // Crear dinámicamente el HTML
-    const html = `
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <title>Certificado de Reconocimiento</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&display=swap');
-    body {
-      margin:0;
-      padding:0;
-      background-color:#f4f4f4;
-      font-family:'Playfair Display', serif;
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      height:100vh;
-    }
-    .certificado {
-      width:100%;
-      max-width:1200px;
-      aspect-ratio:4/3;
-      background-color:white;
-      border:10px solid #003f5c;
-      padding:30px;
-      box-sizing:border-box;
-      box-shadow:0 0 20px rgba(0,0,0,0.1);
-      display:flex;
-      justify-content:center;
-      align-items:center;
-    }
-    .marco {
-      border:2px solid #003f5c;
-      width:100%;
-      height:100%;
-      padding:40px;
-      box-sizing:border-box;
-      text-align:center;
-      display:flex;
-      position:relative;
-      flex-direction:column;
-      justify-content:flex-start;
-      overflow:hidden;
-      background-color:white;
-    }
-    .logos {
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-    }
-    .logos img {
-      width:110px;
-      height:auto;
-    }
-    .titulo {
-      font-size:1.3em;
-      text-transform:uppercase;
-      letter-spacing:1px;
-      margin:0;
-    }
-    h1 {
-      font-size:3.5em;
-      margin:5px 0;
-    }
-    .a {
-      font-size:1.2em;
-      margin:10px 0;
-    }
-    .nombre {
-      font-family:'Great Vibes', cursive;
-      font-size:3em;
-      margin-bottom:10px;
-    }
-    .linea-verde {
-      border:none;
-      height:2px;
-      background-color:#a0b86d;
-      width:60%;
-      margin:0 auto 20px;
-    }
-    .descripcion {
-      font-size:1.2em;
-      line-height:1.5;
-      color:#333;
-      max-width:800px;
-      margin:0 auto;
-    }
-    .firmas {
-      display:flex;
-      justify-content:space-around;
-      align-items:flex-end;
-      margin-top:15px;
-      margin-bottom:40px;
-      background:white;
-      position:relative;
-      z-index:1;
-    }
-    .firma {
-      text-align:center;
-      max-width:220px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:8px;
-    }
-    .firma img {
-      width:220px;
-      height:auto;
-      margin-bottom:0;
-      border:none;
-      filter:drop-shadow(0 2px 2px rgba(0,0,0,0.15));
-    }
-    .linea-firma {
-      height:3px;
-      width:200px;
-      background-color:#a0b86d;
-      margin:0 auto;
-      display:block;
-      border-radius:2px;
-    }
-    .firma-aestra-img {
-      width:140px !important;
-      height:auto !important;
-      filter:drop-shadow(0 2px 2px rgba(0,0,0,0.15));
-      margin-bottom:0;
-      border:none;
-    }
-    .firma strong {
-      font-weight:700;
-      font-size:1.1em;
-      letter-spacing:0.03em;
-    }
-    .firma span {
-      font-style:italic;
-      font-size:0.9em;
-      color:#555;
-    }
-    .ondas-inferiores {
-      position:absolute;
-      bottom:-30px;
-      left:0;
-      right:0;
-      width:100%;
-      height:200px;
-      overflow:hidden;
-      z-index:0;
-    }
-    .onda {
-      position:absolute;
-      width:100%;
-      height:200px;
-      bottom:0;
-      left:0;
-    }
-    .onda.amarillo {
-      z-index:1;
-      opacity:1;
-      fill:#fcbf49;
-    }
-    .onda.azul {
-      z-index:2;
-      opacity:1;
-      fill:#003f5c;
-    }
-  </style>
-</head>
-<body>
-  <div class="certificado">
-    <div class="marco">
-      <div class="logos">
-        <img src="${window.location.origin}/images/logoAV.png" alt="Logo AV">
-        <p class="titulo">ÁTOMOS VIRTUALES<br>OTORGA EL PRESENTE</p>
-        <img src="${window.location.origin}/images/logoAestra.png" alt="Logo Aestra">
-      </div>
-      <div>
+  // Crear div temporal visible fuera del viewport
+  const tempDiv = document.createElement('div');
+  tempDiv.style.top = '1';
+  tempDiv.style.width = '1200px';
+  tempDiv.style.height = '900px';
+  document.body.appendChild(tempDiv);
+
+  // Inyectar HTML completo con un div .certificado, sin los SVG de onda
+  tempDiv.innerHTML = `
+    <div class="certificado" style="width:1200px;height:900px;border:10px solid #003f5c;box-sizing:border-box;font-family:'Playfair Display',serif;padding:30px;position:relative;overflow:hidden;">
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@600&display=swap');
+        .logos { display:flex;justify-content:space-between;align-items:center;}
+        .logos img {width:110px;}
+        .titulo {font-size:1.3em;text-transform:uppercase;}
+        h1 {font-size:3.5em;margin:10px 0;}
+        .a {font-size:1.2em;}
+        .nombre {font-family:'Great Vibes',cursive;font-size:3em;}
+        .linea-verde {height:2px;background:#a0b86d;margin:20px auto;width:60%;}
+        .descripcion {font-size:1.2em;max-width:800px;margin:0 auto;}
+        .firmas {display:flex;justify-content:space-around;margin-top:40px;}
+        .firma {text-align:center;max-width:220px;}
+        .firma img {width:220px;}
+        .firma strong {font-weight:700;font-size:1.1em;}
+        .firma span {font-style:italic;font-size:0.9em;color:#555;}
+        .linea-firma {height:3px;width:200px;background:#a0b86d;margin:5px auto;}
+        .ondas-inferiores {
+          position:absolute;
+          bottom:0;
+          left:0;
+          width:100%;
+          height:148px;
+          z-index:-1;
+          text-align:center;
+        }
+        .marco {
+          position:relative;
+          z-index:1;
+          border:2px solid #003f5c;
+          height:100%;
+          padding:40px;
+          text-align:center;
+        }
+      </style>
+      <div class="marco">
+        <div class="logos">
+          <img src="${window.location.origin}/images/logoAV.png" alt="Logo AV">
+          <p class="titulo">ÁTOMOS VIRTUALES<br>OTORGA EL PRESENTE</p>
+          <img src="${window.location.origin}/images/logoAestra.png" alt="Logo Aestra">
+        </div>
         <h1>RECONOCIMIENTO</h1>
         <p class="a">A</p>
         <p class="nombre">${nombre}</p>
-        <hr class="linea-verde">
+        <div class="linea-verde"></div>
         <p class="descripcion">
           Por su destacada participación en las prácticas realizadas en el laboratorio virtual,<br>
           demostrando habilidades en el manejo y análisis de simulaciones científicas.
         </p>
-      </div>
-      <div class="firmas">
-        <div class="firma">
-          <p><img src="${window.location.origin}/images/firmaatomin.png" alt="Firma DR. Atomín" width="220" height="100"></p>
-          <div class="linea-firma"></div>
-          <p><strong>DR. Atomín</strong><br><span>Profesor Asignado</span></p>
+        <div class="firmas">
+          <div class="firma">
+            <img src="/images/firmaatomin.png">
+            <div class="linea-firma"></div>
+            <strong>DR. Atomín</strong><br><span>Profesor Asignado</span>
+          </div>
+          <div class="firma">
+            <img src="/images/image.png" style="width:140px;">
+            <div class="linea-firma"></div>
+            <strong>AESTRA</strong><br><span>Empresa de Software</span>
+          </div>
         </div>
-        <div class="firma firma-aestra">
-          <p><img src="${window.location.origin}/images/image.png" alt="Firma Aestra" class="firma-aestra-img"></p>
-          <div class="linea-firma"></div>
-          <p><strong>AESTRA</strong><br><span>Empresa de Software</span></p>
-        </div>
       </div>
-      <div class="ondas-inferiores">
-        <svg class="onda amarillo" viewBox="0 0 1200 150" preserveAspectRatio="none">
-          <path d="M0,60 C300,130 900,0 1200,100 L1200,150 L0,150 Z"></path>
-        </svg>
-        <svg class="onda azul" viewBox="0 0 1200 150" preserveAspectRatio="none">
-          <path d="M0,80 C300,150 900,20 1200,120 L1200,150 L0,150 Z"></path>
-        </svg>
-      </div>
+      <div class="ondas-inferiores"></div>
     </div>
-  </div>
-</body>
-</html>`;
+  `;
 
+  // Cargar el waves.svg externo y luego generar el PDF
+  fetch(window.location.origin + '/images/waves.svg')
+    .then(response => response.text())
+    .then(svgContent => {
+      const ondasDiv = tempDiv.querySelector('.ondas-inferiores');
+      ondasDiv.innerHTML = svgContent;
 
-    // Crear un div temporal visible
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = html;
-    document.body.appendChild(tempDiv);
-
-    // Log para depurar
-    console.log("HTML a exportar:", tempDiv.innerHTML);
-
-    html2pdf().from(tempDiv).set({
-        margin: 0,
-        filename: `Certificado_${nombre.replace(/\s+/g, '_')}.pdf`,
-        image: { type: 'png', quality: 1 },
-        html2canvas: { scale: 3, useCORS: true },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' }
-    }).save().then(() => {
-        // Eliminar después de generar el PDF
-        document.body.removeChild(tempDiv);
+      // Esperar un poco a que carguen las fuentes y el SVG
+      setTimeout(() => {
+        const element = tempDiv.querySelector('.certificado');
+        html2pdf().from(element).set({
+          margin: [0, 50],
+          filename: `Certificado_${nombre.replace(/\s+/g, '_')}.pdf`,
+          image: { type: 'png', quality: 1 },
+          html2canvas: { 
+            scale: 3, 
+            useCORS: true,
+            allowTaint: true,
+            logging: true
+          },
+          jsPDF: { unit: 'px', format: [1300, 900], orientation: 'landscape' }
+        }).save().then(() => {
+          document.body.removeChild(tempDiv);
+        });
+      }, 500);
+    })
+    .catch(error => {
+      console.error("Error cargando waves.svg:", error);
+      alert("No se pudo cargar la onda decorativa (waves.svg).");
+      document.body.removeChild(tempDiv);
     });
 }
-
 </script>
-
 
 
 <script>
