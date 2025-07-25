@@ -15,15 +15,12 @@ class DatabaseSeeder extends Seeder
     {
         // Ejecutar primero los seeders de datos base
         $this->call([
-            RoleSeeder::class,      // Roles deben ir primero
-            SchoolSeeder::class,    // Escuelas
+            RoleSeeder::class,      // Roles
             GradeSeeder::class,     // Grados
             TurnoSeeder::class,     // Turnos
             GroupSeeder::class,     // Grupos
-            PeriodSeeder::class,    // Periodos
             UserSeeder::class,      // Usuarios (después de grupos y escuelas)
-            AssignmentSeeder::class, // Asignaciones (requiere users y grupos)
-            ActivityUserSeeder::class
+            ActivityUserSeeder::class// Actividades Unity
         ]);
     }
 }

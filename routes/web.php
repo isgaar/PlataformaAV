@@ -265,13 +265,3 @@ Route::get('/lanzar-unity', function () {
 
     return response()->json($sessionData);
 })->middleware('auth');
-
-
-
-Route::get('/ip-discovery', function () {
-    return response()->json([
-        'scheme' => request()->getScheme(),
-        'server_ip' => request()->getHost(),
-        'server_port' => request()->getPort(),
-    ]);
-}); 

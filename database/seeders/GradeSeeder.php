@@ -13,6 +13,9 @@ class GradeSeeder extends Seeder
         Grade::create(['name' => 'Primero']);
         Grade::create(['name' => 'Segundo']);
         Grade::create(['name' => 'Tercero']);
+        Grade::create(['name' => 'Cuarto']);
+        
+
     }
 }
 
